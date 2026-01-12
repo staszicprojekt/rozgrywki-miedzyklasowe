@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rozgrywki Międzyklasowe</title>
+    <link rel="icon" type="png" href="logo_szkoly.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="school-header">
+            <div class="logo-container">
+                <a href="index.html" class="logo-link">
+                    <div class="logo-placeholder">
+                        <img src="logo_szkoly.png" alt="Logo szkoły" class="school-logo">
+                    </div>
+                </a>
+                <a href="index.html" class="title-link">
+                    <div class="title-container">
+                        <h1 id="pageTitle">Rozgrywki Międzyklasowe 2026</h1>
+                        <p class="school-name" id="schoolName"> I Liceum Ogólnokształcące im. Stanisława Staszica</p>
+                    </div>
+                </a>
+            </div>
+            <div class="current-date">
+                <i class="far fa-calendar-alt"></i>
+                <span id="currentDate"></span>
+            </div>
+        </div>
+        
+        <!-- NAVIGACJA -->
+        <nav class="main-nav">
+            <ul class="nav-list">
+                <!-- DROPDOWN DYSCYPLINY -->
+                <li class="dropdown">
+                    <a href="#">
+                        <i class="fas fa-futbol"></i> Dyscypliny <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="koszykowka.html"><i class="fas fa-basketball-ball"></i> Koszykówka</a>
+                        <a href="siatkowka.html"><i class="fas fa-volleyball-ball"></i> Siatkówka</a>
+                        <a href="pilka-nozna.html"><i class="fas fa-futbol"></i> Piłka nożna</a>
+                    </div>
+                </li>
+                
+                <li><a href="druzyny.html"><i class="fas fa-users"></i> Drużyny</a></li>
+                <li><a href="dokumenty.html"><i class="fas fa-file-alt"></i> Dokumenty</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- GŁÓWNA ZAWARTOŚĆ -->
+    <main class="container">
+        <!-- BANER -->
+        <section class="hero">
+            <div class="hero-content">
+                <h2 id="heroTitle"><i class="fas fa-trophy"></i> Witamy w rozgrywkach!</h2>
+                <p id="heroSubtitle">Śledź na żywo wyniki i klasyfikację drużyn</p>
+                
+                <div class="countdown-container">
+                    <h3><i class="far fa-clock"></i> Do początku rozgrywek:</h3>
+                    <div class="countdown">
+                        <div class="countdown-item">
+                            <span id="days">00</span>
+                            <small>Dni</small>
+                        </div>
+                        <div class="countdown-item">
+                            <span id="hours">00</span>
+                            <small>Godz</small>
+                        </div>
+                        <div class="countdown-item">
+                            <span id="minutes">00</span>
+                            <small>Min</small>
+                        </div>
+                        <div class="countdown-item">
+                            <span id="seconds">00</span>
+                            <small>Sek</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NAJBLIŻSZE MECZE -->
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-calendar-day"></i> Najbliższe mecze</h2>
+                <button onclick="loadMatches()" class="btn-refresh">
+                    <i class="fas fa-sync-alt"></i> Odśwież
+                </button>
+            </div>
+            
+            <div class="matches-grid" id="matchesContainer">
+                <!-- Mecze wczytają się tutaj -->
+            </div>
+            
+            <div id="noMatchesMessage" class="empty-state" style="display: none;">
+                <i class="far fa-calendar-times"></i>
+                <p>Brak nadchodzących meczów</p>
+            </div>
+        </section>
+
+        <!-- KLASYFIKACJA GENERALNA -->
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-medal"></i> Klasyfikacja generalna</h2>
+                <div class="last-update">
+                    Ostatnia aktualizacja: <span id="lastUpdateTime">-</span>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table class="sports-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+        <th>Drużyna</th>
+        <th><span class="full-text">Koszykówka</span><span class="short-text">KOSZ</span></th>
+        <th><span class="full-text">Siatkówka</span><span class="short-text">SIATA</span></th>
+        <th><span class="full-text">Piłka Nożna</span><span class="short-text">PN</span></th>
+        <th><span class="full-text">Suma</span><span class="short-text">Σ</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="standingsTable">
+                        <!-- Ranking wczyta się tutaj -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="noStandingsMessage" class="empty-state" style="display: none;">
+                <i class="far fa-frown"></i>
+                <p>Brak danych klasyfikacji</p>
+            </div>
+        </section>
+        <!-- OGŁOSZENIA -->
+        <section class="section announcements">
+            <div class="section-header">
+                <h2><i class="fas fa-bullhorn"></i> Ogłoszenia</h2>
+                <button onclick="toggleAnnouncements()" class="btn-refresh">
+                    <i class="fas fa-eye"></i> <span id="toggleAnnouncementsText">Ukryj</span>
+                </button>
+            </div>
+            
+            <div class="announcements-list" id="announcementsList">
+                <!-- Ogłoszenia wczytają się tutaj -->
+            </div>
+            
+            <div id="noAnnouncementsMessage" class="empty-state" style="display: none;">
+                <i class="far fa-bell-slash"></i>
+                <p>Brak ogłoszeń</p>
+            </div>
+        </section>
+        <!-- PODSUMOWANIE DYSCYPLIN -->
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-line"></i> Podsumowanie dyscyplin</h2>
+                <div class="sports-stats-header" id="sportsStatsHeader">
+                    <!-- Statystyki główne -->
+                </div>
+            </div>
+            
+            <div class="sports-grid">
+                <!-- Piłka nożna -->
+                <div class="sport-card" id="footballCard">
+                    <div class="sport-icon">
+                        <i class="fas fa-futbol"></i>
+                    </div>
+                    <h3>Piłka nożna</h3>
+                    <div class="sport-stats">
+                        <div class="stat">
+                            <span class="stat-value" id="footballMatches">0</span>
+                            <span class="stat-label">Mecze</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value" id="footballGoals">0</span>
+                            <span class="stat-label">Bramki</span>
+                        </div>
+                    </div>
+                    <a href="pilka-nozna.html" class="btn-sport">
+                        Zobacz więcej <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <!-- Siatkówka -->
+                <div class="sport-card" id="volleyballCard">
+                    <div class="sport-icon">
+                        <i class="fas fa-volleyball-ball"></i>
+                    </div>
+                    <h3>Siatkówka</h3>
+                    <div class="sport-stats">
+                        <div class="stat">
+                            <span class="stat-value" id="volleyballMatches">0</span>
+                            <span class="stat-label">Mecze</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value" id="volleyballSets">0</span>
+                            <span class="stat-label">Sety</span>
+                        </div>
+                    </div>
+                    <a href="siatkowka.html" class="btn-sport">
+                        Zobacz więcej <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <!-- Koszykówka -->
+                <div class="sport-card" id="basketballCard">
+                    <div class="sport-icon">
+                        <i class="fas fa-basketball-ball"></i>
+                    </div>
+                    <h3>Koszykówka</h3>
+                    <div class="sport-stats">
+                        <div class="stat">
+                            <span class="stat-value" id="basketballMatches">0</span>
+                            <span class="stat-label">Mecze</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value" id="basketballPoints">0</span>
+                            <span class="stat-label">Punkty</span>
+                        </div>
+                    </div>
+                    <a href="koszykowka.html" class="btn-sport">
+                        Zobacz więcej <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- PUNKTACJA -->
+        <section class="ranking section">
+            <div class="section-header">
+                <h2><i class="fas fa-balance-scale"></i> System punktacji turnieju</h2>
+            </div>
+            <div class="ranking-grid">
+                <div class="ranking-card">
+                    <h3 class="ranking-title">Koszykówka</h3>
+                    <table class="ranking-table">
+                        <thead>
+                            <tr>
+                                <th>Miejsce</th>
+                                <th>Punkty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="2" class="merged-row" style="text-align: center;">Mecz grupowy</td>
+                            </tr>
+                            <tr>
+                                <td>Zwycięstwo</td>
+                                <td style="white-space: nowrap;">2 pkt</td>
+                            </tr>
+                            <tr>
+                                <td>Porażka</td>
+                                <td style="white-space: nowrap;">0 pkt</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="merged-row" style="text-align: center;">Pozycja w grupie</td>
+                            </tr>
+                            <tr>
+                                <td>1 miejsce</td>
+                                <td style="white-space: nowrap;">+6 pkt</td>
+                            </tr>
+                            <tr>
+                                <td>2 miejsce</td>
+                                <td style="white-space: nowrap;">+4 pkt</td>
+                            </tr>
+                            <tr>
+                                <td>3 miejsce</td>
+                                <td style="white-space: nowrap;">+2 pkt</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="merged-row" style="text-align: center;">Faza pucharowa</td>
+                            </tr>
+                            <tr>
+                                <td>Zwycięzca</td>
+                                <td style="white-space: nowrap;">+25 pkt</td>
+                            </tr>
+                            <tr>
+                                <td>2 miejsce</td>
+                                <td style="white-space: nowrap;">+18 pkt</td>
+                            </tr>
+                            <tr>
+                                <td>3 miejsce</td>
+                                <td style="white-space: nowrap;">+15 pkt</td>
+                            </tr>
+                            <tr>
+                                <td>4 miejsce</td>
+                                <td style="white-space: nowrap;">+12 pkt</td>
+                            </tr>
+                            <tr>
+                                <td>Przegrani w ćwierćfinale</td>
+                                <td style="white-space: nowrap;">+4 pkt</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="ranking-card">
+                    <h3 class="ranking-title">Siatkówka</h3>
+                    <table class="ranking-table">
+                        <thead>
+                            <tr>
+                                <th>Miejsce</th>
+                                <th>Punkty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="2" class="merged-row" style="text-align: center;">Mecz grupowy</td>
+                            </tr>
+                            <tr>
+                                <td>Zwycięstwo</td>
+                                <td style="white-space: nowrap;">2 pkt</td>
+                            </tr>
+                            <tr>
+                                <td>Porażka</td>
+                                <td style="white-space: nowrap;">0 pkt</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="merged-row" style="text-align: center;">Pozycja w grupie</td>
+                            </tr>
+                            <tr>
+                                <td>1 miejsce</td>
+                                <td style="white-space: nowrap;">+5 pkt</td>
+                            </tr>
+                            <tr>
+                                <td>2 miejsce</td>
+                                <td style="white-space: nowrap;">+3 pkt</td>
+                            </tr>
+                            <tr>
+                                <td>3 miejsce</td>
+                                <td style="white-space: nowrap;">+1 pkt</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="merged-row" style="text-align: center;">Faza pucharowa</td>
+                            </tr>
+                            <tr>
+                                <td>Zwycięzca</td>
+                                <td style="white-space: nowrap;">+22 pkt</td>
+                            </tr>
+                            <tr>
+                                <td>2 miejsce</td>
+                                <td style="white-space: nowrap;">+16 pkt</td>
+                            </tr>
+                            <tr>
+                                <td>3 miejsce</td>
+                                <td style="white-space: nowrap;">+13 pkt</td>
+                            </tr>
+                            <tr>
+                                <td>4 miejsce</td>
+                                <td style="white-space: nowrap;">+10 pkt</td>
+                            </tr>
+                            <tr>
+                                <td>Przegrani w ćwierćfinale</td>
+                                <td style="white-space: nowrap;">+4 pkt</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="ranking-card">
+                    <h3 class="ranking-title">Piłka nożna</h3>
+                    <table class="ranking-table">
+                        <thead>
+                            <tr>
+                                <th>Miejsce</th>
+                                <th>Punkty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Zwycięzca</td>
+                                <td style="white-space: nowrap;">30 pkt</td>
+                            </tr>
+                            <tr>
+                                <td>2 miejsce</td>
+                                <td style="white-space: nowrap;">20 pkt</td>
+                            </tr>
+                            <tr>
+                                <td>3 miejsce</td>
+                                <td style="white-space: nowrap;">15 pkt</td>
+                            </tr>
+                            <tr>
+                                <td>4 miejsce</td>
+                                <td style="white-space: nowrap;">12 pkt</td>
+                            </tr>
+                            <tr>
+                                <td>Przegrani w ćwierćfinale</td>
+                                <td style="white-space: nowrap;">9 pkt</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <script>
+        // POPRAWIONY KOD DROPDOWN
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdowns = document.querySelectorAll('.dropdown');
+        
+        dropdowns.forEach(dropdown => {
+            const toggle = dropdown.querySelector('a');
+            
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const isOpen = dropdown.classList.contains('open');
+                
+                // Zamknij wszystkie inne dropdowny
+                dropdowns.forEach(otherDropdown => {
+                    if (otherDropdown !== dropdown) {
+                        otherDropdown.classList.remove('open');
+                    }
+                });
+                
+                // Otwórz/zamknij aktualny dropdown
+                if (!isOpen) {
+                    dropdown.classList.add('open');
+                    adjustDropdownPosition(dropdown);
+                } else {
+                    dropdown.classList.remove('open');
+                }
+            });
+        });
+        
+        // Zamknij po kliknięciu gdzie indziej
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown')) {
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('open');
+                });
+            }
+        });
+        
+        // Zamknij po ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('open');
+                });
+            }
+        });
+        
+        // Zamknij po kliknięciu w link
+        document.querySelectorAll('.dropdown-content a').forEach(link => {
+            link.addEventListener('click', function() {
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('open');
+                });
+            });
+        });
+        
+        // FUNKCJA DOSTOSOWUJĄCA POZYCJĘ DROPDOWNU
+        function adjustDropdownPosition(dropdown) {
+            setTimeout(() => {
+                const content = dropdown.querySelector('.dropdown-content');
+                const toggle = dropdown.querySelector('a');
+                
+                if (!content || !toggle) return;
+                
+                // Resetujemy klasę
+                content.classList.remove('out-of-view');
+                
+                // Sprawdzamy czy dropdown wyjdzie poza ekran (tylko na mobile)
+                if (window.innerWidth <= 768) {
+                    const toggleRect = toggle.getBoundingClientRect();
+                    const contentWidth = content.offsetWidth;
+                    const viewportWidth = window.innerWidth;
+                    
+                    // Jeśli dropdown wyjdzie poza prawy brzeg ekranu
+                    if (toggleRect.left + contentWidth > viewportWidth - 20) {
+                        content.classList.add('out-of-view');
+                    }
+                }
+            }, 10);
+        }
+        
+        // Zamknij dropdowny przy zmianie rozmiaru okna
+        window.addEventListener('resize', function() {
+            dropdowns.forEach(dropdown => {
+                dropdown.classList.remove('open');
+            });
+        });
+        
+        // ... reszta twojego JavaScript ...
+            
+            // ===================== RESZTA KODU JAVASCRIPT =====================
+            const SPREADSHEET_ID = '1qLCQ-6uTyusQRsY23d0tvtEx2XcYmR4MLuwGVriow58';
+            
+            // DODANE: Funkcja do pobierania ustawień banera z arkusza "Baner_Ustawienia"
+            async function loadBannerSettings() {
+                try {
+                    const SHEET_NAME = 'Baner_Ustawienia'; // Nazwa nowego arkusza
+                    const RANGE = 'A2:C5'; // Zakładamy kolumny: A - Klucz, B - Wartość, C - Opis (opcjonalnie)
+                    
+                    const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${RANGE}`;
+                    
+                    const response = await fetch(url);
+                    const text = await response.text();
+                    
+                    const jsonText = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
+                    
+                    if (!jsonText) {
+                        throw new Error('Nieprawidłowa odpowiedź z Google Sheets');
+                    }
+                    
+                    const data = JSON.parse(jsonText[1]);
+                    
+                    // Przetwórz dane ustawień banera
+                    const settings = {};
+                    if (data.table && data.table.rows) {
+                        data.table.rows.forEach(row => {
+                            const cells = row.c;
+                            if (cells && cells.length >= 2) {
+                                const key = cells[0]?.v || '';
+                                const value = cells[1]?.v || '';
+                                if (key && value) {
+                                    settings[key] = value;
+                                }
+                            }
+                        });
+                    }
+                    
+                    console.log('✅ Ustawienia banera załadowane:', settings);
+                    return settings;
+                    
+                } catch (error) {
+                    console.error('❌ Błąd ładowania ustawień banera:', error);
+                    return null;
+                }
+            }
+
+            async function loadGoogleSheetsData() {
+                try {
+                    const SHEET_NAME = 'Main_Ranking';
+                    const RANGE = 'A3:F19';
+                    
+                    const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${RANGE}`;
+                    
+                    const response = await fetch(url);
+                    const text = await response.text();
+                    
+                    const jsonText = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/)[1];
+                    const data = JSON.parse(jsonText);
+                    
+                    displayInTable(data.table.rows);
+                    updateRankingTimestamp();
+                    
+                    console.log('✅ Ranking załadowany');
+                    
+                } catch (error) {
+                    console.error('❌ Błąd rankingu:', error);
+                    document.getElementById('standingsTable').innerHTML = `
+                        <tr><td colspan="6" style="color: red; padding: 20px; text-align: center;">
+                            Błąd ładowania rankingu
+                        </td></tr>
+                    `;
+                }
+            }
+
+            function displayInTable(rows) {
+                const tbody = document.getElementById('standingsTable');
+                let html = '';
+                
+                const sortedRows = [...rows].sort((a, b) => {
+                    const aSum = parseFloat(a.c[5]?.v) || 0;
+                    const bSum = parseFloat(b.c[5]?.v) || 0;
+                    return bSum - aSum;
+                });
+                // DODAJ TEN FRAGMENT KODU na końcu funkcji displayInTable (przed tbody.innerHTML = html;)
+// Znajdź mistrza (najwięcej punktów > 0)
+let champion = null;
+let maxPoints = 0;
+
+sortedRows.forEach(row => {
+    const cells = row.c;
+    const totalPoints = parseFloat(cells[5]?.v) || 0;
+    const teamName = cells[1]?.v || '';
+    
+    // Warunek: musi mieć > 0 punktów
+    if (totalPoints > 0 && totalPoints > maxPoints) {
+        maxPoints = totalPoints;
+        champion = teamName;
+    }
+});
+
+// Zapisz mistrza w localStorage
+if (champion) {
+    localStorage.setItem('currentChampion', champion);
+    localStorage.setItem('championLastUpdate', new Date().toISOString());
+    console.log(`🏆 Mistrz zapisany w localStorage: ${champion}`);
+}
+                sortedRows.forEach((row, index) => {
+                    const cells = row.c;
+                    
+                    html += '<tr>';
+                    html += `<td style="text-align: center; font-weight: bold;">${index + 1}</td>`;
+                    
+                    const className = cells[0]?.v || '';
+                    const teamName = cells[1]?.v || '';
+                    
+                    // Oznacz mistrza specjalną klasą
+        const isChampion = champion && teamName === champion;
+                        
+                    html += `
+                        <td class="${isChampion ? 'champion-row' : ''}">
+                            <div class="team-name-compact">${teamName}</div>
+                            <div class="team-class-compact">${className}</div>
+                        </td>
+                    `;
+                    
+                    html += `<td style="text-align: center; font-weight: bold;">${cells[2]?.v || '0'}</td>`;
+                    html += `<td style="text-align: center; font-weight: bold;">${cells[3]?.v || '0'}</td>`;
+                    html += `<td style="text-align: center; font-weight: bold;">${cells[4]?.v || '0'}</td>`;
+                    
+                    const sum = cells[5]?.v || '0';
+                    html += `<td style="text-align: center; font-weight: bold; color: var(--secondary-color); font-size: 1.1em;">
+                                ${sum}
+                            </td>`;
+                    
+                    html += '</tr>';
+                });
+                
+                tbody.innerHTML = html;
+            }
+            function findChampion(rows) {
+                 // Sortuj drużyny według sumy punktów (malejąco)
+                const sortedRows = [...rows].sort((a, b) => {
+                const aSum = parseFloat(a.c[5]?.v) || 0;
+                const bSum = parseFloat(b.c[5]?.v) || 0;
+                return bSum - aSum;
+            });
+    
+    // Znajdź pierwszą drużynę z sumą > 0
+    let champion = null;
+    for (let row of sortedRows) {
+        const sum = parseFloat(row.c[5]?.v) || 0;
+        const teamName = row.c[1]?.v || '';
+        
+        // WARUNEK: suma > 0
+        if (sum > 0 && teamName) {
+            champion = teamName;
+            break;
+        }
+    }
+    
+    return champion;
+}
+// Dodaj funkcję do zapisywania mistrza w localStorage
+function saveChampionToStorage(champion) {
+    if (champion) {
+        localStorage.setItem('currentChampion', champion);
+        localStorage.setItem('championLastUpdate', new Date().toISOString());
+    }
+}
+            function updateRankingTimestamp() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('pl-PL', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                
+                const dateString = now.toLocaleDateString('pl-PL', {
+                    day: '2-digit',
+                    month: '2-digit'
+                });
+                
+                const timeElement = document.getElementById('lastUpdateTime');
+                if (timeElement) {
+                    timeElement.textContent = `${timeString} (${dateString})`;
+                }
+            }
+
+            function updateCurrentDate() {
+                const now = new Date();
+                const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+                
+                const dateString = now.toLocaleDateString('pl-PL', options);
+                const dateElement = document.getElementById('currentDate');
+                
+                if (dateElement) {
+                    dateElement.textContent = dateString;
+                }
+            }
+
+            let countdownInterval = null;
+
+            // ZMIENIONA: Funkcja startCountdown przyjmuje teraz datę z ustawień
+            function startCountdown(countdownDate) {
+                const eventDate = new Date(countdownDate).getTime();
+                
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                }
+                
+                countdownInterval = setInterval(() => {
+                    const now = new Date().getTime();
+                    const distance = eventDate - now;
+                    
+                    if (distance < 0) {
+                        document.getElementById('days').textContent = '00';
+                        document.getElementById('hours').textContent = '00';
+                        document.getElementById('minutes').textContent = '00';
+                        document.getElementById('seconds').textContent = '00';
+                        
+                        // DODANE: Można zmienić tekst po zakończeniu odliczania
+                        const heroTitle = document.getElementById('heroTitle');
+                        const heroSubtitle = document.getElementById('heroSubtitle');
+                        
+                        if (heroTitle) heroTitle.innerHTML = '<i class="fas fa-trophy"></i> Rozgrywki trwają!';
+                        if (heroSubtitle) heroSubtitle.textContent = 'Śledź wyniki na żywo';
+                        
+                        clearInterval(countdownInterval);
+                        return;
+                    }
+                    
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    
+                    document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                    document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+                }, 1000);
+            }
+
+            // DODANE: Funkcja do aktualizacji banera na podstawie ustawień
+            function updateBannerWithSettings(settings) {
+                if (!settings) return;
+                
+                console.log('🔄 Aktualizacja banera z ustawień:', settings);
+                
+                // Aktualizuj tytuł banera
+                if (settings.heroTitle && settings.heroTitle.trim() !== '') {
+                    const heroTitle = document.getElementById('heroTitle');
+                    if (heroTitle) {
+                        // Sprawdź czy ma ikonę w obecnym tytule
+                        const hasIcon = heroTitle.innerHTML.includes('<i class=');
+                        if (hasIcon) {
+                            heroTitle.innerHTML = `<i class="fas fa-trophy"></i> ${settings.heroTitle}`;
+                        } else {
+                            heroTitle.textContent = settings.heroTitle;
+                        }
+                    }
+                }
+                
+                // Aktualizuj podtytuł banera
+                if (settings.heroSubtitle && settings.heroSubtitle.trim() !== '') {
+                    const heroSubtitle = document.getElementById('heroSubtitle');
+                    if (heroSubtitle) {
+                        heroSubtitle.textContent = settings.heroSubtitle;
+                    }
+                }
+                
+                // Aktualizuj tekst nad odliczaniem
+                if (settings.countdownText && settings.countdownText.trim() !== '') {
+                    const countdownHeader = document.querySelector('.countdown-container h3');
+                    if (countdownHeader) {
+                        countdownHeader.innerHTML = `<i class="far fa-clock"></i> ${settings.countdownText}`;
+                    }
+                }
+                
+                // Aktualizuj datę końca odliczania
+                if (settings.countdownDate && settings.countdownDate.trim() !== '') {
+                    startCountdown(settings.countdownDate);
+                    
+                    // Zapisz datę w localStorage dla bezpieczeństwa
+                    localStorage.setItem('countdownDate', settings.countdownDate);
+                    localStorage.setItem('countdownSettings', JSON.stringify(settings));
+                }
+            }
+
+            // DODANE: Funkcja do ładowania ustawień z localStorage (fallback)
+            function loadBannerSettingsFromStorage() {
+                try {
+                    const savedSettings = localStorage.getItem('countdownSettings');
+                    if (savedSettings) {
+                        const settings = JSON.parse(savedSettings);
+                        console.log('📂 Ładowanie ustawień banera z localStorage:', settings);
+                        return settings;
+                    }
+                } catch (error) {
+                    console.error('Błąd ładowania ustawień z localStorage:', error);
+                }
+                return null;
+            }
+
+            async function initializeAll() {
+                console.log('🚀 Inicjalizacja strony...');
+                
+                updateCurrentDate();
+                
+                // Najpierw spróbuj załadować ustawienia z arkusza
+                const bannerSettings = await loadBannerSettings();
+                
+                if (bannerSettings) {
+                    // Użyj ustawień z arkusza
+                    updateBannerWithSettings(bannerSettings);
+                } else {
+                    // Jeśli nie udało się z arkusza, spróbuj z localStorage
+                    const savedSettings = loadBannerSettingsFromStorage();
+                    if (savedSettings) {
+                        updateBannerWithSettings(savedSettings);
+                    } else {
+                        // Jeśli brak ustawień, użyj domyślnych
+                        console.log('⚠️ Używam domyślnych ustawień banera');
+                        startCountdown('2026-01-19T23:59:59');
+                    }
+                }
+                
+                loadGoogleSheetsData();
+                loadAnnouncements();
+                
+                // Odświeżaj ranking co 30 sekund
+                setInterval(loadGoogleSheetsData, 30000);
+                // Aktualizuj datę co minutę
+                setInterval(updateCurrentDate, 60000);
+                
+                console.log('✅ Strona zainicjalizowana');
+            }
+
+            // Inicjalizacja strony
+            initializeAll();
+
+            window.refreshRanking = function() {
+                console.log('🔄 Ręczne odświeżanie rankingu...');
+                loadGoogleSheetsData();
+                
+                const refreshBtn = event?.target || document.querySelector('.btn-refresh');
+                if (refreshBtn) {
+                    refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                    setTimeout(() => {
+                        refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Odśwież';
+                    }, 1000);
+                }
+            };
+
+            // DODANE: Funkcja do ręcznego odświeżania ustawień banera
+            window.refreshBanner = async function() {
+                console.log('🔄 Odświeżanie ustawień banera...');
+                const bannerSettings = await loadBannerSettings();
+                if (bannerSettings) {
+                    updateBannerWithSettings(bannerSettings);
+                    
+                    const refreshBtn = event?.target;
+                    if (refreshBtn) {
+                        refreshBtn.innerHTML = '<i class="fas fa-check"></i> Odświeżono';
+                        setTimeout(() => {
+                            refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Odśwież baner';
+                        }, 2000);
+                    }
+                } else {
+                    alert('Nie udało się odświeżyć ustawień banera');
+                }
+            };
+        });
+        // ===================== FUNKCJE DO OGROSZEŃ =====================
+
+async function loadAnnouncements() {
+    console.log('📢 Ładowanie ogłoszeń...');
+    
+    try {
+        // Użyj tego samego ID arkusza co w rankingu
+        const SPREADSHEET_ID = '1qLCQ-6uTyusQRsY23d0tvtEx2XcYmR4MLuwGVriow58';
+        const SHEET_NAME = 'Ogłoszenia'; // Taka sama nazwa jak w Google Sheets!
+        const RANGE = 'A2:D20'; // Od wiersza 2 (bez nagłówków) do wiersza 20
+        
+        const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${RANGE}`;
+        
+        const response = await fetch(url);
+        const text = await response.text();
+        
+        // Google zwraca tekst, który musimy sparsować
+        const jsonText = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
+        
+        if (!jsonText) {
+            throw new Error('Nieprawidłowa odpowiedź z Google Sheets');
+        }
+        
+        const data = JSON.parse(jsonText[1]);
+        console.log('✅ Dane ogłoszeń:', data);
+        
+        displayAnnouncements(data.table.rows);
+        
+    } catch (error) {
+        console.error('❌ Błąd ładowania ogłoszeń:', error);
+        
+        // Jeśli błąd, pokaż przykładowe ogłoszenia
+        showFallbackAnnouncements();
+    }
+}
+
+function displayAnnouncements(rows) {
+    const container = document.getElementById('announcementsList');
+    const noAnnouncementsMsg = document.getElementById('noAnnouncementsMessage');
+    
+    // Sprawdź czy są dane
+    if (!rows || rows.length === 0) {
+        container.innerHTML = '';
+        noAnnouncementsMsg.style.display = 'block';
+        return;
+    }
+    
+    // Ukryj komunikat "brak ogłoszeń"
+    noAnnouncementsMsg.style.display = 'none';
+    
+    let html = '';
+    let hasValidAnnouncements = false;
+    
+    // Przejdź przez wszystkie wiersze
+    rows.forEach((row, index) => {
+        const cells = row.c;
+        
+        // Sprawdź czy wiersz ma dane
+        if (!cells || cells.length < 3) return;
+        
+        const date = cells[0]?.v || 'Brak daty';
+        const title = cells[1]?.v || 'Brak tytułu';
+        const content = cells[2]?.v || '';
+        const isImportant = cells[3]?.v === true;
+        
+        // Jeśli nie ma tytułu, pomiń
+        if (title === 'Brak tytułu') return;
+        
+        hasValidAnnouncements = true;
+        
+        html += `
+            <div class="announcement ${isImportant ? 'important' : ''}">
+                <div class="announcement-icon">
+                    <i class="fas ${isImportant ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+                </div>
+                <div class="announcement-content">
+                    <h3>${title}</h3>
+                    <p>${content}</p>
+                    <div class="announcement-date">
+                        <i class="far fa-calendar"></i> ${date}
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    // Jeśli nie ma żadnych ogłoszeń, pokaż komunikat
+    if (!hasValidAnnouncements) {
+        container.innerHTML = '';
+        noAnnouncementsMsg.style.display = 'block';
+        return;
+    }
+    
+    container.innerHTML = html;
+}
+
+function showFallbackAnnouncements() {
+    const container = document.getElementById('announcementsList');
+    const noAnnouncementsMsg = document.getElementById('noAnnouncementsMessage');
+    
+    noAnnouncementsMsg.style.display = 'none';
+    
+    const fallbackAnnouncements = [
+        {
+            title: "Brak połączenia z bazą ogłoszeń",
+            content: "Nie możemy załadować aktualnych ogłoszeń. Spróbuj odświeżyć stronę lub sprawdź połączenie internetowe.",
+            date: new Date().toLocaleDateString('pl-PL'),
+            important: true
+        },
+        {
+            title: "Rozgrywki międzyklasowe 2024",
+            content: "Trwają przygotowania do tegorocznych rozgrywek. Szczegóły wkrótce!",
+            date: new Date().toLocaleDateString('pl-PL'),
+            important: false
+        }
+    ];
+    
+    let html = '';
+    fallbackAnnouncements.forEach(announcement => {
+        html += `
+            <div class="announcement ${announcement.important ? 'important' : ''}">
+                <div class="announcement-icon">
+                    <i class="fas ${announcement.important ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+                </div>
+                <div class="announcement-content">
+                    <h3>${announcement.title}</h3>
+                    <p>${announcement.content}</p>
+                    <div class="announcement-date">
+                        <i class="far fa-calendar"></i> ${announcement.date}
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
+// Funkcja do przełączania widoczności ogłoszeń (już masz, ale sprawdź czy działa)
+function toggleAnnouncements() {
+    const list = document.getElementById('announcementsList');
+    const toggleBtn = document.getElementById('toggleAnnouncementsText');
+    
+    if (list.style.display === 'none') {
+        list.style.display = 'block';
+        toggleBtn.textContent = 'Ukryj';
+    } else {
+        list.style.display = 'none';
+        toggleBtn.textContent = 'Pokaż';
+    }
+}
+    </script>
+</body>
+</html>

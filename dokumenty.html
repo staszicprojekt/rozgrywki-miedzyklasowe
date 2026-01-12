@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dokumenty - Rozgrywki Międzyklasowe</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="school-header">
+            <div class="logo-container">
+                <a href="index.html" class="logo-link">
+                    <div class="logo-placeholder">
+                        <img src="logo_szkoly.png" alt="Logo szkoły" class="school-logo">
+                    </div>
+                </a>
+                <a href="index.html" class="title-link">
+                    <div class="title-container">
+                        <h1 id="pageTitle">Rozgrywki Międzyklasowe 2026</h1>
+                        <p class="school-name" id="schoolName"> I Liceum Ogólnokształcące im. Stanisława Staszica</p>
+                    </div>
+                </a>
+            </div>
+            <div class="current-date">
+                <i class="far fa-calendar-alt"></i>
+                <span id="currentDate"></span>
+            </div>
+        </div>
+        
+        <!-- NAVIGACJA -->
+        <nav class="main-nav">
+            <ul class="nav-list">
+                <!-- DROPDOWN DYSCYPLINY -->
+                <li class="dropdown">
+                    <a href="#">
+                        <i class="fas fa-futbol"></i> Dyscypliny <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="koszykowka.html"><i class="fas fa-basketball-ball"></i> Koszykówka</a>
+                        <a href="siatkowka.html"><i class="fas fa-volleyball-ball"></i> Siatkówka</a>
+                        <a href="pilka-nozna.html"><i class="fas fa-futbol"></i> Piłka nożna</a>
+                    </div>
+                </li>
+                
+                <li><a href="druzyny.html"><i class="fas fa-users"></i> Drużyny</a></li>
+                <li><a href="dokumenty.html"><i class="fas fa-file-alt"></i> Dokumenty</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- GŁÓWNA ZAWARTOŚĆ -->
+    <main class="container">
+        
+
+        <!-- LISTA DOKUMENTÓW -->
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-files"></i> Dostępne dokumenty</h2>
+                <button onclick="refreshDocuments()" class="btn-refresh">
+                    <i class="fas fa-sync-alt"></i>Odśwież
+                </button>
+            </div>
+            
+            <div class="documents-grid" id="documentsGrid">
+                
+            </div>
+            
+            <div id="noDocuments" class="empty-state" style="display: none;">
+                <i class="far fa-folder-open"></i>
+                <p>Brak dostępnych dokumentów</p>
+                <p class="empty-state-sub">Dodaj dokumenty w pliku data.js</p>
+            </div>
+        </section>
+    </main>
+
+    
+    <script>
+        // POPRAWIONY KOD DROPDOWN
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdowns = document.querySelectorAll('.dropdown');
+        
+        dropdowns.forEach(dropdown => {
+            const toggle = dropdown.querySelector('a');
+            
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const isOpen = dropdown.classList.contains('open');
+                
+                // Zamknij wszystkie inne dropdowny
+                dropdowns.forEach(otherDropdown => {
+                    if (otherDropdown !== dropdown) {
+                        otherDropdown.classList.remove('open');
+                    }
+                });
+                
+                // Otwórz/zamknij aktualny dropdown
+                if (!isOpen) {
+                    dropdown.classList.add('open');
+                    adjustDropdownPosition(dropdown);
+                } else {
+                    dropdown.classList.remove('open');
+                }
+            });
+        });
+        
+        // Zamknij po kliknięciu gdzie indziej
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown')) {
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('open');
+                });
+            }
+        });
+        
+        // Zamknij po ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('open');
+                });
+            }
+        });
+        
+        // Zamknij po kliknięciu w link
+        document.querySelectorAll('.dropdown-content a').forEach(link => {
+            link.addEventListener('click', function() {
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('open');
+                });
+            });
+        });
+        
+        // FUNKCJA DOSTOSOWUJĄCA POZYCJĘ DROPDOWNU
+        function adjustDropdownPosition(dropdown) {
+            setTimeout(() => {
+                const content = dropdown.querySelector('.dropdown-content');
+                const toggle = dropdown.querySelector('a');
+                
+                if (!content || !toggle) return;
+                
+                // Resetujemy klasę
+                content.classList.remove('out-of-view');
+                
+                // Sprawdzamy czy dropdown wyjdzie poza ekran (tylko na mobile)
+                if (window.innerWidth <= 768) {
+                    const toggleRect = toggle.getBoundingClientRect();
+                    const contentWidth = content.offsetWidth;
+                    const viewportWidth = window.innerWidth;
+                    
+                    // Jeśli dropdown wyjdzie poza prawy brzeg ekranu
+                    if (toggleRect.left + contentWidth > viewportWidth - 20) {
+                        content.classList.add('out-of-view');
+                    }
+                }
+            }, 10);
+        }
+        
+        // Zamknij dropdowny przy zmianie rozmiaru okna
+        window.addEventListener('resize', function() {
+            dropdowns.forEach(dropdown => {
+                dropdown.classList.remove('open');
+            });
+        });
+    });
+    </script>
+    <!-- SKRYPTY -->
+    <script src="js/data.js"></script>
+    <script src="js/dokumenty.js"></script>
+</body>
+</html>

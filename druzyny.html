@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drużyny - Rozgrywki Międzyklasowe</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="logo_szkoly.png" type="image/png">
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="school-header">
+            <div class="logo-container">
+                <a href="index.html" class="logo-link">
+                    <div class="logo-placeholder">
+                        <img src="logo_szkoly.png" alt="Logo szkoły" class="school-logo">
+                    </div>
+                </a>
+                <a href="index.html" class="title-link">
+                    <div class="title-container">
+                        <h1 id="pageTitle">Rozgrywki Międzyklasowe 2026</h1>
+                        <p class="school-name" id="schoolName">I Liceum Ogólnokształcące im. Stanisława Staszica</p>
+                    </div>
+                </a>
+            </div>
+            <div class="current-date">
+                <i class="far fa-calendar-alt"></i>
+                <span id="currentDate">Ładowanie...</span>
+            </div>
+        </div>
+        
+        <!-- NAVIGACJA -->
+        <nav class="main-nav">
+            <ul class="nav-list">
+                <!-- DROPDOWN DYSCYPLINY -->
+                <li class="dropdown">
+                    <a href="#">
+                        <i class="fas fa-futbol"></i> Dyscypliny <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="koszykowka.html"><i class="fas fa-basketball-ball"></i> Koszykówka</a>
+                        <a href="siatkowka.html"><i class="fas fa-volleyball-ball"></i> Siatkówka</a>
+                        <a href="pilka-nozna.html"><i class="fas fa-futbol"></i> Piłka nożna</a>
+                    </div>
+                </li>
+                
+                <li><a href="druzyny.html" class="active"><i class="fas fa-users"></i> Drużyny</a></li>
+                <li><a href="dokumenty.html"><i class="fas fa-file-alt"></i> Dokumenty</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- GŁÓWNA ZAWARTOŚĆ -->
+    <main class="container">
+        <!-- NAGŁÓWEK -->
+        <section class="hero">
+            <div class="hero-content">
+                <h2><i class="fas fa-users"></i> Wszystkie drużyny</h2>
+                <p>Poznaj skład, kapitanów i osiągnięcia każdej drużyny</p>
+                
+                <div class="teams-summary">
+                    <div class="summary-item">
+                        <i class="fas fa-flag"></i>
+                        <span id="totalTeams">0</span>
+                        <small>Drużyn</small>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fas fa-user-friends"></i>
+                        <span id="totalPlayers">0</span>
+                        <small>Zawodników</small>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fas fa-trophy"></i>
+                        <span id="championTeam">Brak danych</span>
+                        <small>Aktualny mistrz</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LISTA DRUŻYN -->
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-list"></i> Lista drużyn</h2>
+                <div class="view-toggle">
+                    <button id="gridViewBtn" class="view-btn active">
+                        <i class="fas fa-th-large"></i> Kafelki
+                    </button>
+                    <button id="listViewBtn" class="view-btn">
+                        <i class="fas fa-list"></i> Lista
+                    </button>
+                </div>
+            </div>
+            
+            <!-- KOMUNIKAT BRAKU DRUŻYN -->
+            <div id="noTeamsMessage" class="empty-state" style="display: none;">
+                <i class="far fa-frown"></i>
+                <p>Nie znaleziono drużyn spełniających kryteria</p>
+                <button onclick="loadTeams()" class="btn-sport">Odśwież</button>
+            </div>
+            
+            <!-- ŁADOWANIE -->
+            <div id="loadingTeams" class="loading-spinner" style="display: none;">
+                <i class="fas fa-spinner"></i>
+                <p>Ładowanie drużyn...</p>
+            </div>
+            
+            <!-- WIDOK KAFELKOWY -->
+            <div class="teams-grid" id="teamsGridContainer">
+                <!-- Drużyny wczytają się tutaj -->
+                <div class="loading-spinner" id="initialLoading">
+                    <i class="fas fa-spinner"></i>
+                    <p>Ładowanie drużyn...</p>
+                </div>
+            </div>
+            
+            <!-- WIDOK LISTY -->
+            <div class="teams-list" id="teamsListContainer" style="display: none;">
+                <div class="table-container">
+                    <table class="sports-table">
+                        <thead>
+                        </thead>
+                        <tbody id="teamsListTable">
+                            <!-- Lista wczyta się tutaj -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Dodaj przed zamknięciem </body> -->
+
+<!-- MODAL SZCZEGÓŁÓW DRUŻYNY -->
+<div class="modal" id="teamModal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-users"></i> Szczegóły drużyny</h3>
+            <button class="close-modal" onclick="closeTeamModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="teamModalBody">
+            <!-- Zawartość modal ładowana dynamicznie -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // POPRAWIONY KOD DROPDOWN
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdowns = document.querySelectorAll('.dropdown');
+        
+        dropdowns.forEach(dropdown => {
+            const toggle = dropdown.querySelector('a');
+            
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const isOpen = dropdown.classList.contains('open');
+                
+                // Zamknij wszystkie inne dropdowny
+                dropdowns.forEach(otherDropdown => {
+                    if (otherDropdown !== dropdown) {
+                        otherDropdown.classList.remove('open');
+                    }
+                });
+                
+                // Otwórz/zamknij aktualny dropdown
+                if (!isOpen) {
+                    dropdown.classList.add('open');
+                    adjustDropdownPosition(dropdown);
+                } else {
+                    dropdown.classList.remove('open');
+                }
+            });
+        });
+        
+        // Zamknij po kliknięciu gdzie indziej
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown')) {
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('open');
+                });
+            }
+        });
+        
+        // Zamknij po ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('open');
+                });
+            }
+        });
+        
+        // Zamknij po kliknięciu w link
+        document.querySelectorAll('.dropdown-content a').forEach(link => {
+            link.addEventListener('click', function() {
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('open');
+                });
+            });
+        });
+        
+        // FUNKCJA DOSTOSOWUJĄCA POZYCJĘ DROPDOWNU
+        function adjustDropdownPosition(dropdown) {
+            setTimeout(() => {
+                const content = dropdown.querySelector('.dropdown-content');
+                const toggle = dropdown.querySelector('a');
+                
+                if (!content || !toggle) return;
+                
+                // Resetujemy klasę
+                content.classList.remove('out-of-view');
+                
+                // Sprawdzamy czy dropdown wyjdzie poza ekran (tylko na mobile)
+                if (window.innerWidth <= 768) {
+                    const toggleRect = toggle.getBoundingClientRect();
+                    const contentWidth = content.offsetWidth;
+                    const viewportWidth = window.innerWidth;
+                    
+                    // Jeśli dropdown wyjdzie poza prawy brzeg ekranu
+                    if (toggleRect.left + contentWidth > viewportWidth - 20) {
+                        content.classList.add('out-of-view');
+                    }
+                }
+            }, 10);
+        }
+        
+        // Zamknij dropdowny przy zmianie rozmiaru okna
+        window.addEventListener('resize', function() {
+            dropdowns.forEach(dropdown => {
+                dropdown.classList.remove('open');
+            });
+        });
+    });
+// =================== KONFIGURACJA ===================
+const SHEET_ID = '1qLCQ-6uTyusQRsY23d0tvtEx2XcYmR4MLuwGVriow58';
+const TEAMS_SHEET_GID = '706286190';
+const SPORTS_SHEET_GID = '1051858957';
+
+// DODANE: Stałe dla rankingu (takie same jak w index.html)
+const RANKING_SHEET_NAME = 'Main_Ranking';
+const RANKING_RANGE = 'A3:F19';
+
+const TEAMS_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${TEAMS_SHEET_GID}`;
+const SPORTS_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SPORTS_SHEET_GID}`;
+// DODANE: URL do rankingu w formacie JSON (tak jak w index.html)
+const RANKING_JSON_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${RANKING_SHEET_NAME}&range=${RANKING_RANGE}`;
+
+// Mapowanie ikon dyscyplin
+const SPORT_ICONS = {
+    'Koszykówka': 'fas fa-basketball-ball',
+    'Siatkówka': 'fas fa-volleyball-ball',
+    'Piłka Nożna': 'fas fa-futbol'
+};
+
+// Mapowanie kolorów dyscyplin
+const SPORT_COLORS = {
+    'Koszykówka': '#FFAB91',  // Delikatny pomarańcz/łososiowy
+    'Siatkówka': '#80DEEA',   // Wodny niebieski
+    'Piłka Nożna': '#C5E1A5'  // Jasny zielony trawiasty
+};
+
+// =================== ZMIENNE GLOBALNE ===================
+let allTeams = []; // Przetworzone dane drużyn
+let filteredTeams = [];
+let sportsData = []; // Dane o dyscyplinach
+let currentView = 'grid';
+// DODANE: Zmienna na dane rankingowe
+let rankingData = [];
+
+// =================== FUNKCJE POMOCNICZE ===================
+function parseCSV(csvText) {
+    const lines = csvText.split('\n').filter(line => line.trim() !== '');
+    if (lines.length < 2) return [];
+    
+    const headers = lines[0].split(',').map(h => h.trim());
+    const result = [];
+    
+    for (let i = 1; i < lines.length; i++) {
+        const values = lines[i].split(',').map(v => v.trim());
+        const obj = {};
+        headers.forEach((header, index) => {
+            obj[header] = values[index] || '';
+        });
+        result.push(obj);
+    }
+    
+    return result;
+}
+
+async function fetchCSV(url) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        return await response.text();
+    } catch (error) {
+        console.error('Błąd pobierania CSV:', error);
+        return null;
+    }
+}
+
+// DODANE: Funkcja do pobierania danych rankingowych (tak jak w index.html)
+async function fetchRankingData() {
+    try {
+        console.log('📊 Pobieranie danych rankingowych...');
+        const response = await fetch(RANKING_JSON_URL);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
+        const text = await response.text();
+        const jsonText = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
+        
+        if (!jsonText) {
+            throw new Error('Nieprawidłowa odpowiedź z Google Sheets');
+        }
+        
+        const data = JSON.parse(jsonText[1]);
+        console.log('✅ Ranking załadowany:', data);
+        
+        if (data.table && data.table.rows) {
+            rankingData = data.table.rows;
+            return true;
+        } else {
+            console.warn('Brak danych rankingowych w odpowiedzi');
+            return false;
+        }
+        
+    } catch (error) {
+        console.error('❌ Błąd pobierania rankingu:', error);
+        return false;
+    }
+}
+
+// DODANE: Funkcja do znajdowania mistrza na podstawie danych rankingowych
+function findChampionFromRanking() {
+    if (!rankingData || rankingData.length === 0) {
+        console.log('Brak danych rankingowych');
+        return null;
+    }
+    
+    let champion = null;
+    let maxPoints = 0;
+    
+    // Przejdź przez wszystkie drużyny w rankingu
+    rankingData.forEach((row, index) => {
+        const cells = row.c;
+        if (!cells || cells.length < 6) return;
+        
+        const teamName = cells[1]?.v || ''; // Kolumna B - Drużyna
+        const totalPoints = parseFloat(cells[5]?.v) || 0; // Kolumna F - Suma
+        
+        console.log(`Drużyna: ${teamName}, Punkty: ${totalPoints}`);
+        
+        // WARUNEK: suma > 0 i więcej niż aktualny mistrz
+        if (totalPoints > 0 && totalPoints > maxPoints) {
+            maxPoints = totalPoints;
+            champion = teamName;
+        }
+    });
+    
+    console.log(`Znaleziony mistrz: ${champion} z ${maxPoints} punktami`);
+    return champion;
+}
+
+function updateCurrentDate() {
+    const now = new Date();
+    const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    };
+    document.getElementById('currentDate').textContent = 
+        now.toLocaleDateString('pl-PL', options);
+}
+
+// Funkcja do grupowania zawodników w drużyny
+function processTeamData(playersData) {
+    const teamsMap = new Map();
+    
+    playersData.forEach(player => {
+        const teamKey = `${player.Klasa}-${player.Nazwa}`;
+        
+        if (!teamsMap.has(teamKey)) {
+            teamsMap.set(teamKey, {
+                id: teamKey,
+                name: player.Nazwa,
+                class: player.Klasa,
+                players: [],
+                captain: null,
+                sports: [], // Będzie uzupełnione później z danych dyscyplin
+                logoUrl: '',
+                groups: {}
+            });
+        }
+        
+        const team = teamsMap.get(teamKey);
+        const playerObj = {
+            firstName: player.Imie,
+            lastName: player.Nazwisko,
+            isCaptain: player.Kapitan === 'TRUE'
+        };
+        
+        team.players.push(playerObj);
+        
+        if (playerObj.isCaptain) {
+            team.captain = playerObj;
+        }
+    });
+    
+    // Konwertuj mapę do tablicy
+    return Array.from(teamsMap.values());
+}
+
+// Funkcja do łączenia danych drużyn z dyscyplinami
+// Funkcja do łączenia danych drużyn z dyscyplinami
+function mergeTeamsWithSports(teams, sports) {
+    console.log('Sports data from sheet:', sports);
+    console.log('Teams to merge:', teams);
+    
+    teams.forEach(team => {
+        // Znajdź dane dyscyplin dla tej drużyny
+        const teamSports = sports.find(s => 
+            s.Klasa === team.class && s.Nazwa === team.name
+        );
+        
+        console.log(`Looking for ${team.class} - ${team.name}:`, teamSports);
+        
+        if (teamSports) {
+            // Dodaj informacje o dyscyplinach
+            console.log('Found sports data:', teamSports);
+            
+            // Sprawdź różne możliwe nazwy kolumny z logo
+            const logoUrl = teamSports['Logo URL'] || teamSports['Logo'] || teamSports['logo'] || '';
+            console.log('Logo URL from sheet:', logoUrl);
+            
+            team.sports = [];
+            if (teamSports.Koszykówka === 'TRUE') team.sports.push('Koszykówka');
+            if (teamSports.Siatkówka === 'TRUE') team.sports.push('Siatkówka');
+            if (teamSports['Piłka Nożna'] === 'TRUE') team.sports.push('Piłka Nożna');
+            
+            // Dodaj informacje o grupach
+            team.groups = {
+                koszykówka: teamSports['Grupa Kosz'] || teamSports['Grupa Koszykówka'] || '',
+                siatkówka: teamSports['Grupa Siata'] || teamSports['Grupa Siatkówka'] || ''
+            };
+            team.logoUrl = logoUrl;
+        }
+    });
+    
+    return teams;
+}
+// Funkcja do uzyskania logo - używa URL z arkusza lub generuje placeholder
+// Funkcja do uzyskania logo - używa URL z arkusza lub generuje placeholder
+function getTeamLogo(team) {
+    // 1. Sprawdź czy w danych z arkusza jest URL do logo
+    if (team.logoUrl && team.logoUrl.trim() !== '' && team.logoUrl.trim() !== 'null') {
+        console.log('Using logo from sheet:', team.logoUrl);
+        return team.logoUrl;
+    }
+    
+    // 2. Spróbuj znaleźć logo w folderze logos
+    const cleanClassName = team.class.replace(/\s+/g, '').toLowerCase();
+    const logoPath = `logos/${cleanClassName}.jpg`;
+    console.log('Trying local logo:', logoPath);
+    
+    // 3. Zwróć ścieżkę do logo (lub placeholder jeśli nie ma)
+    return logoPath;
+}
+// =================== ŁADOWANIE DANYCH ===================
+async function loadData() {
+    showLoading(true);
+    
+    try {
+        // Pobierz dane zawodników (drużyn)
+        const teamsCSV = await fetchCSV(TEAMS_CSV_URL);
+        if (!teamsCSV) {
+            showNoTeamsMessage();
+            return;
+        }
+        
+        // Pobierz dane dyscyplin
+        const sportsCSV = await fetchCSV(SPORTS_CSV_URL);
+        if (!sportsCSV) {
+            showNoTeamsMessage();
+            return;
+        }
+        
+        // Przetwórz dane
+        const playersData = parseCSV(teamsCSV);
+        const rawSportsData = parseCSV(sportsCSV);
+        
+        if (playersData.length === 0) {
+            showNoTeamsMessage();
+            return;
+        }
+        
+        // Przetwórz dane drużyn
+        let processedTeams = processTeamData(playersData);
+        
+        // Połącz z danymi dyscyplin
+        allTeams = mergeTeamsWithSports(processedTeams, rawSportsData);
+        
+        if (allTeams.length === 0) {
+            showNoTeamsMessage();
+            return;
+        }
+        
+        // DODANE: Pobierz dane rankingowe
+        const rankingLoaded = await fetchRankingData();
+        
+        // Oblicz podsumowanie (przekaż czy ranking został załadowany)
+        updateSummary(rankingLoaded);
+        
+        // Filtruj i wyświetl drużyny
+        filteredTeams = [...allTeams];
+        renderTeams();
+        
+    } catch (error) {
+        console.error('Błąd ładowania danych:', error);
+        showNoTeamsMessage();
+    } finally {
+        showLoading(false);
+    }
+}
+
+// ZMIENIONE: Funkcja updateSummary teraz przyjmuje parametr rankingLoaded
+function updateSummary(rankingLoaded = false) {
+    const totalTeams = allTeams.length;
+    
+    // Oblicz całkowitą liczbę zawodników
+    const totalPlayers = allTeams.reduce((sum, team) => {
+        return sum + team.players.length;
+    }, 0);
+    
+    // Znajdź mistrza
+    let championTeam = 'Brak danych';
+    
+    if (rankingLoaded && rankingData.length > 0) {
+        // Spróbuj znaleźć mistrza z rankingu
+        const champion = findChampionFromRanking();
+        if (champion) {
+            championTeam = champion;
+            console.log(`🏆 Mistrz znaleziony z rankingu: ${championTeam}`);
+            
+            // Zapisz mistrza w localStorage dla innych stron
+            localStorage.setItem('currentChampion', championTeam);
+            localStorage.setItem('championLastUpdate', new Date().toISOString());
+        } else {
+            // Jeśli w rankingu wszyscy mają 0 punktów
+            championTeam = 'Brak';
+            console.log('W rankingu wszyscy mają 0 punktów');
+        }
+    } else {
+        // Jeśli nie udało się pobrać rankingu, sprawdź localStorage
+        const savedChampion = localStorage.getItem('currentChampion');
+        const lastUpdate = localStorage.getItem('championLastUpdate');
+        
+        if (savedChampion) {
+            const updateDate = new Date(lastUpdate);
+            const now = new Date();
+            const hoursDiff = (now - updateDate) / (1000 * 60 * 60);
+            
+            // Jeśli dane są starsze niż 24 godziny, uznajemy je za nieaktualne
+            if (hoursDiff < 24) {
+                championTeam = savedChampion;
+                console.log(`🏆 Mistrz z localStorage: ${championTeam}`);
+            } else {
+                // Użyj pierwszej drużyny jako fallback
+                championTeam = allTeams.length > 0 ? allTeams[0].name : 'Brak danych';
+                console.log(`Użyto fallback: ${championTeam}`);
+            }
+        } else {
+            // Użyj pierwszej drużyny jako fallback
+            championTeam = allTeams.length > 0 ? allTeams[0].name : 'Brak danych';
+            console.log(`Użyto fallback: ${championTeam}`);
+        }
+    }
+    
+    document.getElementById('totalTeams').textContent = totalTeams;
+    document.getElementById('totalPlayers').textContent = totalPlayers;
+    document.getElementById('championTeam').textContent = championTeam;
+}
+
+// DODANE: Funkcja do ręcznego odświeżania mistrza
+async function refreshChampion() {
+    console.log('🔄 Odświeżanie danych mistrza...');
+    const rankingLoaded = await fetchRankingData();
+    updateSummary(rankingLoaded);
+}
+
+// =================== RENDEROWANIE DRUŻYN ===================
+function renderTeams() {
+    if (currentView === 'grid') {
+        renderTeamsGrid();
+    } else {
+        renderTeamsList();
+    }
+}
+
+function renderTeamsGrid() {
+    const container = document.getElementById('teamsGridContainer');
+    if (!container) return;
+    
+    if (filteredTeams.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="far fa-frown"></i>
+                <p>Nie znaleziono drużyn</p>
+                <button onclick="loadData()" class="btn-sport">Odśwież</button>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = '';
+    
+    filteredTeams.forEach((team, index) => {
+        const captainName = team.captain ? 
+            `${team.captain.firstName} ${team.captain.lastName}` : 'Nie wybrano';
+        
+        // UŻYJ TEJ SAMEJ FUNKCJI co w modalu!
+        const logoUrl = `logos/${team.class.replace(/\s+/g, '').toLowerCase()}.jpg`;
+        
+        // Generuj badge'y dla dyscyplin
+        let sportsBadges = '';
+        team.sports.forEach(sport => {
+            const icon = SPORT_ICONS[sport] || 'fas fa-question';
+            const color = SPORT_COLORS[sport] || '#757575';
+            sportsBadges += `
+                <span class="sport-badge" style="background: ${color};">
+                    <i class="${icon}"></i> ${sport}
+                </span>
+            `;
+        });
+        
+        html += `
+            <div class="team-card" onclick="showTeamDetails('${team.id}')">
+                <div class="team-card-header">
+                    <!-- LOGO Z ARKUSZA -->
+                    <div class="team-logo">
+                        <img src="${logoUrl}" alt="Logo ${team.name}" 
+                             onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(team.class)}&background=1a237e&color=fff&size=100'">
+                    </div>
+                    <div class="team-header-info">
+                        <h3>${team.name}</h3>
+                        <span class="team-class-badge">${team.class}</span>
+                    </div>
+                </div>
+                
+                <div class="team-sports">
+                    ${sportsBadges || '<span class="sport-badge">Brak dyscyplin</span>'}
+                </div>
+                
+                <div class="team-info">
+                    <div class="info-item">
+                        <i class="fas fa-user-friends"></i>
+                        <span>${team.players.length} zawodników</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-crown"></i>
+                        <span>Kapitan: ${captainName}</span>
+                    </div>
+                </div>
+                
+                <div class="team-card-footer">
+                    <div class="team-status status-success">
+                        <i class="fas fa-circle"></i>
+                        <span>Zarejestrowana</span>
+                    </div>
+                    <button class="btn-view-details" onclick="event.stopPropagation(); showTeamDetails('${team.id}')">
+                        <i class="fas fa-eye"></i> Szczegóły
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
+function renderTeamsList() {
+    const tableBody = document.getElementById('teamsListTable');
+    const thead = document.querySelector('#teamsListContainer thead');
+    
+    if (!tableBody) return;
+    
+    if (filteredTeams.length === 0) {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="6" class="empty-state">
+                    <i class="far fa-frown"></i>
+                    <p>Nie znaleziono drużyn</p>
+                    <button onclick="loadData()" class="btn-sport">Odśwież</button>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    // Ustaw nagłówki tabeli
+    if (thead) {
+        thead.innerHTML = `
+            <tr>
+                <th>Nazwa drużyny</th>
+                <th>Klasa</th>
+                <th>Dyscypliny</th>
+                <th>Zawodnicy</th>
+                <th>Kapitan</th>
+                <th>Akcje</th>
+            </tr>
+        `;
+    }
+    
+    let html = '';
+    
+    filteredTeams.forEach((team) => {
+        const captainName = team.captain ? 
+            `${team.captain.firstName} ${team.captain.lastName}` : 'Nie wybrano';
+        
+        // Generuj ikony dyscyplin
+        let sportsIcons = '';
+        team.sports.forEach(sport => {
+            const icon = SPORT_ICONS[sport] || 'fas fa-question';
+            const color = SPORT_COLORS[sport] || '#757575';
+            sportsIcons += `
+                <div class="sport-badge-small" style="background: ${color};">
+                    <i class="${icon}"></i>
+                </div>
+            `;
+        });
+        
+        html += `
+            <tr>
+                <td>
+                    <div class="team-name">${team.name}</div>
+                </td>
+                <td>${team.class}</td>
+                <td>
+                    <div class="team-sports-small">
+                        ${sportsIcons || '<span class="sport-badge-small"><i class="fas fa-question"></i></span>'}
+                    </div>
+                </td>
+                <td>${team.players.length}</td>
+                <td>${captainName}</td>
+                <td>
+                    <button class="btn-action" onclick="showTeamDetails('${team.id}')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+    
+    tableBody.innerHTML = html;
+}
+
+// =================== MODAL SZCZEGÓŁÓW ===================
+function showTeamDetails(teamId) {
+    const team = allTeams.find(t => t.id === teamId);
+    if (!team) return;
+    
+    const modalBody = document.getElementById('teamModalBody');
+    const captainName = team.captain ? 
+        `${team.captain.firstName} ${team.captain.lastName}` : 'Nie wybrano';
+    
+    // UŻYJ TEJ SAMEJ LOGIKI CO W KAFELKACH
+    const logoUrl = `logos/${team.class.replace(/\s+/g, '').toLowerCase()}.jpg`;
+    
+    // Generuj listę dyscyplin z grupami
+    let sportsList = '';
+    team.sports.forEach(sport => {
+        const icon = SPORT_ICONS[sport] || 'fas fa-question';
+        const color = SPORT_COLORS[sport] || '#757575';
+        let groupInfo = '';
+        
+        if (sport === 'Koszykówka' && team.groups && team.groups.koszykówka) {
+            groupInfo = `<small>(Grupa: ${team.groups.koszykówka})</small>`;
+        }
+        if (sport === 'Siatkówka' && team.groups && team.groups.siatkówka) {
+            groupInfo = `<small>(Grupa: ${team.groups.siatkówka})</small>`;
+        }
+        
+        sportsList += `
+            <div class="sport-item" style="background: ${color};">
+                <i class="${icon}"></i>
+                <span>${sport} ${groupInfo}</span>
+            </div>
+        `;
+    });
+    
+    modalBody.innerHTML = `
+        <div class="team-modal-header">
+            <div class="team-modal-logo-title">
+                <div class="modal-team-logo">
+                    <img src="${logoUrl}" alt="Logo ${team.name}"
+                         onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(team.class)}&background=1a237e&color=fff&size=150'">
+                </div>
+                <div>
+                    <h3>${team.name}</h3>
+                    <span class="team-class-large">${team.class}</span>
+                </div>
+            </div>
+            
+            <div class="team-modal-stats">
+                <div class="stat-box">
+                    <div class="stat-value">${team.players.length}</div>
+                    <div class="stat-label">Zawodników</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">${team.sports.length}</div>
+                    <div class="stat-label">Dyscypliny</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">${team.class}</div>
+                    <div class="stat-label">Klasa</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="team-modal-content">
+            <div class="team-section">
+                <h4><i class="fas fa-users"></i> Zawodnicy</h4>
+                <div class="players-list">
+                    ${team.players.map(player => `
+                        <div class="player-item ${player.isCaptain ? 'player-captain' : ''}">
+                            <div class="player-name">
+                                ${player.firstName} ${player.lastName}
+                                ${player.isCaptain ? '<i class="fas fa-crown captain-badge"></i>' : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            
+            <div class="team-section">
+                <h4><i class="fas fa-futbol"></i> Dyscypliny</h4>
+                <div class="sports-list">
+                    ${team.sports.map(sport => {
+                        const icon = SPORT_ICONS[sport] || 'fas fa-question';
+                        const color = SPORT_COLORS[sport] || '#757575';
+                        let groupInfo = '';
+                        
+                        if (sport === 'Koszykówka' && team.groups && team.groups.koszykówka) {
+                            groupInfo = `<small>(Grupa: ${team.groups.koszykówka})</small>`;
+                        }
+                        if (sport === 'Siatkówka' && team.groups && team.groups.siatkówka) {
+                            groupInfo = `<small>(Grupa: ${team.groups.siatkówka})</small>`;
+                        }
+                        
+                        return `
+                            <div class="sport-item" style="background: ${color};">
+                                <i class="${icon}"></i>
+                                <span>${sport} ${groupInfo}</span>
+                            </div>
+                        `;
+                    }).join('') || '<p>Brak zadeklarowanych dyscyplin</p>'}
+                </div>  
+            </div>
+        </div>
+    `;
+    
+    // Pokaż modal
+    document.getElementById('teamModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+function closeTeamModal() {
+    document.getElementById('teamModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// =================== ZARZĄDZANIE WIDOKIEM ===================
+function switchView(viewType) {
+    currentView = viewType;
+    
+    // Aktualizuj przyciski
+    document.getElementById('gridViewBtn').classList.remove('active');
+    document.getElementById('listViewBtn').classList.remove('active');
+    
+    if (viewType === 'grid') {
+        document.getElementById('gridViewBtn').classList.add('active');
+        document.getElementById('teamsGridContainer').style.display = 'grid';
+        document.getElementById('teamsListContainer').style.display = 'none';
+    } else {
+        document.getElementById('listViewBtn').classList.add('active');
+        document.getElementById('teamsGridContainer').style.display = 'none';
+        document.getElementById('teamsListContainer').style.display = 'block';
+    }
+    
+    renderTeams();
+}
+
+// =================== FUNKCJE POMOCNICZE UI ===================
+function showLoading(show) {
+    const loadingElement = document.getElementById('initialLoading');
+    const initialLoading = document.getElementById('initialLoading');
+    
+    if (loadingElement) {
+        loadingElement.style.display = show ? 'flex' : 'none';
+    }
+    
+    if (initialLoading) {
+        initialLoading.style.display = show ? 'flex' : 'none';
+    }
+    
+    if (!show) {
+        document.getElementById('noTeamsMessage').style.display = 'none';
+    }
+}
+
+function showNoTeamsMessage() {
+    document.getElementById('initialLoading').style.display = 'none';
+    document.getElementById('noTeamsMessage').style.display = 'block';
+}
+
+// =================== INICJALIZACJA ===================
+document.addEventListener('DOMContentLoaded', function() {
+    // Ustaw datę
+    updateCurrentDate();
+    
+    // Załaduj dane
+    loadData();
+    
+    // Dodaj event listeners dla przycisków widoku
+    document.getElementById('gridViewBtn').addEventListener('click', () => switchView('grid'));
+    document.getElementById('listViewBtn').addEventListener('click', () => switchView('list'));
+    
+    // Zamknij modal po kliknięciu poza nim
+    document.getElementById('teamModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeTeamModal();
+        }
+    });
+    
+    // Zamknij modal klawiszem ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeTeamModal();
+        }
+    });
+});
+
+// Funkcja do odświeżania danych (może być wywołana z przycisku)
+function refreshTeams() {
+    loadData();
+}
+</script>
+
+<!-- Dodaj style dla modala -->
+<style>
+/* =================== MODAL STYLES =================== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    background: var(--primary-color);
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.close-modal:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 30px;
+}
+
+/* Responsywność modala */
+@media (max-width: 768px) {
+    .modal-content {
+        max-width: 95%;
+        max-height: 95vh;
+    }
+    
+    .modal-body {
+        padding: 20px;
+    }
+    
+    .team-modal-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Poprawki dla listy zawodników */
+.players-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 10px;
+}
+
+.player-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    transition: all 0.3s ease;
+}
+
+.player-item:hover {
+    background: rgba(26, 35, 126, 0.05);
+}
+
+.player-item.player-captain {
+    background: rgba(255, 193, 7, 0.1);
+    border-left: 3px solid #ffc107;
+}
+
+.player-name {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.captain-badge {
+    color: #ff9800;
+    font-size: 0.9em;
+}
+
+/* Poprawki dla listy dyscyplin */
+.sports-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.sport-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sport-item i {
+    font-size: 1.2em;
+}
+
+.sport-item small {
+    opacity: 0.9;
+    font-weight: normal;
+    margin-left: 5px;
+}
+</style>
+</body>
+</html>

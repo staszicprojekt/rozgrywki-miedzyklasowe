@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piłka nożna - Rozgrywki Międzyklasowe</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- DODATKOWE STYLE DLA KOMUNIKATU -->
+    <style>
+        .construction-notice {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            margin: 30px auto;
+            padding: 40px;
+            max-width: 900px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #4CAF50;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .construction-content {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .construction-gif-container {
+            flex-shrink: 0;
+        }
+        
+        .construction-gif {
+            width: 180px; /* Zmniejszony rozmiar */
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+        
+        .construction-gif:hover {
+            transform: scale(1.05);
+        }
+        
+        .construction-text {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .construction-text h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .construction-text p {
+            margin: 15px 0;
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #34495e;
+        }
+        
+        .construction-highlight {
+            background-color: rgba(76, 175, 80, 0.1);
+            padding: 15px 20px;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+            margin: 25px 0;
+        }
+        
+        .construction-note {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            margin-top: 20px;
+            font-size: 0.95em;
+            color: #666;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .construction-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .construction-btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .construction-btn-primary {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+        
+        .construction-btn-primary:hover {
+            background-color: #388E3C;
+            transform: translateY(-2px);
+        }
+        
+        .construction-btn-secondary {
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            border: 1px solid #ddd;
+        }
+        
+        .construction-btn-secondary:hover {
+            background-color: #e9ecef;
+            border-color: #4CAF50;
+        }
+        
+        @media (max-width: 768px) {
+            .construction-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 25px;
+            }
+            
+            .construction-gif {
+                width: 150px;
+            }
+            
+            .construction-text h3 {
+                justify-content: center;
+            }
+            
+            .construction-buttons {
+                justify-content: center;
+            }
+            
+            .construction-notice {
+                margin: 20px 15px;
+                padding: 25px;
+            }
+        }
+        
+        /* Animacja dla ikonki narzędzi */
+        @keyframes tools-animation {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            50% { transform: rotate(0deg); }
+            75% { transform: rotate(-10deg); }
+            100% { transform: rotate(0deg); }
+        }
+        
+        .construction-text h3 i {
+            animation: tools-animation 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="school-header">
+            <div class="logo-container">
+                <a href="index.html" class="logo-link">
+                    <div class="logo-placeholder">
+                        <img src="logo_szkoly.png" alt="Logo szkoły" class="school-logo">
+                    </div>
+                </a>
+                <a href="index.html" class="title-link">
+                    <div class="title-container">
+                        <h1 id="pageTitle">Rozgrywki Międzyklasowe 2026</h1>
+                        <p class="school-name" id="schoolName"> I Liceum Ogólnokształcące im. Stanisława Staszica</p>
+                    </div>
+                </a>
+            </div>
+            <div class="current-date">
+                <i class="far fa-calendar-alt"></i>
+                <span id="currentDate"></span>
+            </div>
+        </div>
+        
+        <!-- NAVIGACJA -->
+        <nav class="main-nav">
+            <ul class="nav-list">
+                <!-- DROPDOWN DYSCYPLINY -->
+                <li class="dropdown">
+                    <a href="#">
+                        <i class="fas fa-futbol"></i> Dyscypliny <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="koszykowka.html"><i class="fas fa-basketball-ball"></i> Koszykówka</a>
+                        <a href="siatkowka.html"><i class="fas fa-volleyball-ball"></i> Siatkówka</a>
+                        <a href="pilka-nozna.html" class="active"><i class="fas fa-futbol"></i> Piłka nożna</a>
+                    </div>
+                </li>
+                
+                <li><a href="druzyny.html"><i class="fas fa-users"></i> Drużyny</a></li>
+                <li><a href="dokumenty.html"><i class="fas fa-file-alt"></i> Dokumenty</a></li>
+            </ul>
+        </nav>
+    </header>
+
+<!-- KOMUNIKAT O BUDOWIE STRONY -->
+<div class="container">
+    <div class="construction-notice">
+        <div class="construction-content">
+            <div class="construction-gif-container">
+                <img src="logos/underconstruction.gif" alt="Strona w budowie" class="construction-gif">
+            </div>
+            <div class="construction-text">
+                <h3><i class="fas fa-tools"></i> Strona w przygotowaniu</h3>
+                <p>Właśnie trwają zapisy, dlatego ta sekcja jest jeszcze w budowie.</p>
+                
+                <div class="construction-highlight">
+                    <p><strong>Po zakończeniu zapisów strona zostanie zaktualizowana</strong> i pojawią się tu wszystkie informacje:</p>
+                    <ul style="margin: 10px 0 0 20px; color: #2c3e50;">
+                        <li>Drużyny biorące udział</li>
+                        <li>Terminy spotkań i wyniki na żywo</li>
+                        <li>Drabinka turniejowa i informacje o finale</li>
+                    </ul>
+                </div>
+                
+                <div class="construction-note">
+                    <i class="fas fa-info-circle" style="color: #4CAF50;"></i>
+                    <div>
+                        <strong>Na razie możesz:</strong><br>
+                        • Zebrać drużynę w swojej klasie i zgłosić się poprzez formularz zgłoszeniowy w zakładce "Dokumenty"<br>
+                        • Wrócić tu za kilka dni po zaktualizowaniu danych
+                    </div>
+                </div>
+                
+                <div class="construction-buttons">
+                    <a href="dokumenty.html" class="construction-btn construction-btn-primary">
+                        <i class="fas fa-file-alt"></i> Dokumenty
+                    </a>
+                    <a href="index.html" class="construction-btn construction-btn-secondary">
+                        <i class="fas fa-home"></i> Strona główna
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 
+    RESZTA STRONY JEST W KOMENTARZU - NIE WIDOCZNA
+    ================================================
+    
+    <main class="container">
+        <section class="hero">
+            <div class="hero-content">
+                <h2><i class="fas fa-futbol"></i> Piłka nożna</h2>
+                <p>Mecze, statystyki i tabela ligowa piłki nożnej międzyklasowej</p>
+                
+                <div class="sport-summary">
+                    <div class="summary-item">
+                        <i class="fas fa-futbol"></i>
+                        <span id="totalMatches">0</span>
+                        <small>Meczów</small>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fas fa-flag"></i>
+                        <span id="totalTeams">8</span>
+                        <small>Drużyn</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        ... CAŁA RESZTA KODU STRONY PIŁKI NOŻNEJ ...
+        
+    </main>
+
+    <script src="js/data.js"></script>
+    <script src="js/pilka-nozna.js"></script>
+-->
+
+<!-- SKRYPT DO DATY W HEADERZE - MUSI BYĆ POZA KOMENTARZEM, ŻEBY DZIAŁAŁ -->
+<script>
+    // ===================== FUNKCJE DLA HEADERA =====================
+    // Tylko funkcje niezbędne do działania nagłówka
+    
+    function updateCurrentDate() {
+        const now = new Date();
+        const options = {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        };
+        
+        const dateString = now.toLocaleDateString('pl-PL', options);
+        const dateElement = document.getElementById('currentDate');
+        
+        if (dateElement) {
+            dateElement.textContent = dateString;
+        }
+    }
+    
+    // Inicjalizacja przy załadowaniu strony
+    document.addEventListener('DOMContentLoaded', function() {
+        updateCurrentDate();
+        // Aktualizuj datę co minutę
+        setInterval(updateCurrentDate, 60000);
+    });
+    // POPRAWIONY KOD DROPDOWN
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdowns = document.querySelectorAll('.dropdown');
+        
+        dropdowns.forEach(dropdown => {
+            const toggle = dropdown.querySelector('a');
+            
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const isOpen = dropdown.classList.contains('open');
+                
+                // Zamknij wszystkie inne dropdowny
+                dropdowns.forEach(otherDropdown => {
+                    if (otherDropdown !== dropdown) {
+                        otherDropdown.classList.remove('open');
+                    }
+                });
+                
+                // Otwórz/zamknij aktualny dropdown
+                if (!isOpen) {
+                    dropdown.classList.add('open');
+                    adjustDropdownPosition(dropdown);
+                } else {
+                    dropdown.classList.remove('open');
+                }
+            });
+        });
+        
+        // Zamknij po kliknięciu gdzie indziej
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown')) {
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('open');
+                });
+            }
+        });
+        
+        // Zamknij po ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('open');
+                });
+            }
+        });
+        
+        // Zamknij po kliknięciu w link
+        document.querySelectorAll('.dropdown-content a').forEach(link => {
+            link.addEventListener('click', function() {
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('open');
+                });
+            });
+        });
+        
+        // FUNKCJA DOSTOSOWUJĄCA POZYCJĘ DROPDOWNU
+        function adjustDropdownPosition(dropdown) {
+            setTimeout(() => {
+                const content = dropdown.querySelector('.dropdown-content');
+                const toggle = dropdown.querySelector('a');
+                
+                if (!content || !toggle) return;
+                
+                // Resetujemy klasę
+                content.classList.remove('out-of-view');
+                
+                // Sprawdzamy czy dropdown wyjdzie poza ekran (tylko na mobile)
+                if (window.innerWidth <= 768) {
+                    const toggleRect = toggle.getBoundingClientRect();
+                    const contentWidth = content.offsetWidth;
+                    const viewportWidth = window.innerWidth;
+                    
+                    // Jeśli dropdown wyjdzie poza prawy brzeg ekranu
+                    if (toggleRect.left + contentWidth > viewportWidth - 20) {
+                        content.classList.add('out-of-view');
+                    }
+                }
+            }, 10);
+        }
+        
+        // Zamknij dropdowny przy zmianie rozmiaru okna
+        window.addEventListener('resize', function() {
+            dropdowns.forEach(dropdown => {
+                dropdown.classList.remove('open');
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
