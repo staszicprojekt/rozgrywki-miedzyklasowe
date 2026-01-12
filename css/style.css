@@ -2386,3 +2386,40 @@ footer {
     50% { transform: scale(1.05); }
     100% { transform: scale(1); }
 }
+/* Compact version for mobile */
+@media (max-width: 480px) {
+    .ranking-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .ranking-card {
+        padding: 0.8rem;
+    }
+    
+    .ranking-table {
+        font-size: 0.8em;
+    }
+    
+    /* Zmień układ na bardziej kompaktowy */
+    .ranking-table th:nth-child(1),
+    .ranking-table td:nth-child(1) {
+        width: 70%;
+        min-width: 100px;
+    }
+    
+    .ranking-table th:nth-child(2),
+    .ranking-table td:nth-child(2) {
+        width: 30%;
+        min-width: 70px;
+    }
+    
+    /* Skróć niektóre teksty */
+    .merged-row::before {
+        content: attr(data-short);
+        display: block;
+    }
+    
+    .merged-row span {
+        display: none;
+    }
+}
