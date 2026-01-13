@@ -195,7 +195,6 @@ body {
 
 .dropdown.open > a {
     color: var(--primary-color);
-    font-weight: 600;
     background: rgba(26, 35, 126, 0.05);
     border-bottom-color: var(--primary-color);
 }
