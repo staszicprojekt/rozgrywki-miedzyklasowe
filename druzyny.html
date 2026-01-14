@@ -415,7 +415,6 @@ function processTeamData(playersData) {
 }
 
 // Funkcja do łączenia danych drużyn z dyscyplinami
-// Funkcja do łączenia danych drużyn z dyscyplinami
 function mergeTeamsWithSports(teams, sports) {
     console.log('Sports data from sheet:', sports);
     console.log('Teams to merge:', teams);
@@ -453,16 +452,13 @@ function mergeTeamsWithSports(teams, sports) {
     return teams;
 }
 // Funkcja do uzyskania logo - używa URL z arkusza lub generuje placeholder
-// Funkcja do uzyskania logo - używa URL z arkusza lub generuje placeholder
 function getTeamLogo(team) {
-    // 1. Sprawdź czy w danych z arkusza jest URL do logo
-    if (team.logoUrl && team.logoUrl.trim() !== '' && team.logoUrl.trim() !== 'null') {
-        console.log('Using logo from sheet:', team.logoUrl);
-        return team.logoUrl;
-    }
-    
     // 2. Spróbuj znaleźć logo w folderze logos
-    const cleanClassName = team.class.replace(/\s+/g, '').toLowerCase();
+    const cleanClassName = team.class
+        .replace(/\s*[\/\\]\s*/g, '')  // usuń ukośniki i otaczające je spacje
+        .replace(/[^a-zA-Z0-9]/g, '')   // usuń wszystkie inne znaki specjalne
+        .toLowerCase();
+    
     const logoPath = `logos/${cleanClassName}.jpg`;
     console.log('Trying local logo:', logoPath);
     
@@ -622,7 +618,7 @@ function renderTeamsGrid() {
             `${team.captain.firstName} ${team.captain.lastName}` : 'Nie wybrano';
         
         // UŻYJ TEJ SAMEJ FUNKCJI co w modalu!
-        const logoUrl = `logos/${team.class.replace(/\s+/g, '').toLowerCase()}.jpg`;
+        const logoUrl = getTeamLogo(team);
         
         // Generuj badge'y dla dyscyplin
         let sportsBadges = '';
@@ -767,7 +763,7 @@ function showTeamDetails(teamId) {
         `${team.captain.firstName} ${team.captain.lastName}` : 'Nie wybrano';
     
     // UŻYJ TEJ SAMEJ LOGIKI CO W KAFELKACH
-    const logoUrl = `logos/${team.class.replace(/\s+/g, '').toLowerCase()}.jpg`;
+    const logoUrl = getTeamLogo(team);
     
     // Generuj listę dyscyplin z grupami
     let sportsList = '';
