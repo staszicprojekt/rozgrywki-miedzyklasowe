@@ -723,9 +723,7 @@ function saveChampionToStorage(champion) {
                         // DODANE: Można zmienić tekst po zakończeniu odliczania
                         const heroTitle = document.getElementById('heroTitle');
                         const heroSubtitle = document.getElementById('heroSubtitle');
-                        
-                        if (heroTitle) heroTitle.innerHTML = '<i class="fas fa-trophy"></i> Rozgrywki trwają!';
-                        if (heroSubtitle) heroSubtitle.textContent = 'Śledź wyniki na żywo';
+                    
                         
                         clearInterval(countdownInterval);
                         return;
