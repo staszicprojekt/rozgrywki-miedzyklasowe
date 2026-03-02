@@ -102,7 +102,24 @@
                 <p>Brak nadchodzących meczów</p>
             </div>
         </section>
-
+        <!-- OGŁOSZENIA -->
+        <section class="section announcements">
+            <div class="section-header">
+                <h2><i class="fas fa-bullhorn"></i> Ogłoszenia</h2>
+                <button onclick="toggleAnnouncements()" class="btn-refresh">
+                    <i class="fas fa-eye"></i> <span id="toggleAnnouncementsText">Ukryj</span>
+                </button>
+            </div>
+            
+            <div class="announcements-list" id="announcementsList">
+                <!-- Ogłoszenia wczytają się tutaj -->
+            </div>
+            
+            <div id="noAnnouncementsMessage" class="empty-state" style="display: none;">
+                <i class="far fa-bell-slash"></i>
+                <p>Brak ogłoszeń</p>
+            </div>
+        </section>
         <!-- KLASYFIKACJA GENERALNA -->
         <section class="section">
             <div class="section-header">
@@ -133,24 +150,6 @@
             <div id="noStandingsMessage" class="empty-state" style="display: none;">
                 <i class="far fa-frown"></i>
                 <p>Brak danych klasyfikacji</p>
-            </div>
-        </section>
-        <!-- OGŁOSZENIA -->
-        <section class="section announcements">
-            <div class="section-header">
-                <h2><i class="fas fa-bullhorn"></i> Ogłoszenia</h2>
-                <button onclick="toggleAnnouncements()" class="btn-refresh">
-                    <i class="fas fa-eye"></i> <span id="toggleAnnouncementsText">Ukryj</span>
-                </button>
-            </div>
-            
-            <div class="announcements-list" id="announcementsList">
-                <!-- Ogłoszenia wczytają się tutaj -->
-            </div>
-            
-            <div id="noAnnouncementsMessage" class="empty-state" style="display: none;">
-                <i class="far fa-bell-slash"></i>
-                <p>Brak ogłoszeń</p>
             </div>
         </section>
         <!-- PODSUMOWANIE DYSCYPLIN -->
