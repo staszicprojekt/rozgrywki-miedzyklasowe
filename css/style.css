@@ -2422,3 +2422,198 @@ footer {
         display: none;
     }
 }
+/* ===== ULEPSZONE KAFELKI MECZÓW ===== */
+.match-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    position: relative;
+}
+
+.match-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(26, 35, 126, 0.15);
+}
+
+.match-card--finished {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-left: 4px solid var(--success-color);
+}
+
+.match-card--upcoming {
+    border-left: 4px solid var(--secondary-color);
+}
+
+.match-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: rgba(26, 35, 126, 0.02);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.match-sport {
+    background: var(--primary-color);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.match-date {
+    color: var(--gray-color);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.match-date i {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.match-teams {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 25px 20px 20px;
+    gap: 15px;
+}
+
+.team {
+    flex: 1;
+    text-align: center;
+}
+
+.team-home .team-name::before {
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+.team-away .team-name::before {
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+.team-name {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--primary-dark);
+    display: block;
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+.team-label {
+    font-size: 0.7rem;
+    color: var(--gray-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: rgba(0, 0, 0, 0.03);
+    padding: 2px 8px;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.match-score-display {
+    min-width: 80px;
+    text-align: center;
+}
+
+.match-score {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    background: rgba(26, 35, 126, 0.1);
+    padding: 10px 15px;
+    border-radius: 60px;
+    display: inline-block;
+    line-height: 1;
+    letter-spacing: 2px;
+}
+
+.match-vs {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--gray-color);
+    opacity: 0.5;
+    background: rgba(0, 0, 0, 0.02);
+    padding: 10px 15px;
+    border-radius: 60px;
+    display: inline-block;
+}
+
+.match-footer {
+    padding: 0 20px 20px 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.match-status {
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-upcoming {
+    background: #e3f2fd;
+    color: var(--secondary-color);
+}
+
+.status-finished {
+    background: #e8f5e8;
+    color: #2e7d32;
+}
+
+.status-live {
+    background: #ffebee;
+    color: var(--danger-color);
+    animation: pulse 1.5s infinite;
+}
+
+/* Responsywność dla kafelków */
+@media (max-width: 600px) {
+    .match-teams {
+        flex-direction: column;
+        padding: 20px 15px;
+    }
+    
+    .match-score-display {
+        order: -1;
+        margin-bottom: 10px;
+    }
+    
+    .team {
+        width: 100%;
+    }
+    
+    .team-name {
+        font-size: 1.1rem;
+    }
+    
+    .match-score {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .match-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .match-date {
+        font-size: 0.8rem;
+    }
+}
