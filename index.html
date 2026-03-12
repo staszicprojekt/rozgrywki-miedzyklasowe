@@ -7,6 +7,206 @@
     <link rel="icon" type="png" href="logo_szkoly.png">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== KAFELKI MECZÓW – DLA STRONY GŁÓWNEJ ===== */
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .match-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        .match-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(26, 35, 126, 0.15);
+        }
+
+        .match-card--finished {
+            border-left: 4px solid #4caf50;
+        }
+
+        .match-card--upcoming {
+            border-left: 4px solid #2196f3;
+        }
+
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eee;
+        }
+
+        .match-date {
+            color: #666;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .match-teams {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 15px;
+            gap: 8px;
+        }
+
+        .team {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .team-home {
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        .team-away {
+            align-items: flex-end;
+            text-align: left;
+        }
+
+        .team-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #1a237e;
+            margin-bottom: 4px;
+            word-break: break-word;
+        }
+
+        .team-score {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #1a237e;
+            line-height: 1;
+            background: rgba(26, 35, 126, 0.1);
+            padding: 4px 14px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+
+        .team-score-empty {
+            background: transparent;
+            color: #999;
+            font-size: 1.4rem;
+            opacity: 0.5;
+            padding: 4px 12px;
+        }
+
+        /* Separator domyślny (na duże ekrany) */
+        .desktop-only {
+            display: flex;
+        }
+        .mobile-only {
+            display: none;
+        }
+
+        .match-score-separator {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #999;
+            opacity: 0.7;
+            margin: 0 5px;
+        }
+
+        /* Styl dla zwycięzcy meczu */
+        .team-winner .team-name {
+            font-weight: 800;
+            color: #1a237e;
+        }
+        .team-winner .team-score {
+            background: #1a237e;
+            color: white;
+        }
+
+        .match-footer {
+            padding: 8px 15px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .match-status {
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .match-sport-icon {
+            color: #3f51b5;
+            opacity: 0.3;
+            font-size: 1.2rem;
+        }
+
+        .status-upcoming {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status-finished {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        /* Responsywność */
+        @media (max-width: 600px) {
+            .match-teams {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+
+            .desktop-only {
+                display: none;
+            }
+            .mobile-only {
+                display: block;
+                font-size: 1.5rem;
+                margin: 5px 0;
+                text-align: center;
+                font-weight: 600;
+                color: #999;
+                opacity: 0.7;
+            }
+
+            .team {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .team-name {
+                font-size: 1rem;
+                margin-bottom: 0;
+                flex: 1;
+            }
+
+            .team-score, .team-score-empty {
+                font-size: 1.3rem;
+                padding: 4px 10px;
+                margin-left: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- HEADER -->
@@ -31,10 +231,8 @@
             </div>
         </div>
         
-        <!-- NAVIGACJA -->
         <nav class="main-nav">
             <ul class="nav-list">
-                <!-- DROPDOWN DYSCYPLINY -->
                 <li class="dropdown">
                     <a href="#">
                         <i class="fas fa-futbol"></i> Dyscypliny <i class="fas fa-chevron-down"></i>
@@ -45,14 +243,12 @@
                         <a href="pilka-nozna.html"><i class="fas fa-futbol"></i> Piłka nożna</a>
                     </div>
                 </li>
-                
                 <li><a href="druzyny.html"><i class="fas fa-users"></i> Drużyny</a></li>
                 <li><a href="dokumenty.html"><i class="fas fa-file-alt"></i> Dokumenty</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- GŁÓWNA ZAWARTOŚĆ -->
     <main class="container">
         <!-- BANER -->
         <section class="hero">
@@ -84,14 +280,14 @@
             </div>
         </section>
 
-        <!-- NAJBLIŻSZE MECZE 
+        <!-- NAJBLIŻSZE MECZE -->
         <section class="section">
             <div class="section-header">
                 <h2><i class="fas fa-calendar-day"></i> Najbliższe mecze</h2>
                 <button onclick="loadMatches()" class="btn-refresh">
                     <i class="fas fa-sync-alt"></i> Odśwież
                 </button>
-            </div>-->
+            </div>
             
             <div class="matches-grid" id="matchesContainer">
                 <!-- Mecze wczytają się tutaj -->
@@ -102,6 +298,7 @@
                 <p>Brak nadchodzących meczów</p>
             </div>
         </section>
+
         <!-- OGŁOSZENIA -->
         <section class="section announcements">
             <div class="section-header">
@@ -120,6 +317,7 @@
                 <p>Brak ogłoszeń</p>
             </div>
         </section>
+
         <!-- KLASYFIKACJA GENERALNA -->
         <section class="section">
             <div class="section-header">
@@ -134,11 +332,11 @@
                     <thead>
                         <tr>
                             <th>#</th>
-        <th>Drużyna</th>
-        <th><span class="full-text">Koszykówka</span><span class="short-text">KOSZ</span></th>
-        <th><span class="full-text">Siatkówka</span><span class="short-text">SIATA</span></th>
-        <th><span class="full-text">Piłka Nożna</span><span class="short-text">PN</span></th>
-        <th><span class="full-text">Suma</span><span class="short-text">Σ</span></th>
+                            <th>Drużyna</th>
+                            <th><span class="full-text">Koszykówka</span><span class="short-text">KOSZ</span></th>
+                            <th><span class="full-text">Siatkówka</span><span class="short-text">SIATA</span></th>
+                            <th><span class="full-text">Piłka Nożna</span><span class="short-text">PN</span></th>
+                            <th><span class="full-text">Suma</span><span class="short-text">Σ</span></th>
                         </tr>
                     </thead>
                     <tbody id="standingsTable">
@@ -152,21 +350,18 @@
                 <p>Brak danych klasyfikacji</p>
             </div>
         </section>
+
         <!-- PODSUMOWANIE DYSCYPLIN -->
         <section class="section">
             <div class="section-header">
                 <h2><i class="fas fa-chart-line"></i> Podsumowanie dyscyplin</h2>
-                <div class="sports-stats-header" id="sportsStatsHeader">
-                    <!-- Statystyki główne -->
-                </div>
+                <div class="sports-stats-header" id="sportsStatsHeader"></div>
             </div>
             
             <div class="sports-grid">
                 <!-- Piłka nożna -->
                 <div class="sport-card" id="footballCard">
-                    <div class="sport-icon">
-                        <i class="fas fa-futbol"></i>
-                    </div>
+                    <div class="sport-icon"><i class="fas fa-futbol"></i></div>
                     <h3>Piłka nożna</h3>
                     <div class="sport-stats">
                         <div class="stat">
@@ -178,16 +373,12 @@
                             <span class="stat-label">Bramki</span>
                         </div>
                     </div>
-                    <a href="pilka-nozna.html" class="btn-sport">
-                        Zobacz więcej <i class="fas fa-arrow-right"></i>
-                    </a>
+                    <a href="pilka-nozna.html" class="btn-sport">Zobacz więcej <i class="fas fa-arrow-right"></i></a>
                 </div>
                 
                 <!-- Siatkówka -->
                 <div class="sport-card" id="volleyballCard">
-                    <div class="sport-icon">
-                        <i class="fas fa-volleyball-ball"></i>
-                    </div>
+                    <div class="sport-icon"><i class="fas fa-volleyball-ball"></i></div>
                     <h3>Siatkówka</h3>
                     <div class="sport-stats">
                         <div class="stat">
@@ -199,16 +390,12 @@
                             <span class="stat-label">Sety</span>
                         </div>
                     </div>
-                    <a href="siatkowka.html" class="btn-sport">
-                        Zobacz więcej <i class="fas fa-arrow-right"></i>
-                    </a>
+                    <a href="siatkowka.html" class="btn-sport">Zobacz więcej <i class="fas fa-arrow-right"></i></a>
                 </div>
                 
                 <!-- Koszykówka -->
                 <div class="sport-card" id="basketballCard">
-                    <div class="sport-icon">
-                        <i class="fas fa-basketball-ball"></i>
-                    </div>
+                    <div class="sport-icon"><i class="fas fa-basketball-ball"></i></div>
                     <h3>Koszykówka</h3>
                     <div class="sport-stats">
                         <div class="stat">
@@ -220,14 +407,12 @@
                             <span class="stat-label">Punkty</span>
                         </div>
                     </div>
-                    <a href="koszykowka.html" class="btn-sport">
-                        Zobacz więcej <i class="fas fa-arrow-right"></i>
-                    </a>
+                    <a href="koszykowka.html" class="btn-sport">Zobacz więcej <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
         </section>
 
-        <!-- PUNKTACJA -->
+                <!-- PUNKTACJA -->
         <section class="ranking section">
             <div class="section-header">
                 <h2><i class="fas fa-balance-scale"></i> System punktacji turnieju</h2>
@@ -400,627 +585,588 @@
             </div>
             </div>
         </section>
-        
     </main>
 
     <script>
-        // POPRAWIONY KOD DROPDOWN
-    document.addEventListener('DOMContentLoaded', function() {
-        const dropdowns = document.querySelectorAll('.dropdown');
-        
-        dropdowns.forEach(dropdown => {
-            const toggle = dropdown.querySelector('a');
-            
-            toggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const isOpen = dropdown.classList.contains('open');
-                
-                // Zamknij wszystkie inne dropdowny
-                dropdowns.forEach(otherDropdown => {
-                    if (otherDropdown !== dropdown) {
-                        otherDropdown.classList.remove('open');
-                    }
-                });
-                
-                // Otwórz/zamknij aktualny dropdown
-                if (!isOpen) {
-                    dropdown.classList.add('open');
-                    adjustDropdownPosition(dropdown);
-                } else {
-                    dropdown.classList.remove('open');
-                }
-            });
-        });
-        
-        // Zamknij po kliknięciu gdzie indziej
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.dropdown')) {
-                dropdowns.forEach(dropdown => {
-                    dropdown.classList.remove('open');
-                });
-            }
-        });
-        
-        // Zamknij po ESC
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                dropdowns.forEach(dropdown => {
-                    dropdown.classList.remove('open');
-                });
-            }
-        });
-        
-        // Zamknij po kliknięciu w link
-        document.querySelectorAll('.dropdown-content a').forEach(link => {
-            link.addEventListener('click', function() {
-                dropdowns.forEach(dropdown => {
-                    dropdown.classList.remove('open');
-                });
-            });
-        });
-        
-        // FUNKCJA DOSTOSOWUJĄCA POZYCJĘ DROPDOWNU
-        function adjustDropdownPosition(dropdown) {
-            setTimeout(() => {
-                const content = dropdown.querySelector('.dropdown-content');
-                const toggle = dropdown.querySelector('a');
-                
-                if (!content || !toggle) return;
-                
-                // Resetujemy klasę
-                content.classList.remove('out-of-view');
-                
-                // Sprawdzamy czy dropdown wyjdzie poza ekran (tylko na mobile)
-                if (window.innerWidth <= 768) {
-                    const toggleRect = toggle.getBoundingClientRect();
-                    const contentWidth = content.offsetWidth;
-                    const viewportWidth = window.innerWidth;
-                    
-                    // Jeśli dropdown wyjdzie poza prawy brzeg ekranu
-                    if (toggleRect.left + contentWidth > viewportWidth - 20) {
-                        content.classList.add('out-of-view');
-                    }
-                }
-            }, 10);
-        }
-        
-        // Zamknij dropdowny przy zmianie rozmiaru okna
-        window.addEventListener('resize', function() {
+        // POPRAWIONY KOD DROPDOWN (bez zmian)
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdowns = document.querySelectorAll('.dropdown');
             dropdowns.forEach(dropdown => {
-                dropdown.classList.remove('open');
+                const toggle = dropdown.querySelector('a');
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const isOpen = dropdown.classList.contains('open');
+                    dropdowns.forEach(other => other.classList.remove('open'));
+                    if (!isOpen) {
+                        dropdown.classList.add('open');
+                        adjustDropdownPosition(dropdown);
+                    } else {
+                        dropdown.classList.remove('open');
+                    }
+                });
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.dropdown')) {
+                    dropdowns.forEach(d => d.classList.remove('open'));
+                }
+            });
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    dropdowns.forEach(d => d.classList.remove('open'));
+                }
+            });
+            
+            document.querySelectorAll('.dropdown-content a').forEach(link => {
+                link.addEventListener('click', function() {
+                    dropdowns.forEach(d => d.classList.remove('open'));
+                });
+            });
+            
+            function adjustDropdownPosition(dropdown) {
+                setTimeout(() => {
+                    const content = dropdown.querySelector('.dropdown-content');
+                    const toggle = dropdown.querySelector('a');
+                    if (!content || !toggle) return;
+                    content.classList.remove('out-of-view');
+                    if (window.innerWidth <= 768) {
+                        const toggleRect = toggle.getBoundingClientRect();
+                        const contentWidth = content.offsetWidth;
+                        const viewportWidth = window.innerWidth;
+                        if (toggleRect.left + contentWidth > viewportWidth - 20) {
+                            content.classList.add('out-of-view');
+                        }
+                    }
+                }, 10);
+            }
+            
+            window.addEventListener('resize', function() {
+                dropdowns.forEach(d => d.classList.remove('open'));
             });
         });
-        
-        // ... reszta twojego JavaScript ...
-            
-            // ===================== RESZTA KODU JAVASCRIPT =====================
-            const SPREADSHEET_ID = '1qLCQ-6uTyusQRsY23d0tvtEx2XcYmR4MLuwGVriow58';
-            
-            // DODANE: Funkcja do pobierania ustawień banera z arkusza "Baner_Ustawienia"
-            async function loadBannerSettings() {
-                try {
-                    const SHEET_NAME = 'Baner_Ustawienia'; // Nazwa nowego arkusza
-                    const RANGE = 'A2:C5'; // Zakładamy kolumny: A - Klucz, B - Wartość, C - Opis (opcjonalnie)
-                    
-                    const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${RANGE}`;
-                    
-                    const response = await fetch(url);
-                    const text = await response.text();
-                    
-                    const jsonText = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
-                    
-                    if (!jsonText) {
-                        throw new Error('Nieprawidłowa odpowiedź z Google Sheets');
-                    }
-                    
-                    const data = JSON.parse(jsonText[1]);
-                    
-                    // Przetwórz dane ustawień banera
-                    const settings = {};
-                    if (data.table && data.table.rows) {
-                        data.table.rows.forEach(row => {
-                            const cells = row.c;
-                            if (cells && cells.length >= 2) {
-                                const key = cells[0]?.v || '';
-                                const value = cells[1]?.v || '';
-                                if (key && value) {
-                                    settings[key] = value;
-                                }
-                            }
-                        });
-                    }
-                    
-                    console.log('✅ Ustawienia banera załadowane:', settings);
-                    return settings;
-                    
-                } catch (error) {
-                    console.error('❌ Błąd ładowania ustawień banera:', error);
-                    return null;
+
+        // ===================== FUNKCJE DO BANERA, RANKINGU, OGŁOSZEŃ (bez zmian) =====================
+        const SPREADSHEET_ID = '1qLCQ-6uTyusQRsY23d0tvtEx2XcYmR4MLuwGVriow58';
+
+        async function loadBannerSettings() {
+            try {
+                const SHEET_NAME = 'Baner_Ustawienia';
+                const RANGE = 'A2:C5';
+                const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${RANGE}`;
+                const response = await fetch(url);
+                const text = await response.text();
+                const jsonText = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
+                if (!jsonText) throw new Error('Nieprawidłowa odpowiedź');
+                const data = JSON.parse(jsonText[1]);
+                const settings = {};
+                if (data.table && data.table.rows) {
+                    data.table.rows.forEach(row => {
+                        const cells = row.c;
+                        if (cells && cells.length >= 2) {
+                            const key = cells[0]?.v || '';
+                            const value = cells[1]?.v || '';
+                            if (key && value) settings[key] = value;
+                        }
+                    });
                 }
+                console.log('✅ Ustawienia banera załadowane:', settings);
+                return settings;
+            } catch (error) {
+                console.error('❌ Błąd ładowania ustawień banera:', error);
+                return null;
             }
+        }
 
-            async function loadGoogleSheetsData() {
-                try {
-                    const SHEET_NAME = 'Main_Ranking';
-                    const RANGE = 'A3:F19';
-                    
-                    const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${RANGE}`;
-                    
-                    const response = await fetch(url);
-                    const text = await response.text();
-                    
-                    const jsonText = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/)[1];
-                    const data = JSON.parse(jsonText);
-                    
-                    displayInTable(data.table.rows);
-                    updateRankingTimestamp();
-                    
-                    console.log('✅ Ranking załadowany');
-                    
-                } catch (error) {
-                    console.error('❌ Błąd rankingu:', error);
-                    document.getElementById('standingsTable').innerHTML = `
-                        <tr><td colspan="6" style="color: red; padding: 20px; text-align: center;">
-                            Błąd ładowania rankingu
-                        </td></tr>
-                    `;
-                }
+        async function loadGoogleSheetsData() {
+            try {
+                const SHEET_NAME = 'Main_Ranking';
+                const RANGE = 'A3:F19';
+                const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${RANGE}`;
+                const response = await fetch(url);
+                const text = await response.text();
+                const jsonText = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/)[1];
+                const data = JSON.parse(jsonText);
+                displayInTable(data.table.rows);
+                updateRankingTimestamp();
+                console.log('✅ Ranking załadowany');
+            } catch (error) {
+                console.error('❌ Błąd rankingu:', error);
+                document.getElementById('standingsTable').innerHTML = `
+                    <tr><td colspan="6" style="color: red; padding: 20px; text-align: center;">
+                        Błąd ładowania rankingu
+                    </td></tr>
+                `;
             }
+        }
 
-            function displayInTable(rows) {
-                const tbody = document.getElementById('standingsTable');
-                let html = '';
-                
-                const sortedRows = [...rows].sort((a, b) => {
-                    const aSum = parseFloat(a.c[5]?.v) || 0;
-                    const bSum = parseFloat(b.c[5]?.v) || 0;
-                    return bSum - aSum;
-                });
-                // DODAJ TEN FRAGMENT KODU na końcu funkcji displayInTable (przed tbody.innerHTML = html;)
-// Znajdź mistrza (najwięcej punktów > 0)
-let champion = null;
-let maxPoints = 0;
-
-sortedRows.forEach(row => {
-    const cells = row.c;
-    const totalPoints = parseFloat(cells[5]?.v) || 0;
-    const teamName = cells[1]?.v || '';
-    
-    // Warunek: musi mieć > 0 punktów
-    if (totalPoints > 0 && totalPoints > maxPoints) {
-        maxPoints = totalPoints;
-        champion = teamName;
-    }
-});
-
-// Zapisz mistrza w localStorage
-if (champion) {
-    localStorage.setItem('currentChampion', champion);
-    localStorage.setItem('championLastUpdate', new Date().toISOString());
-    console.log(`🏆 Mistrz zapisany w localStorage: ${champion}`);
-}
-                sortedRows.forEach((row, index) => {
-                    const cells = row.c;
-                    
-                    html += '<tr>';
-                    html += `<td style="text-align: center; font-weight: bold;">${index + 1}</td>`;
-                    
-                    const className = cells[0]?.v || '';
-                    const teamName = cells[1]?.v || '';
-                    
-                    // Oznacz mistrza specjalną klasą
-        const isChampion = champion && teamName === champion;
-                        
-                    html += `
-                        <td class="${isChampion ? 'champion-row' : ''}">
-                            <div class="team-name-compact">${teamName}</div>
-                            <div class="team-class-compact">${className}</div>
-                        </td>
-                    `;
-                    
-                    html += `<td style="text-align: center; font-weight: bold;">${cells[2]?.v || '0'}</td>`;
-                    html += `<td style="text-align: center; font-weight: bold;">${cells[3]?.v || '0'}</td>`;
-                    html += `<td style="text-align: center; font-weight: bold;">${cells[4]?.v || '0'}</td>`;
-                    
-                    const sum = cells[5]?.v || '0';
-                    html += `<td style="text-align: center; font-weight: bold; color: var(--secondary-color); font-size: 1.1em;">
-                                ${sum}
-                            </td>`;
-                    
-                    html += '</tr>';
-                });
-                
-                tbody.innerHTML = html;
-            }
-            function findChampion(rows) {
-                 // Sortuj drużyny według sumy punktów (malejąco)
-                const sortedRows = [...rows].sort((a, b) => {
+        function displayInTable(rows) {
+            const tbody = document.getElementById('standingsTable');
+            let html = '';
+            const sortedRows = [...rows].sort((a, b) => {
                 const aSum = parseFloat(a.c[5]?.v) || 0;
                 const bSum = parseFloat(b.c[5]?.v) || 0;
                 return bSum - aSum;
             });
-    
-    // Znajdź pierwszą drużynę z sumą > 0
-    let champion = null;
-    for (let row of sortedRows) {
-        const sum = parseFloat(row.c[5]?.v) || 0;
-        const teamName = row.c[1]?.v || '';
-        
-        // WARUNEK: suma > 0
-        if (sum > 0 && teamName) {
-            champion = teamName;
-            break;
+            
+            let champion = null;
+            let maxPoints = 0;
+            sortedRows.forEach(row => {
+                const cells = row.c;
+                const totalPoints = parseFloat(cells[5]?.v) || 0;
+                const teamName = cells[1]?.v || '';
+                if (totalPoints > 0 && totalPoints > maxPoints) {
+                    maxPoints = totalPoints;
+                    champion = teamName;
+                }
+            });
+            
+            if (champion) {
+                localStorage.setItem('currentChampion', champion);
+                localStorage.setItem('championLastUpdate', new Date().toISOString());
+                console.log(`🏆 Mistrz zapisany w localStorage: ${champion}`);
+            }
+            
+            sortedRows.forEach((row, index) => {
+                const cells = row.c;
+                html += '<tr>';
+                html += `<td style="text-align: center; font-weight: bold;">${index + 1}</td>`;
+                const className = cells[0]?.v || '';
+                const teamName = cells[1]?.v || '';
+                const isChampion = champion && teamName === champion;
+                html += `<td class="${isChampion ? 'champion-row' : ''}">
+                            <div class="team-name-compact">${teamName}</div>
+                            <div class="team-class-compact">${className}</div>
+                         </td>`;
+                html += `<td style="text-align: center; font-weight: bold;">${cells[2]?.v || '0'}</td>`;
+                html += `<td style="text-align: center; font-weight: bold;">${cells[3]?.v || '0'}</td>`;
+                html += `<td style="text-align: center; font-weight: bold;">${cells[4]?.v || '0'}</td>`;
+                const sum = cells[5]?.v || '0';
+                html += `<td style="text-align: center; font-weight: bold; color: var(--secondary-color); font-size: 1.1em;">${sum}</td>`;
+                html += '</tr>';
+            });
+            tbody.innerHTML = html;
         }
-    }
-    
-    return champion;
-}
-// Dodaj funkcję do zapisywania mistrza w localStorage
-function saveChampionToStorage(champion) {
-    if (champion) {
-        localStorage.setItem('currentChampion', champion);
-        localStorage.setItem('championLastUpdate', new Date().toISOString());
-    }
-}
-            function updateRankingTimestamp() {
-                const now = new Date();
-                const timeString = now.toLocaleTimeString('pl-PL', { 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
-                });
-                
-                const dateString = now.toLocaleDateString('pl-PL', {
-                    day: '2-digit',
-                    month: '2-digit'
-                });
-                
-                const timeElement = document.getElementById('lastUpdateTime');
-                if (timeElement) {
-                    timeElement.textContent = `${timeString} (${dateString})`;
-                }
-            }
 
-            function updateCurrentDate() {
-                const now = new Date();
-                const options = {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                };
-                
-                const dateString = now.toLocaleDateString('pl-PL', options);
-                const dateElement = document.getElementById('currentDate');
-                
-                if (dateElement) {
-                    dateElement.textContent = dateString;
-                }
-            }
+        function updateRankingTimestamp() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
+            const dateString = now.toLocaleDateString('pl-PL', { day: '2-digit', month: '2-digit' });
+            const timeElement = document.getElementById('lastUpdateTime');
+            if (timeElement) timeElement.textContent = `${timeString} (${dateString})`;
+        }
 
-            let countdownInterval = null;
+        function updateCurrentDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateString = now.toLocaleDateString('pl-PL', options);
+            const dateElement = document.getElementById('currentDate');
+            if (dateElement) dateElement.textContent = dateString;
+        }
 
-            // ZMIENIONA: Funkcja startCountdown przyjmuje teraz datę z ustawień
-            function startCountdown(countdownDate) {
-                const eventDate = new Date(countdownDate).getTime();
-                
-                if (countdownInterval) {
+        let countdownInterval = null;
+
+        function startCountdown(countdownDate) {
+            const eventDate = new Date(countdownDate).getTime();
+            if (countdownInterval) clearInterval(countdownInterval);
+            countdownInterval = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = eventDate - now;
+                if (distance < 0) {
+                    document.getElementById('days').textContent = '00';
+                    document.getElementById('hours').textContent = '00';
+                    document.getElementById('minutes').textContent = '00';
+                    document.getElementById('seconds').textContent = '00';
                     clearInterval(countdownInterval);
+                    return;
                 }
-                
-                countdownInterval = setInterval(() => {
-                    const now = new Date().getTime();
-                    const distance = eventDate - now;
-                    
-                    if (distance < 0) {
-                        document.getElementById('days').textContent = '00';
-                        document.getElementById('hours').textContent = '00';
-                        document.getElementById('minutes').textContent = '00';
-                        document.getElementById('seconds').textContent = '00';
-                        
-                        // DODANE: Można zmienić tekst po zakończeniu odliczania
-                        const heroTitle = document.getElementById('heroTitle');
-                        const heroSubtitle = document.getElementById('heroSubtitle');
-                    
-                        
-                        clearInterval(countdownInterval);
-                        return;
-                    }
-                    
-                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                    
-                    document.getElementById('days').textContent = days.toString().padStart(2, '0');
-                    document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-                    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-                    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-                }, 1000);
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            }, 1000);
+        }
+
+        function updateBannerWithSettings(settings) {
+            if (!settings) return;
+            console.log('🔄 Aktualizacja banera z ustawień:', settings);
+            if (settings.heroTitle && settings.heroTitle.trim() !== '') {
+                const heroTitle = document.getElementById('heroTitle');
+                if (heroTitle) heroTitle.innerHTML = `<i class="fas fa-trophy"></i> ${settings.heroTitle}`;
             }
-
-            // DODANE: Funkcja do aktualizacji banera na podstawie ustawień
-            function updateBannerWithSettings(settings) {
-                if (!settings) return;
-                
-                console.log('🔄 Aktualizacja banera z ustawień:', settings);
-                
-                // Aktualizuj tytuł banera
-                if (settings.heroTitle && settings.heroTitle.trim() !== '') {
-                    const heroTitle = document.getElementById('heroTitle');
-                    if (heroTitle) {
-                        // Sprawdź czy ma ikonę w obecnym tytule
-                        const hasIcon = heroTitle.innerHTML.includes('<i class=');
-                        if (hasIcon) {
-                            heroTitle.innerHTML = `<i class="fas fa-trophy"></i> ${settings.heroTitle}`;
-                        } else {
-                            heroTitle.textContent = settings.heroTitle;
-                        }
-                    }
-                }
-                
-                // Aktualizuj podtytuł banera
-                if (settings.heroSubtitle && settings.heroSubtitle.trim() !== '') {
-                    const heroSubtitle = document.getElementById('heroSubtitle');
-                    if (heroSubtitle) {
-                        heroSubtitle.textContent = settings.heroSubtitle;
-                    }
-                }
-                
-                // Aktualizuj tekst nad odliczaniem
-                if (settings.countdownText && settings.countdownText.trim() !== '') {
-                    const countdownHeader = document.querySelector('.countdown-container h3');
-                    if (countdownHeader) {
-                        countdownHeader.innerHTML = `<i class="far fa-clock"></i> ${settings.countdownText}`;
-                    }
-                }
-                
-                // Aktualizuj datę końca odliczania
-                if (settings.countdownDate && settings.countdownDate.trim() !== '') {
-                    startCountdown(settings.countdownDate);
-                    
-                    // Zapisz datę w localStorage dla bezpieczeństwa
-                    localStorage.setItem('countdownDate', settings.countdownDate);
-                    localStorage.setItem('countdownSettings', JSON.stringify(settings));
-                }
+            if (settings.heroSubtitle && settings.heroSubtitle.trim() !== '') {
+                const heroSubtitle = document.getElementById('heroSubtitle');
+                if (heroSubtitle) heroSubtitle.textContent = settings.heroSubtitle;
             }
-
-            // DODANE: Funkcja do ładowania ustawień z localStorage (fallback)
-            function loadBannerSettingsFromStorage() {
-                try {
-                    const savedSettings = localStorage.getItem('countdownSettings');
-                    if (savedSettings) {
-                        const settings = JSON.parse(savedSettings);
-                        console.log('📂 Ładowanie ustawień banera z localStorage:', settings);
-                        return settings;
-                    }
-                } catch (error) {
-                    console.error('Błąd ładowania ustawień z localStorage:', error);
-                }
-                return null;
+            if (settings.countdownText && settings.countdownText.trim() !== '') {
+                const countdownHeader = document.querySelector('.countdown-container h3');
+                if (countdownHeader) countdownHeader.innerHTML = `<i class="far fa-clock"></i> ${settings.countdownText}`;
             }
-
-            async function initializeAll() {
-                console.log('🚀 Inicjalizacja strony...');
-                
-                updateCurrentDate();
-                
-                // Najpierw spróbuj załadować ustawienia z arkusza
-                const bannerSettings = await loadBannerSettings();
-                
-                if (bannerSettings) {
-                    // Użyj ustawień z arkusza
-                    updateBannerWithSettings(bannerSettings);
-                } else {
-                    // Jeśli nie udało się z arkusza, spróbuj z localStorage
-                    const savedSettings = loadBannerSettingsFromStorage();
-                    if (savedSettings) {
-                        updateBannerWithSettings(savedSettings);
-                    } else {
-                        // Jeśli brak ustawień, użyj domyślnych
-                        console.log('⚠️ Używam domyślnych ustawień banera');
-                        startCountdown('2026-01-19T23:59:59');
-                    }
-                }
-                
-                loadGoogleSheetsData();
-                loadAnnouncements();
-                
-                // Odświeżaj ranking co 30 sekund
-                setInterval(loadGoogleSheetsData, 30000);
-                // Aktualizuj datę co minutę
-                setInterval(updateCurrentDate, 60000);
-                
-                console.log('✅ Strona zainicjalizowana');
+            if (settings.countdownDate && settings.countdownDate.trim() !== '') {
+                startCountdown(settings.countdownDate);
+                localStorage.setItem('countdownDate', settings.countdownDate);
+                localStorage.setItem('countdownSettings', JSON.stringify(settings));
             }
+        }
 
-            // Inicjalizacja strony
-            initializeAll();
+        function loadBannerSettingsFromStorage() {
+            try {
+                const savedSettings = localStorage.getItem('countdownSettings');
+                if (savedSettings) return JSON.parse(savedSettings);
+            } catch (error) {
+                console.error('Błąd ładowania ustawień z localStorage:', error);
+            }
+            return null;
+        }
 
-            window.refreshRanking = function() {
-                console.log('🔄 Ręczne odświeżanie rankingu...');
-                loadGoogleSheetsData();
-                
-                const refreshBtn = event?.target || document.querySelector('.btn-refresh');
-                if (refreshBtn) {
-                    refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-                    setTimeout(() => {
-                        refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Odśwież';
-                    }, 1000);
-                }
-            };
-
-            // DODANE: Funkcja do ręcznego odświeżania ustawień banera
-            window.refreshBanner = async function() {
-                console.log('🔄 Odświeżanie ustawień banera...');
-                const bannerSettings = await loadBannerSettings();
-                if (bannerSettings) {
-                    updateBannerWithSettings(bannerSettings);
-                    
-                    const refreshBtn = event?.target;
-                    if (refreshBtn) {
-                        refreshBtn.innerHTML = '<i class="fas fa-check"></i> Odświeżono';
-                        setTimeout(() => {
-                            refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Odśwież baner';
-                        }, 2000);
-                    }
-                } else {
-                    alert('Nie udało się odświeżyć ustawień banera');
-                }
-            };
-        });
-        // ===================== FUNKCJE DO OGROSZEŃ =====================
-
-async function loadAnnouncements() {
-    console.log('📢 Ładowanie ogłoszeń...');
-    
+        // ===================== FUNKCJE DO STATYSTYK DYSCYPLIN =====================
+        async function fetchSportStats(sheetName, range, pointsElementId, matchesElementId) {
     try {
-        // Użyj tego samego ID arkusza co w rankingu
-        const SPREADSHEET_ID = '1qLCQ-6uTyusQRsY23d0tvtEx2XcYmR4MLuwGVriow58';
-        const SHEET_NAME = 'Ogłoszenia'; // Taka sama nazwa jak w Google Sheets!
-        const RANGE = 'A2:D20'; // Od wiersza 2 (bez nagłówków) do wiersza 20
-        
-        const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${RANGE}`;
-        
+        const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${sheetName}&range=${range}`;
         const response = await fetch(url);
         const text = await response.text();
-        
-        // Google zwraca tekst, który musimy sparsować
         const jsonText = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
-        
-        if (!jsonText) {
-            throw new Error('Nieprawidłowa odpowiedź z Google Sheets');
-        }
-        
+        if (!jsonText) throw new Error('Nieprawidłowa odpowiedź');
         const data = JSON.parse(jsonText[1]);
-        console.log('✅ Dane ogłoszeń:', data);
+        const rows = data.table.rows;
         
-        displayAnnouncements(data.table.rows);
-        
-    } catch (error) {
-        console.error('❌ Błąd ładowania ogłoszeń:', error);
-        
-        // Jeśli błąd, pokaż przykładowe ogłoszenia
-        showFallbackAnnouncements();
-    }
-}
-
-function displayAnnouncements(rows) {
-    const container = document.getElementById('announcementsList');
-    const noAnnouncementsMsg = document.getElementById('noAnnouncementsMessage');
-    
-    // Sprawdź czy są dane
-    if (!rows || rows.length === 0) {
-        container.innerHTML = '';
-        noAnnouncementsMsg.style.display = 'block';
-        return;
-    }
-    
-    // Ukryj komunikat "brak ogłoszeń"
-    noAnnouncementsMsg.style.display = 'none';
-    
-    let html = '';
-    let hasValidAnnouncements = false;
-    
-    // Przejdź przez wszystkie wiersze
-    rows.forEach((row, index) => {
-        const cells = row.c;
-        
-        // Sprawdź czy wiersz ma dane
-        if (!cells || cells.length < 3) return;
-        
-        const date = cells[0]?.v || 'Brak daty';
-        const title = cells[1]?.v || 'Brak tytułu';
-        const content = cells[2]?.v || '';
-        const isImportant = cells[3]?.v === true;
-        
-        // Jeśli nie ma tytułu, pomiń
-        if (title === 'Brak tytułu') return;
-        
-        hasValidAnnouncements = true;
-        
-        html += `
-            <div class="announcement ${isImportant ? 'important' : ''}">
-                <div class="announcement-icon">
-                    <i class="fas ${isImportant ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
-                </div>
-                <div class="announcement-content">
-                    <h3>${title}</h3>
-                    <p>${content}</p>
-                    <div class="announcement-date">
-                        <i class="far fa-calendar"></i> ${date}
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-    
-    // Jeśli nie ma żadnych ogłoszeń, pokaż komunikat
-    if (!hasValidAnnouncements) {
-        container.innerHTML = '';
-        noAnnouncementsMsg.style.display = 'block';
-        return;
-    }
-    
-    container.innerHTML = html;
-}
-
-function showFallbackAnnouncements() {
-    const container = document.getElementById('announcementsList');
-    const noAnnouncementsMsg = document.getElementById('noAnnouncementsMessage');
-    
-    noAnnouncementsMsg.style.display = 'none';
-    
-    const fallbackAnnouncements = [
-        {
-            title: "Brak połączenia z bazą ogłoszeń",
-            content: "Nie możemy załadować aktualnych ogłoszeń. Spróbuj odświeżyć stronę lub sprawdź połączenie internetowe.",
-            date: new Date().toLocaleDateString('pl-PL'),
-            important: true
-        },
-        {
-            title: "Rozgrywki międzyklasowe 2024",
-            content: "Trwają przygotowania do tegorocznych rozgrywek. Szczegóły wkrótce!",
-            date: new Date().toLocaleDateString('pl-PL'),
-            important: false
+        if (!rows || rows.length === 0) {
+            document.getElementById(matchesElementId).textContent = '0';
+            document.getElementById(pointsElementId).textContent = '0';
+            return;
         }
-    ];
-    
-    let html = '';
-    fallbackAnnouncements.forEach(announcement => {
-        html += `
-            <div class="announcement ${announcement.important ? 'important' : ''}">
-                <div class="announcement-icon">
-                    <i class="fas ${announcement.important ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
-                </div>
-                <div class="announcement-content">
-                    <h3>${announcement.title}</h3>
-                    <p>${announcement.content}</p>
-                    <div class="announcement-date">
-                        <i class="far fa-calendar"></i> ${announcement.date}
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-    
-    container.innerHTML = html;
-}
 
-// Funkcja do przełączania widoczności ogłoszeń (już masz, ale sprawdź czy działa)
-function toggleAnnouncements() {
-    const list = document.getElementById('announcementsList');
-    const toggleBtn = document.getElementById('toggleAnnouncementsText');
-    
-    if (list.style.display === 'none') {
-        list.style.display = 'block';
-        toggleBtn.textContent = 'Ukryj';
-    } else {
-        list.style.display = 'none';
-        toggleBtn.textContent = 'Pokaż';
+        let matchesCount = 0;
+        let totalPoints = 0;
+        
+        rows.forEach(row => {
+            const cells = row.c;
+            if (!cells || cells.length < 6) return;
+            const team1 = cells[2]?.v || '';
+            const team2 = cells[5]?.v || '';
+            if (!team1 || !team2) return; // pomijamy niekompletne wiersze
+            
+            const score1 = cells[3]?.v;
+            const score2 = cells[4]?.v;
+            // Sprawdzamy czy oba wyniki są liczbami (czy mecz rozegrany)
+            if (score1 && score2 && !isNaN(parseInt(score1)) && !isNaN(parseInt(score2))) {
+                matchesCount++; // <-- tylko mecz z wynikami
+                totalPoints += parseInt(score1) + parseInt(score2);
+            }
+        });
+        
+        document.getElementById(matchesElementId).textContent = matchesCount;
+        document.getElementById(pointsElementId).textContent = totalPoints;
+        
+        console.log(`✅ Statystyki dla ${sheetName}: mecze=${matchesCount}, punkty=${totalPoints}`);
+    } catch (error) {
+        console.error(`❌ Błąd ładowania statystyk dla ${sheetName}:`, error);
+        document.getElementById(matchesElementId).textContent = '0';
+        document.getElementById(pointsElementId).textContent = '0';
     }
 }
+
+        function loadBasketballStats() {
+            fetchSportStats('Dane_Kosz', 'L2:R20', 'basketballPoints', 'basketballMatches');
+        }
+
+        function loadVolleyballStats() {
+            fetchSportStats('Dane_Siat', 'L2:R20', 'volleyballSets', 'volleyballMatches');
+        }
+
+        function loadFootballStats() {
+            fetchSportStats('Dane_Pilka', 'L2:R20', 'footballGoals', 'footballMatches');
+        }
+
+        async function initializeAll() {
+            console.log('🚀 Inicjalizacja strony...');
+            updateCurrentDate();
+            const bannerSettings = await loadBannerSettings();
+            if (bannerSettings) {
+                updateBannerWithSettings(bannerSettings);
+            } else {
+                const savedSettings = loadBannerSettingsFromStorage();
+                if (savedSettings) {
+                    updateBannerWithSettings(savedSettings);
+                } else {
+                    console.log('⚠️ Używam domyślnych ustawień banera');
+                    startCountdown('2026-01-19T23:59:59');
+                }
+            }
+            loadGoogleSheetsData();
+            loadAnnouncements();
+            loadMatches(); // mecze (nadchodzące) – dla koszykówki
+            // Ładujemy statystyki dla wszystkich dyscyplin
+            loadBasketballStats();
+            loadVolleyballStats();
+            loadFootballStats();
+            
+            setInterval(loadGoogleSheetsData, 30000);
+            setInterval(updateCurrentDate, 60000);
+            setInterval(loadMatches, 300000); // odświeżanie meczów co 5 min
+            setInterval(loadBasketballStats, 300000);
+            setInterval(loadVolleyballStats, 300000);
+            setInterval(loadFootballStats, 300000);
+            
+            console.log('✅ Strona zainicjalizowana');
+        }
+
+        initializeAll();
+
+        // ===================== FUNKCJE DO OGŁOSZEŃ (bez zmian) =====================
+        async function loadAnnouncements() {
+            console.log('📢 Ładowanie ogłoszeń...');
+            try {
+                const SHEET_NAME = 'Ogłoszenia';
+                const RANGE = 'A2:D20';
+                const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${RANGE}`;
+                const response = await fetch(url);
+                const text = await response.text();
+                const jsonText = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
+                if (!jsonText) throw new Error('Nieprawidłowa odpowiedź');
+                const data = JSON.parse(jsonText[1]);
+                console.log('✅ Dane ogłoszeń:', data);
+                displayAnnouncements(data.table.rows);
+            } catch (error) {
+                console.error('❌ Błąd ładowania ogłoszeń:', error);
+                showFallbackAnnouncements();
+            }
+        }
+
+        function displayAnnouncements(rows) {
+            const container = document.getElementById('announcementsList');
+            const noAnnouncementsMsg = document.getElementById('noAnnouncementsMessage');
+            if (!rows || rows.length === 0) {
+                container.innerHTML = '';
+                noAnnouncementsMsg.style.display = 'block';
+                return;
+            }
+            noAnnouncementsMsg.style.display = 'none';
+            let html = '';
+            let hasValidAnnouncements = false;
+            rows.forEach(row => {
+                const cells = row.c;
+                if (!cells || cells.length < 3) return;
+                const date = cells[0]?.v || 'Brak daty';
+                const title = cells[1]?.v || 'Brak tytułu';
+                const content = cells[2]?.v || '';
+                const isImportant = cells[3]?.v === true;
+                if (title === 'Brak tytułu') return;
+                hasValidAnnouncements = true;
+                html += `
+                    <div class="announcement ${isImportant ? 'important' : ''}">
+                        <div class="announcement-icon">
+                            <i class="fas ${isImportant ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+                        </div>
+                        <div class="announcement-content">
+                            <h3>${title}</h3>
+                            <p>${content}</p>
+                            <div class="announcement-date">
+                                <i class="far fa-calendar"></i> ${date}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            if (!hasValidAnnouncements) {
+                container.innerHTML = '';
+                noAnnouncementsMsg.style.display = 'block';
+                return;
+            }
+            container.innerHTML = html;
+        }
+
+        function showFallbackAnnouncements() {
+            const container = document.getElementById('announcementsList');
+            const noAnnouncementsMsg = document.getElementById('noAnnouncementsMessage');
+            noAnnouncementsMsg.style.display = 'none';
+            const fallbackAnnouncements = [
+                {
+                    title: "Brak połączenia z bazą ogłoszeń",
+                    content: "Nie możemy załadować aktualnych ogłoszeń. Spróbuj odświeżyć stronę lub sprawdź połączenie internetowe.",
+                    date: new Date().toLocaleDateString('pl-PL'),
+                    important: true
+                },
+                {
+                    title: "Rozgrywki międzyklasowe 2024",
+                    content: "Trwają przygotowania do tegorocznych rozgrywek. Szczegóły wkrótce!",
+                    date: new Date().toLocaleDateString('pl-PL'),
+                    important: false
+                }
+            ];
+            let html = '';
+            fallbackAnnouncements.forEach(announcement => {
+                html += `
+                    <div class="announcement ${announcement.important ? 'important' : ''}">
+                        <div class="announcement-icon"><i class="fas ${announcement.important ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i></div>
+                        <div class="announcement-content">
+                            <h3>${announcement.title}</h3>
+                            <p>${announcement.content}</p>
+                            <div class="announcement-date"><i class="far fa-calendar"></i> ${announcement.date}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function toggleAnnouncements() {
+            const list = document.getElementById('announcementsList');
+            const toggleBtn = document.getElementById('toggleAnnouncementsText');
+            if (list.style.display === 'none') {
+                list.style.display = 'block';
+                toggleBtn.textContent = 'Ukryj';
+            } else {
+                list.style.display = 'none';
+                toggleBtn.textContent = 'Pokaż';
+            }
+        }
+
+        // ===================== FUNKCJE DO MECZÓW (POPRAWIONE) =====================
+        function parseDate(dateStr, timeStr) {
+            if (!dateStr) return null;
+            let datePart = dateStr.trim();
+            let timePart = timeStr ? timeStr.trim() : '00:00';
+            if (datePart.includes('.')) {
+                let parts = datePart.split('.');
+                if (parts.length === 3) {
+                    datePart = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                }
+            }
+            return new Date(`${datePart}T${timePart}:00`);
+        }
+
+        function renderMatchCard(match) {
+            const hasScore = match.score1 !== '' && match.score2 !== '' && !isNaN(parseInt(match.score1)) && !isNaN(parseInt(match.score2));
+            const statusClass = hasScore ? 'status-finished' : 'status-upcoming';
+            const statusText = hasScore ? 'Rozegrany' : 'Nadchodzący';
+            const matchCardClass = hasScore ? 'match-card--finished' : 'match-card--upcoming';
+
+            // Określenie zwycięzcy
+            let winnerClass1 = '';
+            let winnerClass2 = '';
+            if (hasScore) {
+                const s1 = parseInt(match.score1);
+                const s2 = parseInt(match.score2);
+                if (s1 > s2) {
+                    winnerClass1 = 'team-winner';
+                } else if (s2 > s1) {
+                    winnerClass2 = 'team-winner';
+                }
+            }
+
+            return `
+                <div class="match-card ${matchCardClass}">
+                    <div class="match-header">
+                        <span class="match-date">
+                            <i class="far fa-calendar-alt"></i> ${match.date} 
+                            <i class="far fa-clock" style="margin-left:8px;"></i> ${match.time}
+                        </span>
+                    </div>
+                    <div class="match-teams">
+                        <div class="team team-home ${winnerClass1}">
+                            <span class="team-name">${match.team1}</span>
+                            ${hasScore ? `<span class="team-score">${match.score1}</span>` : '<span class="team-score team-score-empty">?</span>'}
+                        </div>
+                        <!-- Separator dla dużych ekranów -->
+                        <div class="match-score-separator desktop-only">
+                            <span>:</span>
+                        </div>
+                        <!-- Separator dla małych ekranów -->
+                        <div class="match-score-separator mobile-only">
+                            <span>vs</span>
+                        </div>
+                        <div class="team team-away ${winnerClass2}">
+                            <span class="team-name">${match.team2}</span>
+                            ${hasScore ? `<span class="team-score">${match.score2}</span>` : '<span class="team-score team-score-empty">?</span>'}
+                        </div>
+                    </div>
+                    <div class="match-footer">
+                        <div class="match-status ${statusClass}">${statusText}</div>
+                        <div class="match-sport-icon"><i class="fas fa-basketball-ball"></i></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function loadMatches() {
+            const container = document.getElementById('matchesContainer');
+            const noMatchesMsg = document.getElementById('noMatchesMessage');
+            
+            container.innerHTML = '<div class="loading-spinner" style="text-align:center; padding:30px;"><i class="fas fa-spinner fa-spin fa-2x"></i><p>Ładowanie meczów...</p></div>';
+            noMatchesMsg.style.display = 'none';
+
+            try {
+                const SHEET_NAME = 'Dane_Kosz';
+                const RANGE = 'L2:R20';
+                const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${RANGE}`;
+                
+                const response = await fetch(url);
+                const text = await response.text();
+                const jsonText = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
+                if (!jsonText) throw new Error('Nieprawidłowa odpowiedź z Google Sheets');
+                
+                const data = JSON.parse(jsonText[1]);
+                const rows = data.table.rows;
+
+                if (!rows || rows.length === 0) {
+                    container.innerHTML = '';
+                    noMatchesMsg.style.display = 'block';
+                    return;
+                }
+
+                const matches = rows.map(row => {
+                    const cells = row.c;
+                    return {
+                        date: cells[0]?.v || '',
+                        time: cells[1]?.v || '',
+                        team1: cells[2]?.v || '',
+                        score1: cells[3]?.v || '',
+                        score2: cells[4]?.v || '',
+                        team2: cells[5]?.v || ''
+                    };
+                }).filter(m => m.team1 && m.team2);
+
+                const upcomingMatches = matches.filter(m => {
+                    const hasScore = m.score1 !== '' && m.score2 !== '' && !isNaN(parseInt(m.score1));
+                    return !hasScore;
+                });
+
+                if (upcomingMatches.length === 0) {
+                    container.innerHTML = '';
+                    noMatchesMsg.style.display = 'block';
+                    return;
+                }
+
+                upcomingMatches.sort((a, b) => {
+                    const dateA = parseDate(a.date, a.time);
+                    const dateB = parseDate(b.date, b.time);
+                    if (!dateA && !dateB) return 0;
+                    if (!dateA) return 1;
+                    if (!dateB) return -1;
+                    return dateA - dateB;
+                });
+
+                const matchesToShow = upcomingMatches.slice(0, 6);
+                let html = '';
+                matchesToShow.forEach(match => {
+                    html += renderMatchCard(match);
+                });
+
+                container.innerHTML = html;
+                noMatchesMsg.style.display = 'none';
+
+            } catch (error) {
+                console.error('Błąd ładowania meczów:', error);
+                container.innerHTML = '<div class="error-message" style="color:red; text-align:center;">Nie udało się załadować meczów</div>';
+                noMatchesMsg.style.display = 'none';
+            }
+        }
     </script>
 </body>
 </html>

@@ -74,275 +74,303 @@
         }
 
         /* ===== KAFELKI MECZÓW – POPRAWIONE ===== */
-.matches-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-}
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
 
-.match-card {
-    background: white;
-    border-radius: 16px;
-    overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: none;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    position: relative;
-}
+        .match-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
 
-.match-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 30px rgba(26, 35, 126, 0.15);
-}
+        .match-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(26, 35, 126, 0.15);
+        }
 
-.match-card--finished {
-    border-left: 4px solid var(--success-color);
-}
+        .match-card--finished {
+            border-left: 4px solid var(--success-color);
+        }
 
-.match-card--upcoming {
-    border-left: 4px solid var(--secondary-color);
-}
+        .match-card--upcoming {
+            border-left: 4px solid var(--secondary-color);
+        }
 
-.match-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
 
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
+        .match-date {
+            color: var(--gray-color);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
 
-.match-date {
-    color: var(--gray-color);
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
+        .match-date i {
+            color: var(--primary-color);
+            opacity: 0.7;
+        }
 
-.match-date i {
-    color: var(--primary-color);
-    opacity: 0.7;
-}
+        .date-time-separator {
+            width: 5px;
+            height: 20px;
+            margin: 0 4px;
+        }
 
-.date-time-separator {
-    width: 5px;
-    height: 20px;
-    margin: 0 4px;
-}
+        .match-date span {
+            margin: 0 2px;
+        }
 
-.match-date span {
-    margin: 0 2px;
-}
+        .match-teams {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            gap: 10px;
+        }
 
-.match-teams {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px;
-    gap: 10px;
-}
+        .team {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
 
-.team {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
+        .team-home {
+            align-items: flex-start;
+            text-align: left;
+        }
 
-.team-home {
-    align-items: flex-start;
-    text-align: left;
-}
+        .team-away {
+            align-items: flex-end;
+            text-align: right;
+        }
 
-.team-away {
-    align-items: flex-end;
-    text-align: right;
-}
+        .team-name {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+            line-height: 1.3;
+            max-width: 100%;
+            word-break: break-word;
+        }
 
-.team-name {
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: var(--primary-dark);
-    margin-bottom: 6px;
-    line-height: 1.3;
-    max-width: 100%;
-    word-break: break-word;
-}
+        .team-score {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            line-height: 1;
+            background: rgba(26, 35, 126, 0.1);
+            padding: 5px 18px;
+            border-radius: 40px;
+            display: inline-block;
+        }
 
-.team-score {
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: var(--primary-color);
-    line-height: 1;
-    background: rgba(26, 35, 126, 0.1);
-    padding: 5px 18px;
-    border-radius: 40px;
-    display: inline-block;
-}
+        .team-score-empty {
+            background: transparent;
+            color: var(--gray-color);
+            font-size: 1.5rem;
+            opacity: 0.5;
+            padding: 5px 15px;
+        }
 
-.team-score-empty {
-    background: transparent;
-    color: var(--gray-color);
-    font-size: 1.5rem;
-    opacity: 0.5;
-    padding: 5px 15px;
-}
+        /* Separator domyślny (na duże ekrany) */
+        .match-score-separator {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--gray-color);
+            opacity: 0.7;
+            margin: 0 5px;
+        }
 
-.match-score-separator {
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--gray-color);
-    opacity: 0.7;
-    margin: 0 5px;
-}
+        /* Domyślnie pokazujemy separator z dwukropkiem, ukrywamy wersję mobilną */
+        .desktop-only {
+            display: flex;
+        }
+        .mobile-only {
+            display: none;
+        }
 
-.match-footer {
-    padding: 10px 20px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid rgba(0,0,0,0.05);
-}
+        .match-footer {
+            padding: 10px 20px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
 
-.match-status {
-    padding: 6px 16px;
-    border-radius: 30px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
+        .match-status {
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-.match-sport-icon {
-    color: var(--primary-light);
-    opacity: 0.3;
-    font-size: 1.2rem;
-}
+        .match-sport-icon {
+            color: var(--primary-light);
+            opacity: 0.3;
+            font-size: 1.2rem;
+        }
 
-.status-upcoming {
-    background: #e3f2fd;
-    color: var(--secondary-color);
-}
+        .status-upcoming {
+            background: #e3f2fd;
+            color: var(--secondary-color);
+        }
 
-.status-finished {
-    background: #e8f5e8;
-    color: #2e7d32;
-}
+        .status-finished {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
 
-.status-live {
-    background: #ffebee;
-    color: var(--danger-color);
-    animation: pulse 1.5s infinite;
-}
+        .status-live {
+            background: #ffebee;
+            color: var(--danger-color);
+            animation: pulse 1.5s infinite;
+        }
 
-@keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.6; }
-    100% { opacity: 1; }
-}
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
 
-.matches-group-header {
-    grid-column: 1 / -1;
-    margin: 20px 0 10px;
-    padding-bottom: 5px;
-    border-bottom: 2px solid var(--primary-color);
-    color: var(--primary-color);
-    font-size: 1.4em;
-}
+        .matches-group-header {
+            grid-column: 1 / -1;
+            margin: 20px 0 10px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            font-size: 1.4em;
+        }
 
-.btn-refresh {
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s;
-}
+        .btn-refresh {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
 
-.btn-refresh:hover {
-    background: var(--primary-dark);
-    transform: translateY(-2px);
-}
+        .btn-refresh:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
 
-.loading-spinner {
-    text-align: center;
-    padding: 40px;
-    color: var(--primary-color);
-}
+        .loading-spinner {
+            text-align: center;
+            padding: 40px;
+            color: var(--primary-color);
+        }
 
-.error-message {
-    text-align: center;
-    padding: 40px;
-    color: var(--danger-color);
-    background: #ffebee;
-    border-radius: 8px;
-}
+        .error-message {
+            text-align: center;
+            padding: 40px;
+            color: var(--danger-color);
+            background: #ffebee;
+            border-radius: 8px;
+        }
 
-/* Responsywność dla kafelków */
-@media (max-width: 600px) {
-    .match-teams {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 15px;
-    }
+        /* Styl dla zwycięzcy meczu */
+        .team-winner .team-name {
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+        .team-winner .team-score {
+            background: var(--primary-color);
+            color: white;
+        }
 
-    .match-score-separator {
-        display: none;
-    }
+        /* Responsywność dla kafelków */
+        @media (max-width: 600px) {
+            .match-teams {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
 
-    .team {
-        width: 100%;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
+            /* Ukrywamy separator desktopowy, pokazujemy mobilny */
+            .desktop-only {
+                display: none;
+            }
+            .mobile-only {
+                display: block;
+                font-size: 1.5rem;
+                margin: 5px 0;
+                text-align: center;
+                font-weight: 600;
+                color: var(--gray-color);
+                opacity: 0.7;
+            }
 
-    .team-home, .team-away {
-        align-items: center;
-        text-align: center;
-    }
+            .team {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
 
-    .team-name {
-        font-size: 1.1rem;
-        margin-bottom: 0;
-        flex: 1;
-    }
+            .team-home, .team-away {
+                align-items: center;
+                text-align: center;
+            }
 
-    .team-score, .team-score-empty {
-        font-size: 1.5rem;
-        padding: 5px 12px;
-        margin-left: 10px;
-    }
-}
+            .team-name {
+                font-size: 1.1rem;
+                margin-bottom: 0;
+                flex: 1;
+            }
 
-@media (max-width: 400px) {
-    .match-header {
-        padding: 12px 15px;
-    }
+            .team-score, .team-score-empty {
+                font-size: 1.5rem;
+                padding: 5px 12px;
+                margin-left: 10px;
+            }
+        }
 
-    .match-date {
-        font-size: 0.85rem;
-        padding: 4px 10px;
-    }
+        @media (max-width: 400px) {
+            .match-header {
+                padding: 12px 15px;
+            }
 
-    .match-footer {
-        padding: 8px 15px 15px;
-    }
+            .match-date {
+                font-size: 0.85rem;
+                padding: 4px 10px;
+            }
 
-    .match-status {
-        font-size: 0.7rem;
-        padding: 4px 12px;
-    }
+            .match-footer {
+                padding: 8px 15px 15px;
+            }
 
-    .match-sport-icon {
-        font-size: 1rem;
-    }
-}
+            .match-status {
+                font-size: 0.7rem;
+                padding: 4px 12px;
+            }
+
+            .match-sport-icon {
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -394,6 +422,15 @@
             </div>
         </section>
 
+                <!-- NOWA SEKCJA: Klasyfikacja zawodników -->
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-users"></i> Klasyfikacja zawodników</h2>
+                <a href="zawodnicy_kosz.html" class="btn-refresh"><i class="fas fa-arrow-right"></i> Zobacz szczegóły</a>
+            </div>
+            <!-- Opcjonalnie można dodać podgląd top 3, ale na razie tylko link -->
+        </section>
+        
         <!-- NOWA SEKCJA: Terminarz i wyniki -->
         <section class="section">
             <div class="section-header">
@@ -536,25 +573,39 @@
                                 losses: cells[4]?.v || '0',
                                 draws: cells[5]?.v || '0',
                                 points: cells[6]?.v || '0',
-                                group: cells[7]?.v || ''
+                                group: cells[7]?.v || '' // kolumna H (poza zakresem A2:G20, więc będzie pusta)
                             };
                         });
 
                         console.log('Dane koszykówki:', teams);
 
+                        // Sortowanie: punkty (malejąco), wygrane (malejąco), przegrane (rosnąco)
+                        const sortTeams = (a, b) => {
+                            const ptsA = parseInt(a.points) || 0;
+                            const ptsB = parseInt(b.points) || 0;
+                            if (ptsA !== ptsB) return ptsB - ptsA;
+
+                            const winsA = parseInt(a.wins) || 0;
+                            const winsB = parseInt(b.wins) || 0;
+                            if (winsA !== winsB) return winsB - winsA;
+
+                            const lossesA = parseInt(a.losses) || 0;
+                            const lossesB = parseInt(b.losses) || 0;
+                            return lossesA - lossesB; // mniej przegranych = wyższe miejsce
+                        };
+
                         let groupATeams = teams.filter(t => t.group === 'A' || t.group === 'Grupa A');
                         let groupBTeams = teams.filter(t => t.group === 'B' || t.group === 'Grupa B');
 
-                        const sortByPoints = (a, b) => (parseInt(b.points) || 0) - (parseInt(a.points) || 0);
-                        groupATeams.sort(sortByPoints);
-                        groupBTeams.sort(sortByPoints);
+                        groupATeams.sort(sortTeams);
+                        groupBTeams.sort(sortTeams);
 
                         if (groupATeams.length === 0 && groupBTeams.length === 0) {
                             const half = Math.ceil(teams.length / 2);
                             let groupATeamsAlt = teams.slice(0, half);
                             let groupBTeamsAlt = teams.slice(half);
-                            groupATeamsAlt.sort(sortByPoints);
-                            groupBTeamsAlt.sort(sortByPoints);
+                            groupATeamsAlt.sort(sortTeams);
+                            groupBTeamsAlt.sort(sortTeams);
                             container.innerHTML = renderGroupTable('Grupa A', groupATeamsAlt) + renderGroupTable('Grupa B', groupBTeamsAlt);
                         } else {
                             container.innerHTML = renderGroupTable('Grupa A', groupATeams) + renderGroupTable('Grupa B', groupBTeams);
@@ -585,39 +636,57 @@
             }
 
             function renderMatchCard(match) {
-    const hasScore = match.score1 !== '' && match.score2 !== '' && !isNaN(parseInt(match.score1)) && !isNaN(parseInt(match.score2));
-    const statusClass = hasScore ? 'status-finished' : 'status-upcoming';
-    const statusText = hasScore ? 'Rozegrany' : 'Nadchodzący';
-    const matchCardClass = hasScore ? 'match-card--finished' : 'match-card--upcoming';
+                const hasScore = match.score1 !== '' && match.score2 !== '' && !isNaN(parseInt(match.score1)) && !isNaN(parseInt(match.score2));
+                const statusClass = hasScore ? 'status-finished' : 'status-upcoming';
+                const statusText = hasScore ? 'Rozegrany' : 'Nadchodzący';
+                const matchCardClass = hasScore ? 'match-card--finished' : 'match-card--upcoming';
 
-    return `
-        <div class="match-card ${matchCardClass}">
-            <div class="match-header">
-                <span class="match-date">
-                    <i class="far fa-calendar-alt"></i> ${match.date} 
-                    <span class="date-time-separator"></span>
-                    <i class="far fa-clock"></i> ${match.time}</span>
-            </div>
-            <div class="match-teams">
-                <div class="team team-home">
-                    <span class="team-name">${match.team1}</span>
-                    ${hasScore ? `<span class="team-score">${match.score1}</span>` : '<span class="team-score team-score-empty">?</span>'}
-                </div>
-                <div class="match-score-separator">
-                    <span>:</span>
-                </div>
-                <div class="team team-away">
-                    <span class="team-name">${match.team2}</span>
-                    ${hasScore ? `<span class="team-score">${match.score2}</span>` : '<span class="team-score team-score-empty">?</span>'}
-                </div>
-            </div>
-            <div class="match-footer">
-                <div class="match-status ${statusClass}">${statusText}</div>
-                <div class="match-sport-icon"><i class="fas fa-basketball-ball"></i></div>
-            </div>
-        </div>
-    `;
-}
+                let winnerClass1 = '';
+                let winnerClass2 = '';
+                if (hasScore) {
+                    const s1 = parseInt(match.score1);
+                    const s2 = parseInt(match.score2);
+                    if (s1 > s2) {
+                        winnerClass1 = 'team-winner';
+                    } else if (s2 > s1) {
+                        winnerClass2 = 'team-winner';
+                    }
+                    // remis – obie klasy puste
+                }
+
+                return `
+                    <div class="match-card ${matchCardClass}">
+                        <div class="match-header">
+                            <span class="match-date">
+                                <i class="far fa-calendar-alt"></i> ${match.date} 
+                                <span class="date-time-separator"></span>
+                                <i class="far fa-clock"></i> ${match.time}</span>
+                        </div>
+                        <div class="match-teams">
+                            <div class="team team-home ${winnerClass1}">
+                                <span class="team-name">${match.team1}</span>
+                                ${hasScore ? `<span class="team-score">${match.score1}</span>` : '<span class="team-score team-score-empty">?</span>'}
+                            </div>
+                            <!-- Separator na desktop (:) -->
+                            <div class="match-score-separator desktop-only">
+                                <span>:</span>
+                            </div>
+                            <!-- Separator na mobile (vs) -->
+                            <div class="match-score-separator mobile-only">
+                                <span>vs</span>
+                            </div>
+                            <div class="team team-away ${winnerClass2}">
+                                <span class="team-name">${match.team2}</span>
+                                ${hasScore ? `<span class="team-score">${match.score2}</span>` : '<span class="team-score team-score-empty">?</span>'}
+                            </div>
+                        </div>
+                        <div class="match-footer">
+                            <div class="match-status ${statusClass}">${statusText}</div>
+                            <div class="match-sport-icon"><i class="fas fa-basketball-ball"></i></div>
+                        </div>
+                    </div>
+                `;
+            }
 
             function loadMatches() {
                 const container = document.getElementById('matchesContainer');

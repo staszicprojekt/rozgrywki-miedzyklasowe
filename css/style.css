@@ -2363,10 +2363,6 @@ footer {
     }
 }
 /* W pliku style.css lub w sekcji <style> w index.html */
-.champion-row {
-    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 235, 59, 0.1) 100%);
-    border-left: 4px solid #ffc107;
-}
 
 .champion-badge {
     display: inline-block;

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zawodnicy - Koszykówka</title>
+    <link rel="icon" type="png" href="logo_szkoly.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Dodatkowe style dla tabeli zawodników */
+        .players-table-wrapper {
+            overflow-x: auto;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .players-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            min-width: 800px; /* Wymusza przewijanie na małych ekranach */
+        }
+
+        .players-table th {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 8px;
+            font-weight: 600;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .players-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        .players-table tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .players-table .player-name {
+            font-weight: 600;
+            color: var(--primary-dark);
+            text-align: left;
+        }
+
+        .players-table .class-badge {
+            display: inline-block;
+            background: var(--primary-light);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .players-table .total-score {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .players-table .game-score {
+            font-family: monospace;
+            font-weight: 500;
+        }
+
+        .empty-score {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        .section-header .btn-back {
+            background: var(--gray-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .section-header .btn-back:hover {
+            background: #555;
+            transform: translateY(-2px);
+        }
+        .players-table td:first-child {
+            color: var(--gray-color);
+            font-weight: 100;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="school-header">
+            <div class="logo-container">
+                <a href="index.html" class="logo-link">
+                    <div class="logo-placeholder">
+                        <img src="logo_szkoly.png" alt="Logo szkoły" class="school-logo">
+                    </div>
+                </a>
+                <a href="index.html" class="title-link">
+                    <div class="title-container">
+                        <h1 id="pageTitle">Rozgrywki Międzyklasowe 2026</h1>
+                        <p class="school-name" id="schoolName"> I Liceum Ogólnokształcące im. Stanisława Staszica</p>
+                    </div>
+                </a>
+            </div>
+            <div class="current-date">
+                <i class="far fa-calendar-alt"></i>
+                <span id="currentDate"></span>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <ul class="nav-list">
+                <li class="dropdown">
+                    <a href="#">
+                        <i class="fas fa-futbol"></i> Dyscypliny <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="koszykowka.html"><i class="fas fa-basketball-ball"></i> Koszykówka</a>
+                        <a href="siatkowka.html"><i class="fas fa-volleyball-ball"></i> Siatkówka</a>
+                        <a href="pilka-nozna.html"><i class="fas fa-futbol"></i> Piłka nożna</a>
+                    </div>
+                </li>
+                <li><a href="druzyny.html"><i class="fas fa-users"></i> Drużyny</a></li>
+                <li><a href="dokumenty.html"><i class="fas fa-file-alt"></i> Dokumenty</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-trophy"></i> Klasyfikacja zawodników - koszykówka</h2>
+                <a href="koszykowka.html" class="btn-back"><i class="fas fa-arrow-left"></i> Powrót</a>
+            </div>
+            <div id="playersTableContainer">
+                <!-- Tabela zostanie wstawiona przez JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function updateCurrentDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateString = now.toLocaleDateString('pl-PL', options);
+            document.getElementById('currentDate').textContent = dateString;
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCurrentDate();
+            setInterval(updateCurrentDate, 60000);
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdowns = document.querySelectorAll('.dropdown');
+            dropdowns.forEach(dropdown => {
+                const toggle = dropdown.querySelector('a');
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const isOpen = dropdown.classList.contains('open');
+                    dropdowns.forEach(other => other.classList.remove('open'));
+                    if (!isOpen) dropdown.classList.add('open');
+                });
+            });
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.dropdown')) {
+                    dropdowns.forEach(d => d.classList.remove('open'));
+                }
+            });
+        });
+    </script>
+
+    <script>
+        (function() {
+            const SPREADSHEET_ID = '1qLCQ-6uTyusQRsY23d0tvtEx2XcYmR4MLuwGVriow58';
+            const SHEET_NAME = 'zawodnicy_kosz';
+            // Zakres: od A2 do Z (zakładamy maksymalnie 26 kolumn, wystarczy)
+            const RANGE = 'A2:Z1000'; 
+            const dataUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${RANGE}`;
+
+            const container = document.getElementById('playersTableContainer');
+
+            function showLoading() {
+                container.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin fa-3x"></i><p>Ładowanie danych zawodników...</p></div>';
+            }
+
+            function displayError(message) {
+                container.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-triangle"></i> ${message}</div>`;
+            }
+
+            function renderPlayersTable(players) {
+                if (players.length === 0) {
+                    container.innerHTML = '<div class="empty-state"><i class="far fa-frown"></i><p>Brak danych zawodników</p></div>';
+                    return;
+                }
+
+                // Określamy liczbę kolumn gier (wszystkie kolumny poza indeksami 0-3)
+                const gameColumnsCount = players[0].scores.length;
+
+                // Generujemy nagłówki dla gier
+                let gameHeaders = '';
+                for (let i = 1; i <= gameColumnsCount; i++) {
+                    gameHeaders += `<th>Gra ${i}</th>`;
+                }
+
+                let html = `
+                    <div class="players-table-wrapper">
+                        <table class="players-table">
+                            <thead>
+                                <tr>
+                                    <th>Miejsce</th>
+                                    <th>Zawodnik</th>
+                                    <th>Klasa</th>
+                                    <th>Suma</th>
+                                    ${gameHeaders}
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+
+                players.forEach((player, index) => {
+                    const miejsce = index + 1;
+                    // Połącz imię i nazwisko
+                    const fullName = `${player.firstName} ${player.lastName}`.trim();
+                    // Klasa w badge
+                    const klasaBadge = `<span class="class-badge">${player.class}</span>`;
+
+                    // Komórki z wynikami gier
+                    let gameCells = '';
+                    player.scores.forEach(score => {
+                        if (score && score !== '') {
+                            gameCells += `<td class="game-score">${score}</td>`;
+                        } else {
+                            gameCells += `<td class="empty-score">-</td>`;
+                        }
+                    });
+
+                    html += `
+                        <tr>
+                            <td><strong>${miejsce}</strong></td>
+                            <td class="player-name">${fullName}</td>
+                            <td>${klasaBadge}</td>
+                            <td class="total-score">${player.total}</td>
+                            ${gameCells}
+                        </tr>
+                    `;
+                });
+
+                html += `</tbody></table></div>`;
+                container.innerHTML = html;
+            }
+
+            function loadPlayers() {
+                showLoading();
+
+                fetch(dataUrl)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Błąd sieci');
+                        return response.text();
+                    })
+                    .then(text => {
+                        const jsonText = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
+                        if (!jsonText) throw new Error('Nieprawidłowa odpowiedź z Google Sheets');
+                        
+                        const data = JSON.parse(jsonText[1]);
+                        const rows = data.table.rows;
+
+                        if (!rows || rows.length === 0) {
+                            container.innerHTML = '<div class="empty-state"><i class="far fa-frown"></i><p>Brak danych zawodników</p></div>';
+                            return;
+                        }
+
+                        // Mapowanie wierszy na obiekty zawodników
+                        const players = rows.map(row => {
+                            const cells = row.c;
+                            // Zakładamy: indeks 0: Imię, 1: Nazwisko, 2: Klasa, 3: Suma, 4... : gry
+                            const firstName = cells[0]?.v || '';
+                            const lastName = cells[1]?.v || '';
+                            const klasa = cells[2]?.v || '';
+                            const total = cells[3]?.v || '0';
+                            // Pozostałe komórki to gry (od indeksu 4 do końca)
+                            const scores = [];
+                            for (let i = 4; i < cells.length; i++) {
+                                scores.push(cells[i]?.v || '');
+                            }
+                            return {
+                                firstName,
+                                lastName,
+                                class: klasa,
+                                total: parseInt(total) || 0,
+                                scores
+                            };
+                        });
+
+                        // Filtrujemy tych, którzy mają przynajmniej imię i nazwisko (opcjonalnie)
+                        const validPlayers = players.filter(p => p.firstName || p.lastName);
+
+                        // Sortowanie: najpierw po total (malejąco), potem po klasie (alfabetycznie)
+                        validPlayers.sort((a, b) => {
+                            if (a.total !== b.total) return b.total - a.total;
+                            return (a.class || '').localeCompare(b.class || '');
+                        });
+
+                        renderPlayersTable(validPlayers);
+                    })
+                    .catch(error => {
+                        console.error('Błąd ładowania zawodników:', error);
+                        displayError('Nie udało się załadować danych zawodników.');
+                    });
+            }
+
+            document.addEventListener('DOMContentLoaded', loadPlayers);
+            // Odświeżanie co 20 minut (opcjonalnie)
+            setInterval(loadPlayers, 1200000);
+        })();
+    </script>
+</body>
+</html>
