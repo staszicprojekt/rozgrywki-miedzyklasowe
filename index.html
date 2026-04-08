@@ -1103,7 +1103,7 @@
 
             try {
                 const SHEET_NAME = 'Dane_Kosz';
-                const RANGE = 'L2:R20';
+                const RANGE = 'L2:R100';
                 const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${RANGE}`;
                 
                 const response = await fetch(url);
@@ -1152,7 +1152,7 @@
                     return dateA - dateB;
                 });
 
-                const matchesToShow = upcomingMatches.slice(0, 6);
+                const matchesToShow = upcomingMatches;
                 let html = '';
                 matchesToShow.forEach(match => {
                     html += renderMatchCard(match);
