@@ -16,6 +16,15 @@
             justify-content: center;
         }
 
+        /* Wyróżnienie dla dwóch pierwszych drużyn w grupie */
+        .sports-table tbody tr.qualified {
+           background: rgba(76, 175, 80, 0.12);   /* delikatny zielony odcień */
+          border-left: 4px solid var(--success-color);
+          font-weight: 500;                      /* opcjonalnie lekko pogrubiona czcionka */
+        }
+        .sports-table th:nth-child(1){
+            border-left: 4px solid var(--primary-color);
+        }
         .group-table {
             flex: 1 1 50px;
             min-width: 300px;
@@ -431,6 +440,16 @@
             <!-- Opcjonalnie można dodać podgląd top 3, ale na razie tylko link -->
         </section>
         
+        <!-- SEKCJA: DRABINKA PUCHAROWA -->
+        <section class="section" id="bracketSection">
+        <div class="section-header">
+           <h2><i class="fas fa-trophy"></i> Drabinka pucharowa</h2>
+        </div>
+        <div class="bracket-outer" id="bracketContainer">
+            <!-- tu JavaScript wstawi drabinkę -->
+        </div>
+        </section>
+
         <!-- NOWA SEKCJA: Terminarz i wyniki -->
         <section class="section">
             <div class="section-header">
@@ -483,13 +502,16 @@
             const SHEET_NAME = 'Dane_Kosz';
             
             // Zakres dla tabel grupowych (A2:G20)
-            const GROUPS_RANGE = 'A2:G20';
+            const GROUPS_RANGE = 'A2:H20';
             const groupsUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${GROUPS_RANGE}`;
             
             // Zakres dla meczów (L2:R100)
             const MATCHES_RANGE = 'L2:R100';
             const matchesUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${MATCHES_RANGE}`;
 
+            // Zakres dla drabinki pucharowej (N32:Q35)
+            const BRACKET_RANGE = 'N32:Q35';
+            const bracketUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${BRACKET_RANGE}`;
             // ================== FUNKCJE POMOCNICZE ==================
             function displayError(containerId, message) {
                 const container = document.getElementById(containerId);
@@ -519,24 +541,27 @@
                                         <th><span class="full-text">Wygrane</span><span class="short-text">W</span></th>
                                         <th><span class="full-text">Przegrane</span><span class="short-text">P</span></th>
                                         <th><span class="full-text">Remisy</span><span class="short-text">R</span></th>
+                                        <th><span class="full-text">+/-</span><span class="short-text">+/-</span></th>
                                         <th><span class="full-text">Pkt</span><span class="short-text">PKT</span></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                 `;
                 if (teamRows.length === 0) {
-                    html += `<tr><td colspan="6" class="empty-state">Brak danych w grupie</td></tr>`;
+                    html += `<tr><td colspan="7" class="empty-state">Brak danych w grupie</td></tr>`;
                 } else {
-                    teamRows.forEach(team => {
-                        html += `<tr>
-                            <td>${team.class || ''}</td>
-                            <td><span class="team-name">${team.name || ''}</span></td>
-                            <td>${team.wins}</td>
-                            <td>${team.losses}</td>
-                            <td>${team.draws}</td>
-                            <td><strong>${team.points}</strong></td>
-                        </tr>`;
-                    });
+                    teamRows.forEach((team, index) => {
+                    const rowClass = index < 2 ? ' class="qualified"' : '';
+                    html += `<tr${rowClass}>
+                        <td>${team.class || ''}</td>
+                        <td><span class="team-name">${team.name || ''}</span></td>
+                        <td>${team.wins}</td>
+                        <td>${team.losses}</td>
+                        <td>${team.draws}</td>
+                        <td>${team.pointsDiff || '0'}</td>
+                        <td><strong>${team.points}</strong></td>
+                    </tr>`;
+                });
                 }
                 html += `</tbody></table></div></div>`;
                 return html;
@@ -573,7 +598,7 @@
                                 losses: cells[4]?.v || '0',
                                 draws: cells[5]?.v || '0',
                                 points: cells[6]?.v || '0',
-                                group: cells[7]?.v || '' // kolumna H (poza zakresem A2:G20, więc będzie pusta)
+                                pointsDiff: cells[7]?.v || ''
                             };
                         });
 
@@ -581,17 +606,25 @@
 
                         // Sortowanie: punkty (malejąco), wygrane (malejąco), przegrane (rosnąco)
                         const sortTeams = (a, b) => {
+                            // 1. Punkty (malejąco)
                             const ptsA = parseInt(a.points) || 0;
                             const ptsB = parseInt(b.points) || 0;
                             if (ptsA !== ptsB) return ptsB - ptsA;
 
+                            // 2. Bilans punktów (malejąco) – NOWE KRYTERIUM
+                            const diffA = parseInt(a.pointsDiff) || 0;
+                            const diffB = parseInt(b.pointsDiff) || 0;
+                            if (diffA !== diffB) return diffB - diffA;
+
+                            // 3. Wygrane (malejąco)
                             const winsA = parseInt(a.wins) || 0;
                             const winsB = parseInt(b.wins) || 0;
                             if (winsA !== winsB) return winsB - winsA;
 
+                            // 4. Przegrane (rosnąco – mniej przegranych lepsze)
                             const lossesA = parseInt(a.losses) || 0;
                             const lossesB = parseInt(b.losses) || 0;
-                            return lossesA - lossesB; // mniej przegranych = wyższe miejsce
+                            return lossesA - lossesB;
                         };
 
                         let groupATeams = teams.filter(t => t.group === 'A' || t.group === 'Grupa A');
@@ -617,6 +650,88 @@
                     });
             }
 
+            // ================== DRABINKA PUCHAROWA ==================
+            function renderBracketMatch(match, title) {
+    const hasScore = match.score1 !== '' && match.score2 !== '' && 
+                     !isNaN(parseInt(match.score1)) && !isNaN(parseInt(match.score2));
+    
+    return `
+        <div class="bracket-match ${title === 'Finał' ? 'final' : title === 'Mecz o 3. miejsce' ? 'third' : ''}">
+            <h4>${title}</h4>
+            <table class="match-rows">
+                <tr>
+                    <td class="team-cell">${match.team1 || '?'}</td>
+                    <td class="score-cell">${hasScore ? match.score1 : '<span class="score-empty">?</span>'}</td>
+                    <td class="score-sep">:</td>
+                    <td class="score-cell">${hasScore ? match.score2 : '<span class="score-empty">?</span>'}</td>
+                    <td class="team-cell" style="text-align:right;">${match.team2 || '?'}</td>
+                </tr>
+            </table>
+        </div>
+    `;
+}
+function loadBracket() {
+    const container = document.getElementById('bracketContainer');
+    container.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin fa-2x"></i><p>Ładowanie drabinki...</p></div>';
+
+    fetch(bracketUrl)
+        .then(response => {
+            if (!response.ok) throw new Error('Błąd sieci');
+            return response.text();
+        })
+        .then(text => {
+            const jsonText = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
+            if (!jsonText) throw new Error('Nieprawidłowa odpowiedź');
+            const data = JSON.parse(jsonText[1]);
+            const rows = data.table.rows;
+
+            if (!rows || rows.length < 4) {
+                container.innerHTML = '<div class="empty-state"><i class="far fa-frown"></i><p>Brak danych drabinki</p></div>';
+                return;
+            }
+
+            // Pobieramy kolejne wiersze
+            const sf1 = {
+                team1: rows[0].c[0]?.v || '',   // kolumna N
+                score1: rows[0].c[1]?.v || '',  // O
+                score2: rows[0].c[2]?.v || '',  // P
+                team2: rows[0].c[3]?.v || ''    // Q
+            };
+            const sf2 = {
+                team1: rows[1].c[0]?.v || '',
+                score1: rows[1].c[1]?.v || '',
+                score2: rows[1].c[2]?.v || '',
+                team2: rows[1].c[3]?.v || ''
+            };
+            const third = {
+                team1: rows[2].c[0]?.v || '',
+                score1: rows[2].c[1]?.v || '',
+                score2: rows[2].c[2]?.v || '',
+                team2: rows[2].c[3]?.v || ''
+            };
+            const final = {
+                team1: rows[3].c[0]?.v || '',
+                score1: rows[3].c[1]?.v || '',
+                score2: rows[3].c[2]?.v || '',
+                team2: rows[3].c[3]?.v || ''
+            };
+
+            const html = `
+                <div class="bracket-grid">
+                    <div class="sf1">${renderBracketMatch(sf1, 'Półfinał 1')}</div>
+                    <div class="sf2">${renderBracketMatch(sf2, 'Półfinał 2')}</div>
+                    <div class="final">${renderBracketMatch(final, 'Finał')}</div>
+                    <div class="third">${renderBracketMatch(third, 'Mecz o 3. miejsce')}</div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Błąd ładowania drabinki:', error);
+            container.innerHTML = '<div class="error-message"><i class="fas fa-exclamation-triangle"></i> Nie udało się załadować drabinki</div>';
+        });
+}
             // ================== MECZE / TERMINARZ ==================
             function parseDate(dateStr, timeStr) {
                 if (!dateStr) return null;
@@ -764,11 +879,13 @@
                 loadBasketballData();
                 // Ładujemy mecze
                 loadMatches();
-                
+                loadBracket();
                 // Odświeżanie co 20 minut (1200000 ms)
                 setInterval(() => {
                     loadBasketballData();
                     loadMatches();
+                    loadBracket();
+
                 }, 1200000);
             });
 

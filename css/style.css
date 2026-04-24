@@ -1160,6 +1160,7 @@ footer {
 }
 /* NAPRAWIONE: Widoczność nagłówków na bardzo wąskich ekranach */
 @media (max-width: 400px) {
+    
     .sports-table th {
         font-size: 0.85em !important; /* Zwiększone z 0.75em */
         padding: 10px 4px; /* Większe paddingi dla lepszej czytelności */
@@ -1185,32 +1186,32 @@ footer {
         table-layout: fixed; /* Naprawia szerokości kolumn */
     }
     
-    /* Ustaw stałe szerokości dla kolumn z punktami */
-    .sports-table th:nth-child(3),
-    .sports-table td:nth-child(3),
-    .sports-table th:nth-child(4),
-    .sports-table td:nth-child(4),
-    .sports-table th:nth-child(5),
-    .sports-table td:nth-child(5),
-    .sports-table th:nth-child(6),
-    .sports-table td:nth-child(6) {
-        width: 15% !important; /* Wszystkie kolumny z punktami mają taką samą szerokość */
-        min-width: 50px;
-        text-align: center;
-    }
-    
-    /* Kolumna z drużyną dostaje więcej miejsca */
-    .sports-table th:nth-child(2),
-    .sports-table td:nth-child(2) {
-        width: 40% !important;
-    }
-    
-    /* Kolumna z miejscem */
-    .sports-table th:nth-child(1),
-    .sports-table td:nth-child(1) {
-        width: 10% !important;
-        min-width: 30px;
-    }
+    /* Ustaw stałe szerokości dla kolumn z punktami – teraz także 7. */
+.sports-table th:nth-child(3),
+.sports-table td:nth-child(3),
+.sports-table th:nth-child(4),
+.sports-table td:nth-child(4),
+.sports-table th:nth-child(5),
+.sports-table td:nth-child(5),
+.sports-table th:nth-child(6),
+.sports-table td:nth-child(6),
+.sports-table th:nth-child(7),
+.sports-table td:nth-child(7) {
+    width: 15% !important;
+    min-width: 45px;
+    text-align: center;
+}
+
+/* Kolumna z drużyną (2) i klasą (1) – bez zmian */
+.sports-table th:nth-child(2),
+.sports-table td:nth-child(2) {
+    width: 35% !important;  /* lekko zmniejszone, by zmieścić 7 kolumn */
+}
+.sports-table th:nth-child(1),
+.sports-table td:nth-child(1) {
+    width: 10% !important;
+    min-width: 35px;
+}
 }
 /* Dla opcji 2 - osobne linki */
 .logo-container {
@@ -2611,5 +2612,131 @@ footer {
     
     .match-date {
         font-size: 0.8rem;
+    }
+}
+/* ===== DRABINKA PUCHAROWA ===== */
+.bracket-outer {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.bracket-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;   /* zawsze 2 kolumny */
+    grid-template-rows: 1fr 1fr;      /* równe wysokości wierszy */
+    gap: 20px;
+    align-items: stretch;             /* komórki rozciągnięte do wysokości wiersza */
+}
+
+/* Każdy mecz w drabince */
+.bracket-match {
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;          /* wyśrodkowanie pionowe */
+    align-items: center;              /* wyśrodkowanie poziome */
+    height: 100%;                     /* wypełnia całą wysokość komórki siatki */
+    box-sizing: border-box;
+}
+
+.bracket-match h4 {
+    margin: 0 0 10px 0;
+    font-size: 1em;
+    color: var(--primary-color);
+    text-align: center;
+}
+
+.match-rows {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;              /* równe szerokości kolumn */
+}
+
+.match-rows td {
+    padding: 8px 5px;
+    vertical-align: middle;
+    font-size: 1rem;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+    word-break: break-word;
+}
+
+.match-rows tr:last-child td {
+    border-bottom: none;
+}
+
+.team-cell {
+    font-weight: 600;
+    color: var(--primary-dark);
+    width: 35%;                       /* zmniejszono, aby zmieścić wynik i separator */
+    word-break: normal;
+}
+
+.score-cell {
+    font-weight: 700;
+    color: var(--primary-color);
+    width: 15%;
+    font-size: 1.2em;
+}
+
+.score-sep {
+    width: 10%;
+    font-weight: bold;
+    color: var(--gray-color);
+    font-size: 1.2em;
+}
+
+.score-empty {
+    opacity: 0.4;
+    font-size: 1.2em;
+}
+
+/* Pozycjonowanie w siatce */
+.sf1 { grid-row: 1; grid-column: 1; }
+.sf2 { grid-row: 2; grid-column: 1; }
+.final { grid-row: 1; grid-column: 2; }
+.third { grid-row: 2; grid-column: 2; }
+
+/* ===== RESPONSYWNOŚĆ ===== */
+@media (max-width: 600px) {
+    .bracket-grid {
+        gap: 10px;
+    }
+    .bracket-match {
+        padding: 10px 5px;
+    }
+    .bracket-match h4 {
+        font-size: 0.85em;
+        margin-bottom: 5px;
+    }
+    .match-rows td {
+        padding: 6px 2px;
+        font-size: 0.75em;
+    }
+    .score-cell, .score-sep, .score-empty {
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 400px) {
+    .bracket-grid {
+        gap: 8px;
+    }
+    .bracket-match {
+        padding: 8px 3px;
+    }
+    .bracket-match h4 {
+        font-size: 0.75em;
+    }
+    .match-rows td {
+        padding: 5px 1px;
+        font-size: 0.7em;
+    }
+    .score-cell, .score-sep, .score-empty {
+        font-size: 0.8em;
     }
 }

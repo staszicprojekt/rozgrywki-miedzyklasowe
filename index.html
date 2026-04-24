@@ -1130,7 +1130,7 @@
                         score2: cells[4]?.v || '',
                         team2: cells[5]?.v || ''
                     };
-                }).filter(m => m.team1 && m.team2);
+                }).filter(m => m.team1 && m.team2 && m.date && m.date.trim() !== '');
 
                 const upcomingMatches = matches.filter(m => {
                     const hasScore = m.score1 !== '' && m.score2 !== '' && !isNaN(parseInt(m.score1));
