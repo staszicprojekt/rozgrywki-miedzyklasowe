@@ -1073,6 +1073,33 @@ function refreshTeams() {
     font-weight: normal;
     margin-left: 5px;
 }
+/* ==== Zmniejszona czcionka dla nazwy aktualnego mistrza ==== */
+.summary-item #championTeam {
+    font-size: 1.2em;          /* mniejsza niż standardowe 2em */
+    line-height: 1.3;
+    word-break: break-word;    /* pozwala zawijać długą nazwę */
+}
+
+/* Na tabletach */
+@media (max-width: 768px) {
+    .summary-item #championTeam {
+        font-size: 1em;
+    }
+}
+
+/* Na telefonach */
+@media (max-width: 480px) {
+    .summary-item #championTeam {
+        font-size: 0.85em;
+    }
+}
+
+/* Na bardzo małych ekranach (np. iPhone SE) */
+@media (max-width: 350px) {
+    .summary-item #championTeam {
+        font-size: 0.8em;
+    }
+}
 </style>
 </body>
 </html>

@@ -2,40 +2,60 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>Zawodnicy - Koszykówka</title>
-    <link rel="icon" type="png" href="logo_szkoly.png">
+    <link rel="icon" type="image/png" href="logo_szkoly.png">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Dodatkowe style dla tabeli zawodników */
+        /* =============== STYLE SPECYFICZNE DLA TABELI ZAWODNIKÓW (KOSZYKÓWKA) =============== */
+        :root {
+            --primary-color: #1a237e;
+            --primary-light: #534bae;
+            --primary-dark: #000051;
+            --secondary-color: #00b0ff;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+            --light-color: #f5f5f5;
+            --dark-color: #333;
+            --gray-color: #757575;
+            --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
         .players-table-wrapper {
             overflow-x: auto;
             margin-top: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            -webkit-overflow-scrolling: touch; /* płynne przewijanie na iOS */
         }
 
         .players-table {
             width: 100%;
             border-collapse: collapse;
             background: white;
-            min-width: 800px; /* Wymusza przewijanie na małych ekranach */
+            min-width: 600px; /* nieco mniejsza niż 800px, aby lepiej pasowała */
+            table-layout: auto; /* kolumny dopasowują się do zawartości */
         }
 
         .players-table th {
             background: var(--primary-color);
             color: white;
-            padding: 12px 8px;
+            padding: 10px 6px;
             font-weight: 600;
             text-align: center;
             white-space: nowrap;
+            font-size: 0.85rem;
+            letter-spacing: 0.3px;
         }
 
         .players-table td {
-            padding: 10px 8px;
+            padding: 8px 6px;
             border-bottom: 1px solid #eee;
             text-align: center;
+            font-size: 0.85rem;
+            vertical-align: middle;
         }
 
         .players-table tbody tr:hover {
@@ -46,6 +66,8 @@
             font-weight: 600;
             color: var(--primary-dark);
             text-align: left;
+            word-break: break-word;
+            max-width: 140px; /* zapobiega zbyt długim liniom */
         }
 
         .players-table .class-badge {
@@ -54,47 +76,173 @@
             color: white;
             padding: 2px 8px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 600;
+            white-space: nowrap;
         }
 
         .players-table .total-score {
             font-weight: 700;
             color: var(--primary-color);
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
         .players-table .game-score {
             font-family: monospace;
             font-weight: 500;
+            font-size: 0.85rem;
         }
 
         .empty-score {
             color: #ccc;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .section-header .btn-back {
             background: var(--gray-color);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 8px 16px;
+            border-radius: 6px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
+            gap: 6px;
+            transition: all 0.25s;
             text-decoration: none;
+            font-size: 0.9rem;
         }
 
         .section-header .btn-back:hover {
             background: #555;
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
+
         .players-table td:first-child {
             color: var(--gray-color);
-            font-weight: 100;
+            font-weight: 400;
+        }
+
+        .loading-spinner { text-align: center; padding: 30px; color: var(--primary-color); }
+        .error-message { text-align: center; padding: 30px; color: var(--danger-color); background: #ffebee; border-radius: 8px; }
+
+        /* =============== RESPONSYWNOŚĆ =============== */
+        @media (max-width: 768px) {
+            .players-table th,
+            .players-table td {
+                padding: 7px 4px;
+                font-size: 0.8rem;
+            }
+            .players-table .player-name {
+                font-size: 0.85rem;
+                max-width: 120px;
+            }
+            .players-table .class-badge {
+                font-size: 0.7rem;
+                padding: 2px 6px;
+            }
+            .players-table .total-score {
+                font-size: 0.95rem;
+            }
+            .players-table .game-score {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .players-table {
+                min-width: 500px; /* wciąż wymaga przewijania, ale mniej */
+            }
+            .players-table th,
+            .players-table td {
+                padding: 6px 3px;
+                font-size: 0.72rem;
+            }
+            .players-table .player-name {
+                font-size: 0.78rem;
+                max-width: 100px;
+            }
+            .players-table .class-badge {
+                font-size: 0.65rem;
+                padding: 1px 5px;
+            }
+            .players-table .total-score {
+                font-size: 0.9rem;
+            }
+            .players-table .game-score {
+                font-size: 0.72rem;
+            }
+            .empty-score {
+                font-size: 0.72rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .players-table {
+                min-width: 450px;
+            }
+            .players-table th,
+            .players-table td {
+                padding: 5px 2px;
+                font-size: 0.65rem;
+            }
+            .players-table .player-name {
+                font-size: 0.7rem;
+                max-width: 80px;
+            }
+            .players-table .class-badge {
+                font-size: 0.6rem;
+                padding: 1px 4px;
+            }
+            .players-table .total-score {
+                font-size: 0.8rem;
+            }
+            .players-table .game-score {
+                font-size: 0.65rem;
+            }
+            .empty-score {
+                font-size: 0.65rem;
+            }
+            .section-header .btn-back {
+                padding: 5px 10px;
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 350px) {
+            .players-table {
+                min-width: 400px;
+            }
+            .players-table th,
+            .players-table td {
+                padding: 4px 1px;
+                font-size: 0.6rem;
+                letter-spacing: -0.2px;
+            }
+            .players-table .player-name {
+                font-size: 0.65rem;
+                max-width: 70px;
+            }
+            .players-table .class-badge {
+                font-size: 0.55rem;
+                padding: 0 3px;
+            }
+            .players-table .total-score {
+                font-size: 0.75rem;
+            }
+            .players-table .game-score {
+                font-size: 0.6rem;
+            }
+            .empty-score {
+                font-size: 0.6rem;
+            }
+        }
+
+        /* Specjalne poprawki dla iPhone Safari */
+        @supports (-webkit-touch-callout: none) {
+            .players-table-wrapper {
+                -webkit-overflow-scrolling: touch;
+            }
         }
     </style>
 </head>
@@ -109,8 +257,8 @@
                 </a>
                 <a href="index.html" class="title-link">
                     <div class="title-container">
-                        <h1 id="pageTitle">Rozgrywki Międzyklasowe 2026</h1>
-                        <p class="school-name" id="schoolName"> I Liceum Ogólnokształcące im. Stanisława Staszica</p>
+                        <h1>Rozgrywki Międzyklasowe 2026</h1>
+                        <p class="school-name"> I Liceum Ogólnokształcące im. Stanisława Staszica</p>
                     </div>
                 </a>
             </div>
@@ -122,9 +270,7 @@
         <nav class="main-nav">
             <ul class="nav-list">
                 <li class="dropdown">
-                    <a href="#">
-                        <i class="fas fa-futbol"></i> Dyscypliny <i class="fas fa-chevron-down"></i>
-                    </a>
+                    <a href="#"><i class="fas fa-futbol"></i> Dyscypliny <i class="fas fa-chevron-down"></i></a>
                     <div class="dropdown-content">
                         <a href="koszykowka.html"><i class="fas fa-basketball-ball"></i> Koszykówka</a>
                         <a href="siatkowka.html"><i class="fas fa-volleyball-ball"></i> Siatkówka</a>
@@ -153,15 +299,14 @@
         function updateCurrentDate() {
             const now = new Date();
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const dateString = now.toLocaleDateString('pl-PL', options);
-            document.getElementById('currentDate').textContent = dateString;
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('pl-PL', options);
         }
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', () => {
             updateCurrentDate();
             setInterval(updateCurrentDate, 60000);
         });
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', () => {
             const dropdowns = document.querySelectorAll('.dropdown');
             dropdowns.forEach(dropdown => {
                 const toggle = dropdown.querySelector('a');
@@ -172,11 +317,19 @@
                     dropdowns.forEach(other => other.classList.remove('open'));
                     if (!isOpen) dropdown.classList.add('open');
                 });
+                toggle.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const isOpen = dropdown.classList.contains('open');
+                    dropdowns.forEach(other => other.classList.remove('open'));
+                    if (!isOpen) dropdown.classList.add('open');
+                });
             });
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.dropdown')) {
-                    dropdowns.forEach(d => d.classList.remove('open'));
-                }
+            document.addEventListener('click', e => {
+                if (!e.target.closest('.dropdown')) dropdowns.forEach(d => d.classList.remove('open'));
+            });
+            document.addEventListener('touchend', e => {
+                if (!e.target.closest('.dropdown')) dropdowns.forEach(d => d.classList.remove('open'));
             });
         });
     </script>
@@ -185,8 +338,7 @@
         (function() {
             const SPREADSHEET_ID = '1qLCQ-6uTyusQRsY23d0tvtEx2XcYmR4MLuwGVriow58';
             const SHEET_NAME = 'zawodnicy_kosz';
-            // Zakres: od A2 do Z (zakładamy maksymalnie 26 kolumn, wystarczy)
-            const RANGE = 'A2:K1000'; 
+            const RANGE = 'A2:K1000';
             const dataUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${RANGE}`;
 
             const container = document.getElementById('playersTableContainer');
@@ -200,15 +352,12 @@
             }
 
             function renderPlayersTable(players) {
-                if (players.length === 0) {
+                if (!players || players.length === 0) {
                     container.innerHTML = '<div class="empty-state"><i class="far fa-frown"></i><p>Brak danych zawodników</p></div>';
                     return;
                 }
 
-                // Określamy liczbę kolumn gier (wszystkie kolumny poza indeksami 0-3)
                 const gameColumnsCount = players[0].scores.length;
-
-                // Generujemy nagłówki dla gier
                 let gameHeaders = '';
                 for (let i = 1; i <= gameColumnsCount; i++) {
                     gameHeaders += `<th>Gra ${i}</th>`;
@@ -226,17 +375,21 @@
                                     ${gameHeaders}
                                 </tr>
                             </thead>
-                            <tbody>
-                `;
-
+                            <tbody>`;
+                let currentPlace = 0;
+                let previousTotal = null;                
                 players.forEach((player, index) => {
-                    const miejsce = index + 1;
-                    // Połącz imię i nazwisko
+                    // Jeżeli suma punktów jest inna niż u poprzednika, nadajemy nowy numer miejsca
+    if (player.total !== previousTotal) {
+        currentPlace = index + 1;         // nowe miejsce (1, 2, 3...)
+        previousTotal = player.total;     // zapamiętujemy nową sumę
+    }
+    // W przeciwnym razie currentPlace pozostaje bez zmian (ex aequo)
+
+    const miejsce = currentPlace;
                     const fullName = `${player.firstName} ${player.lastName}`.trim();
-                    // Klasa w badge
                     const klasaBadge = `<span class="class-badge">${player.class}</span>`;
 
-                    // Komórki z wynikami gier
                     let gameCells = '';
                     player.scores.forEach(score => {
                         if (score && score !== '') {
@@ -253,8 +406,7 @@
                             <td>${klasaBadge}</td>
                             <td class="total-score">${player.total}</td>
                             ${gameCells}
-                        </tr>
-                    `;
+                        </tr>`;
                 });
 
                 html += `</tbody></table></div>`;
@@ -263,7 +415,6 @@
 
             function loadPlayers() {
                 showLoading();
-
                 fetch(dataUrl)
                     .then(response => {
                         if (!response.ok) throw new Error('Błąd sieci');
@@ -272,7 +423,6 @@
                     .then(text => {
                         const jsonText = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
                         if (!jsonText) throw new Error('Nieprawidłowa odpowiedź z Google Sheets');
-                        
                         const data = JSON.parse(jsonText[1]);
                         const rows = data.table.rows;
 
@@ -281,15 +431,12 @@
                             return;
                         }
 
-                        // Mapowanie wierszy na obiekty zawodników
                         const players = rows.map(row => {
                             const cells = row.c;
-                            // Zakładamy: indeks 0: Imię, 1: Nazwisko, 2: Klasa, 3: Suma, 4... : gry
                             const firstName = cells[0]?.v || '';
                             const lastName = cells[1]?.v || '';
                             const klasa = cells[2]?.v || '';
                             const total = cells[3]?.v || '0';
-                            // Pozostałe komórki to gry (od indeksu 4 do końca)
                             const scores = [];
                             for (let i = 4; i < cells.length; i++) {
                                 scores.push(cells[i]?.v || '');
@@ -303,10 +450,7 @@
                             };
                         });
 
-                        // Filtrujemy tych, którzy mają przynajmniej imię i nazwisko (opcjonalnie)
                         const validPlayers = players.filter(p => p.firstName || p.lastName);
-
-                        // Sortowanie: najpierw po total (malejąco), potem po klasie (alfabetycznie)
                         validPlayers.sort((a, b) => {
                             if (a.total !== b.total) return b.total - a.total;
                             return (a.class || '').localeCompare(b.class || '');
@@ -321,7 +465,6 @@
             }
 
             document.addEventListener('DOMContentLoaded', loadPlayers);
-            // Odświeżanie co 20 minut (opcjonalnie)
             setInterval(loadPlayers, 1200000);
         })();
     </script>
