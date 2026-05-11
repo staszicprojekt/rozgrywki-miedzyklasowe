@@ -1027,40 +1027,118 @@
             }
         }
 
-        // ===================== FUNKCJE DO MECZÓW (POPRAWIONE) =====================
-        function parseDate(dateStr, timeStr) {
-            if (!dateStr) return null;
-            let datePart = dateStr.trim();
-            let timePart = timeStr ? timeStr.trim() : '00:00';
-            if (datePart.includes('.')) {
-                let parts = datePart.split('.');
-                if (parts.length === 3) {
-                    datePart = `${parts[2]}-${parts[1]}-${parts[0]}`;
-                }
-            }
-            return new Date(`${datePart}T${timePart}:00`);
+        // ===================== FUNKCJE DO MECZÓW (WIELODYSCYPLINOWE) =====================
+function parseDate(dateStr, timeStr) {
+    if (!dateStr) return null;
+    let datePart = dateStr.trim();
+    let timePart = timeStr ? timeStr.trim() : '00:00';
+    if (datePart.includes('.')) {
+        let parts = datePart.split('.');
+        if (parts.length === 3) {
+            datePart = `${parts[2]}-${parts[1]}-${parts[0]}`;
+        }
+    }
+    return new Date(`${datePart}T${timePart}:00`);
+}
+
+async function fetchMatchesFromSheet(sheetName, range, sportName, sportIcon) {
+    try {
+        const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${sheetName}&range=${range}`;
+        const response = await fetch(url);
+        const text = await response.text();
+        const jsonText = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
+        if (!jsonText) return [];
+        const data = JSON.parse(jsonText[1]);
+        const rows = data.table.rows;
+        if (!rows || rows.length === 0) return [];
+
+        // Mapowanie kolumn w zależności od arkusza
+        let colDate = 0, colTime = 1, colTeam1 = 2, colScore1 = 3, colScore2 = 4, colTeam2 = 5;
+        if (sheetName === 'Dane_Siatka') {
+            // Zakres P2:X100 -> P=0, Q=1, R=2, S=3, T=4, V=6 (drużyna2)
+            colDate = 0; colTime = 1; colTeam1 = 2; colScore1 = 3; colScore2 = 4; colTeam2 = 6;
+        } else if (sheetName === 'Dane_Pilka') {
+            // Zakładamy podobny układ jak koszykówka (L2:R60)
+            colDate = 0; colTime = 1; colTeam1 = 2; colScore1 = 3; colScore2 = 4; colTeam2 = 5;
+        } else {
+            // Dla Dane_Kosz
+            colDate = 0; colTime = 1; colTeam1 = 2; colScore1 = 3; colScore2 = 4; colTeam2 = 5;
         }
 
-        function renderMatchCard(match) {
+        return rows.map(row => {
+            const cells = row.c;
+            if (!cells) return null;
+            return {
+                date: cells[colDate]?.v || '',
+                time: cells[colTime]?.v || '',
+                team1: cells[colTeam1]?.v || '',
+                score1: cells[colScore1]?.v || '',
+                score2: cells[colScore2]?.v || '',
+                team2: cells[colTeam2]?.v || '',
+                sport: sportName,
+                sportIcon: sportIcon
+            };
+        }).filter(m => m.team1 && m.team2 && m.date && m.date.trim() !== '');
+    } catch (error) {
+        console.error(`Błąd ładowania meczów z ${sheetName}:`, error);
+        return [];
+    }
+}
+
+async function loadMatches() {
+    const container = document.getElementById('matchesContainer');
+    const noMatchesMsg = document.getElementById('noMatchesMessage');
+    
+    container.innerHTML = '<div class="loading-spinner" style="text-align:center; padding:30px;"><i class="fas fa-spinner fa-spin fa-2x"></i><p>Ładowanie meczów...</p></div>';
+    noMatchesMsg.style.display = 'none';
+
+    try {
+        // Pobieramy mecze ze wszystkich trzech dyscyplin
+        const koszMatches = await fetchMatchesFromSheet('Dane_Kosz', 'L2:R100', 'Koszykówka', 'fa-basketball-ball');
+        const siatkaMatches = await fetchMatchesFromSheet('Dane_Siatka', 'P2:X100', 'Siatkówka', 'fa-volleyball-ball');
+        const pilkaMatches = await fetchMatchesFromSheet('Dane_Pilka', 'L2:R60', 'Piłka nożna', 'fa-futbol');
+        
+        let allMatches = [...koszMatches, ...siatkaMatches, ...pilkaMatches];
+        
+        // Filtrujemy tylko mecze nadchodzące (bez wyników liczbowych)
+        const upcomingMatches = allMatches.filter(m => {
+            const hasScore = m.score1 !== '' && m.score2 !== '' && !isNaN(parseInt(m.score1)) && !isNaN(parseInt(m.score2));
+            return !hasScore;
+        });
+
+        if (upcomingMatches.length === 0) {
+            container.innerHTML = '';
+            noMatchesMsg.style.display = 'block';
+            return;
+        }
+
+        // Sortowanie po dacie i godzinie
+        upcomingMatches.sort((a, b) => {
+            const dateA = parseDate(a.date, a.time);
+            const dateB = parseDate(b.date, b.time);
+            if (!dateA && !dateB) return 0;
+            if (!dateA) return 1;
+            if (!dateB) return -1;
+            return dateA - dateB;
+        });
+
+        // Renderowanie kafelków
+        let html = '';
+        upcomingMatches.forEach(match => {
             const hasScore = match.score1 !== '' && match.score2 !== '' && !isNaN(parseInt(match.score1)) && !isNaN(parseInt(match.score2));
             const statusClass = hasScore ? 'status-finished' : 'status-upcoming';
             const statusText = hasScore ? 'Rozegrany' : 'Nadchodzący';
             const matchCardClass = hasScore ? 'match-card--finished' : 'match-card--upcoming';
 
-            // Określenie zwycięzcy
-            let winnerClass1 = '';
-            let winnerClass2 = '';
+            let winnerClass1 = '', winnerClass2 = '';
             if (hasScore) {
                 const s1 = parseInt(match.score1);
                 const s2 = parseInt(match.score2);
-                if (s1 > s2) {
-                    winnerClass1 = 'team-winner';
-                } else if (s2 > s1) {
-                    winnerClass2 = 'team-winner';
-                }
+                if (s1 > s2) winnerClass1 = 'team-winner';
+                else if (s2 > s1) winnerClass2 = 'team-winner';
             }
 
-            return `
+            html += `
                 <div class="match-card ${matchCardClass}">
                     <div class="match-header">
                         <span class="match-date">
@@ -1073,14 +1151,8 @@
                             <span class="team-name">${match.team1}</span>
                             ${hasScore ? `<span class="team-score">${match.score1}</span>` : '<span class="team-score team-score-empty">?</span>'}
                         </div>
-                        <!-- Separator dla dużych ekranów -->
-                        <div class="match-score-separator desktop-only">
-                            <span>:</span>
-                        </div>
-                        <!-- Separator dla małych ekranów -->
-                        <div class="match-score-separator mobile-only">
-                            <span>vs</span>
-                        </div>
+                        <div class="match-score-separator desktop-only"><span>:</span></div>
+                        <div class="match-score-separator mobile-only"><span>vs</span></div>
                         <div class="team team-away ${winnerClass2}">
                             <span class="team-name">${match.team2}</span>
                             ${hasScore ? `<span class="team-score">${match.score2}</span>` : '<span class="team-score team-score-empty">?</span>'}
@@ -1088,85 +1160,20 @@
                     </div>
                     <div class="match-footer">
                         <div class="match-status ${statusClass}">${statusText}</div>
-                        <div class="match-sport-icon"><i class="fas fa-basketball-ball"></i></div>
+                        <div class="match-sport-icon"><i class="fas ${match.sportIcon}"></i></div>
                     </div>
                 </div>
             `;
-        }
+        });
+        container.innerHTML = html;
+        noMatchesMsg.style.display = 'none';
 
-        async function loadMatches() {
-            const container = document.getElementById('matchesContainer');
-            const noMatchesMsg = document.getElementById('noMatchesMessage');
-            
-            container.innerHTML = '<div class="loading-spinner" style="text-align:center; padding:30px;"><i class="fas fa-spinner fa-spin fa-2x"></i><p>Ładowanie meczów...</p></div>';
-            noMatchesMsg.style.display = 'none';
-
-            try {
-                const SHEET_NAME = 'Dane_Kosz';
-                const RANGE = 'L2:R100';
-                const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${RANGE}`;
-                
-                const response = await fetch(url);
-                const text = await response.text();
-                const jsonText = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
-                if (!jsonText) throw new Error('Nieprawidłowa odpowiedź z Google Sheets');
-                
-                const data = JSON.parse(jsonText[1]);
-                const rows = data.table.rows;
-
-                if (!rows || rows.length === 0) {
-                    container.innerHTML = '';
-                    noMatchesMsg.style.display = 'block';
-                    return;
-                }
-
-                const matches = rows.map(row => {
-                    const cells = row.c;
-                    return {
-                        date: cells[0]?.v || '',
-                        time: cells[1]?.v || '',
-                        team1: cells[2]?.v || '',
-                        score1: cells[3]?.v || '',
-                        score2: cells[4]?.v || '',
-                        team2: cells[5]?.v || ''
-                    };
-                }).filter(m => m.team1 && m.team2 && m.date && m.date.trim() !== '');
-
-                const upcomingMatches = matches.filter(m => {
-                    const hasScore = m.score1 !== '' && m.score2 !== '' && !isNaN(parseInt(m.score1));
-                    return !hasScore;
-                });
-
-                if (upcomingMatches.length === 0) {
-                    container.innerHTML = '';
-                    noMatchesMsg.style.display = 'block';
-                    return;
-                }
-
-                upcomingMatches.sort((a, b) => {
-                    const dateA = parseDate(a.date, a.time);
-                    const dateB = parseDate(b.date, b.time);
-                    if (!dateA && !dateB) return 0;
-                    if (!dateA) return 1;
-                    if (!dateB) return -1;
-                    return dateA - dateB;
-                });
-
-                const matchesToShow = upcomingMatches;
-                let html = '';
-                matchesToShow.forEach(match => {
-                    html += renderMatchCard(match);
-                });
-
-                container.innerHTML = html;
-                noMatchesMsg.style.display = 'none';
-
-            } catch (error) {
-                console.error('Błąd ładowania meczów:', error);
-                container.innerHTML = '<div class="error-message" style="color:red; text-align:center;">Nie udało się załadować meczów</div>';
-                noMatchesMsg.style.display = 'none';
-            }
-        }
+    } catch (error) {
+        console.error('Błąd ładowania meczów:', error);
+        container.innerHTML = '<div class="error-message" style="color:red; text-align:center;">Nie udało się załadować meczów</div>';
+        noMatchesMsg.style.display = 'none';
+    }
+}
     </script>
 </body>
 </html>
