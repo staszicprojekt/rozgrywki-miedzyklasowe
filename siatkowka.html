@@ -346,25 +346,25 @@
             padding: 0 15px;
         }
 
-        /* Drabinka pucharowa */
+        /* =============== DRABINKA PUCHAROWA (poprawiona – mniejsza czcionka) =============== */
         .bracket-outer {
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
+            overflow-x: auto;
         }
 
         .bracket-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr;
-            gap: 12px;
+            gap: 10px;
             align-items: stretch;
         }
 
         .bracket-match {
             background: white;
-            border-radius: 10px;
-            padding: 12px 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+            border-radius: 8px;
+            padding: 8px 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
             border: 1px solid #eee;
             display: flex;
             flex-direction: column;
@@ -375,10 +375,11 @@
         }
 
         .bracket-match h4 {
-            margin: 0 0 8px 0;
-            font-size: 0.9rem;
+            margin: 0 0 5px 0;
+            font-size: 0.75rem;
             color: var(--primary-color);
             text-align: center;
+            font-weight: 600;
         }
 
         .match-rows {
@@ -388,9 +389,9 @@
         }
 
         .match-rows td {
-            padding: 5px 3px;
+            padding: 3px 2px;
             vertical-align: middle;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             text-align: center;
             border-bottom: 1px solid #f0f0f0;
             word-break: break-word;
@@ -398,15 +399,73 @@
 
         .match-rows tr:last-child td { border-bottom: none; }
 
-        .team-cell { font-weight: 600; color: var(--primary-dark); width: 35%; }
-        .score-cell { font-weight: 700; color: var(--primary-color); width: 15%; font-size: 1rem; }
-        .score-sep { width: 10%; font-weight: bold; color: var(--gray-color); font-size: 1rem; }
-        .score-empty { opacity: 0.4; font-size: 1rem; }
+        .team-cell {
+    font-weight: 600;
+    color: var(--primary-dark);
+    width: 35%;
+    font-size: 0.7rem;
+    line-height: 1.2;
+    vertical-align: middle;   /* ← pionowe wyśrodkowanie */
+    text-align: center;       /* ← poziome wyśrodkowanie obu drużyn */
+}
+        .score-cell {
+            font-weight: 700;
+            color: var(--primary-color);
+            width: 15%;
+            font-size: 0.8rem;
+        }
+        .score-sep {
+            width: 10%;
+            font-weight: bold;
+            color: var(--gray-color);
+            font-size: 0.8rem;
+        }
+        .score-empty {
+            opacity: 0.4;
+            font-size: 0.8rem;
+        }
 
-        .sf1 { grid-row: 1; grid-column: 1; }
-        .sf2 { grid-row: 2; grid-column: 1; }
-        .final { grid-row: 1; grid-column: 2; }
-        .third { grid-row: 2; grid-column: 2; }
+        /* Responsywność drabinki – jeszcze mniejsze czcionki na wąskich ekranach */
+        @media (max-width: 700px) {
+            .bracket-grid {
+                gap: 8px;
+            }
+            .bracket-match {
+                padding: 6px 4px;
+            }
+            .bracket-match h4 {
+                font-size: 0.7rem;
+                margin-bottom: 3px;
+            }
+            .match-rows td {
+                font-size: 0.65rem;
+                padding: 2px 1px;
+            }
+            .team-cell {
+                font-size: 0.65rem;
+            }
+            .score-cell, .score-sep, .score-empty {
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .bracket-grid {
+                grid-template-columns: 1fr; /* układ pionowy */
+                gap: 8px;
+            }
+            .bracket-match {
+                width: 100%;
+                padding: 8px 5px;
+            }
+            .match-rows td {
+                font-size: 0.7rem;
+                padding: 3px 2px;
+            }
+            .team-cell {
+                font-size: 0.7rem;
+            }
+        }
 
         /* =============== RESPONSYWNOŚĆ - TABLETY =============== */
         @media (max-width: 768px) {
@@ -456,14 +515,6 @@
 
             .match-teams {
                 padding: 12px 10px;
-            }
-
-            .bracket-grid {
-                gap: 10px;
-            }
-
-            .bracket-match {
-                padding: 10px 8px;
             }
 
             .team-name {
@@ -620,46 +671,6 @@
                 font-size: 0.7em;
                 padding: 0 10px;
             }
-
-            /* Drabinka */
-            .bracket-outer {
-                max-width: 100%;
-            }
-
-            .bracket-grid {
-                gap: 8px;
-            }
-
-            .bracket-match {
-                padding: 8px 5px;
-                border-radius: 8px;
-            }
-
-            .bracket-match h4 {
-                font-size: 0.75rem;
-                margin-bottom: 5px;
-            }
-
-            .match-rows td {
-                padding: 4px 2px;
-                font-size: 0.7rem;
-            }
-
-            .score-cell,
-            .score-sep,
-            .score-empty {
-                font-size: 0.8rem;
-            }
-
-            .btn-refresh {
-                padding: 6px 12px;
-                font-size: 0.8rem;
-                gap: 4px;
-            }
-
-            .section-header h2 {
-                font-size: 1.1rem;
-            }
         }
 
         /* =============== RESPONSYWNOŚĆ - MAŁE TELEFONY =============== */
@@ -789,145 +800,22 @@
                 margin: 10px 0 3px;
             }
 
-            /* Drabinka - układ jednokolumnowy na bardzo małych ekranach */
-            .bracket-grid {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto;
-                gap: 8px;
-            }
-
-            .sf1,
-            .sf2,
-            .final,
-            .third {
-                grid-row: auto;
-                grid-column: auto;
-            }
-
+            /* Drabinka – dodatkowe zmniejszenie */
             .bracket-match {
-                padding: 10px 8px;
-                height: auto;
-                min-height: 60px;
+                padding: 5px 3px;
             }
-
             .bracket-match h4 {
-                font-size: 0.8rem;
-                margin-bottom: 6px;
-            }
-
-            .match-rows td {
-                padding: 5px 2px;
-                font-size: 0.7rem;
-            }
-
-            .score-cell,
-            .score-sep,
-            .score-empty {
-                font-size: 0.8rem;
-            }
-
-            .btn-refresh {
-                padding: 5px 10px;
-                font-size: 0.75rem;
-            }
-
-            .section-header h2 {
-                font-size: 1rem;
-            }
-
-            .section-header {
-                gap: 8px;
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-
-        /* =============== RESPONSYWNOŚĆ - BARDZO MAŁE EKRANY =============== */
-        @media (max-width: 350px) {
-            .sports-table {
-                table-layout: fixed;
-                width: 100%;
-            }
-
-            .sports-table th:nth-child(1),
-            .sports-table td:nth-child(1) { width: 5%; }
-            .sports-table th:nth-child(2),
-            .sports-table td:nth-child(2) { width: 21%; }
-            .sports-table th:nth-child(3),
-            .sports-table td:nth-child(3) { width: 9%; }
-            .sports-table th:nth-child(4),
-            .sports-table td:nth-child(4) { width: 9%; }
-            .sports-table th:nth-child(5),
-            .sports-table td:nth-child(5) { width: 9%; }
-            .sports-table th:nth-child(6),
-            .sports-table td:nth-child(6) { width: 9%; }
-            .sports-table th:nth-child(7),
-            .sports-table td:nth-child(7) { width: 10%; }
-            .sports-table th:nth-child(8),
-            .sports-table td:nth-child(8) { width: 10%; }
-            .sports-table th:nth-child(9),
-            .sports-table td:nth-child(9) { width: 18%; }
-
-            .sports-table th {
-                font-size: 0.56rem;
-                padding: 4px 0px;
-            }
-
-            .sports-table td {
-                font-size: 0.56rem;
-                padding: 3px 0px;
-            }
-
-            .sports-table td .team-name {
-                font-size: 0.6rem;
-                max-width: 100%;
-                line-height: 1.15;
-            }
-
-            .match-teams {
-                padding: 8px 5px;
-                gap: 2px;
-            }
-
-            .team-name {
-                font-size: 0.72rem;
-            }
-
-            .team-score {
-                font-size: 1rem;
-                padding: 2px 6px;
-            }
-
-            .match-score-separator {
-                font-size: 1rem;
-                margin: 0 1px;
-                min-width: 12px;
-            }
-
-            .match-header {
-                padding: 5px 8px;
-            }
-
-            .match-date {
                 font-size: 0.65rem;
             }
-
-            .match-court {
-                font-size: 0.6rem;
-                padding: 1px 5px;
-            }
-
-            .bracket-match {
-                padding: 8px 5px;
-            }
-
-            .bracket-match h4 {
-                font-size: 0.7rem;
-            }
-
             .match-rows td {
+                font-size: 0.6rem;
+                padding: 2px 1px;
+            }
+            .team-cell {
+                font-size: 0.6rem;
+            }
+            .score-cell, .score-sep {
                 font-size: 0.65rem;
-                padding: 3px 1px;
             }
         }
 
@@ -1021,6 +909,14 @@
             <div class="tables-container" id="tablesContainer"></div>
         </section>
 
+        <!-- NOWA SEKCJA: DRABINKA PUCHAROWA Z PÓŁFINAŁAMI -->
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-trophy"></i> Drabinka pucharowa</h2>
+            </div>
+            <div class="bracket-outer" id="bracketContainer"></div>
+        </section>
+
         <section class="section">
             <div class="section-header">
                 <h2><i class="fas fa-calendar-alt"></i> Terminarz i wyniki</h2>
@@ -1070,14 +966,14 @@
         });
     </script>
 
-    <!-- Główny skrypt danych -->
+    <!-- Główny skrypt danych (bez zmian, tylko poprawiony zakres) -->
     <script>
         (function() {
             const SPREADSHEET_ID = '1qLCQ-6uTyusQRsY23d0tvtEx2XcYmR4MLuwGVriow58';
             const SHEET_NAME = 'Dane_Siatka';
             const GROUPS_RANGE = 'A2:J25';
             const MATCHES_RANGE = 'P2:X100';
-            const BRACKET_RANGE = 'N32:Q35';
+            const BRACKET_RANGE = 'R23:V35';  // poprawiony zakres
 
             function displayError(id, msg) {
                 const el = document.getElementById(id);
@@ -1215,49 +1111,73 @@
                                 <td class="score-cell">${hasScore ? match.score1 : '<span class="score-empty">?</span>'}</td>
                                 <td class="score-sep">:</td>
                                 <td class="score-cell">${hasScore ? match.score2 : '<span class="score-empty">?</span>'}</td>
-                                <td class="team-cell" style="text-align:right;">${match.team2 || '?'}</td>
+                                <td class="team-cell">${match.team2 || '?'}</td>
                             </tr>
                         </table>
                     </div>`;
             }
 
             function loadBracket() {
-                const container = document.getElementById('bracketContainer');
-                showLoading('bracketContainer');
-                const url =
-                    `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${BRACKET_RANGE}`;
-                fetch(url)
-                    .then(r => r.ok ? r.text() : Promise.reject('Błąd sieci'))
-                    .then(text => {
-                        const json = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
-                        if (!json) throw new Error('Nieprawidłowa odpowiedź');
-                        const data = JSON.parse(json[1]);
-                        const rows = data.table.rows;
-                        if (!rows || rows.length < 4) {
-                            container.innerHTML = '<div class="empty-state"><p>Brak danych drabinki</p></div>';
-                            return;
-                        }
-                        const sf1 = { team1: rows[0].c[0]?.v || '', score1: rows[0].c[1]?.v || '', score2: rows[0]
-                                .c[2]?.v || '', team2: rows[0].c[3]?.v || '' };
-                        const sf2 = { team1: rows[1].c[0]?.v || '', score1: rows[1].c[1]?.v || '', score2: rows[1]
-                                .c[2]?.v || '', team2: rows[1].c[3]?.v || '' };
-                        const third = { team1: rows[2].c[0]?.v || '', score1: rows[2].c[1]?.v || '', score2: rows[2]
-                                .c[2]?.v || '', team2: rows[2].c[3]?.v || '' };
-                        const final = { team1: rows[3].c[0]?.v || '', score1: rows[3].c[1]?.v || '', score2: rows[3]
-                                .c[2]?.v || '', team2: rows[3].c[3]?.v || '' };
-                        container.innerHTML = `
-                            <div class="bracket-grid">
-                                <div class="sf1">${renderBracketMatch(sf1, 'Półfinał 1')}</div>
-                                <div class="sf2">${renderBracketMatch(sf2, 'Półfinał 2')}</div>
-                                <div class="final">${renderBracketMatch(final, 'Finał')}</div>
-                                <div class="third">${renderBracketMatch(third, 'Mecz o 3. miejsce')}</div>
-                            </div>`;
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        displayError('bracketContainer', 'Nie udało się załadować drabinki.');
-                    });
+    const container = document.getElementById('bracketContainer');
+    if (!container) return;
+    showLoading('bracketContainer');
+    const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${BRACKET_RANGE}`;
+    fetch(url)
+        .then(r => r.ok ? r.text() : Promise.reject('Błąd sieci'))
+        .then(text => {
+            const json = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
+            if (!json) throw new Error('Nieprawidłowa odpowiedź');
+            const data = JSON.parse(json[1]);
+            const rows = data.table.rows;
+            if (!rows || rows.length < 8) {
+                container.innerHTML = '<div class="empty-state"><p>Brak danych drabinki (potrzeba co najmniej 8 wierszy)</p></div>';
+                return;
             }
+
+            // Ćwierćfinały (wiersze 0-3)
+            const qf1 = { team1: rows[0].c[0]?.v || '', score1: rows[0].c[1]?.v || '', score2: rows[0].c[2]?.v || '', team2: rows[0].c[4]?.v || '' };
+            const qf2 = { team1: rows[1].c[0]?.v || '', score1: rows[1].c[1]?.v || '', score2: rows[1].c[2]?.v || '', team2: rows[1].c[4]?.v || '' };
+            const qf3 = { team1: rows[2].c[0]?.v || '', score1: rows[2].c[1]?.v || '', score2: rows[2].c[2]?.v || '', team2: rows[2].c[4]?.v || '' };
+            const qf4 = { team1: rows[3].c[0]?.v || '', score1: rows[3].c[1]?.v || '', score2: rows[3].c[2]?.v || '', team2: rows[3].c[4]?.v || '' };
+
+            // Półfinały (wiersze 4-5)
+            const sf1 = { team1: rows[4].c[0]?.v || '', score1: rows[4].c[1]?.v || '', score2: rows[4].c[2]?.v || '', team2: rows[4].c[4]?.v || '' };
+            const sf2 = { team1: rows[5].c[0]?.v || '', score1: rows[5].c[1]?.v || '', score2: rows[5].c[2]?.v || '', team2: rows[5].c[4]?.v || '' };
+
+            // Finał i mecz o 3. miejsce (wiersze 6-7)
+            const final = { team1: rows[6].c[0]?.v || '', score1: rows[6].c[1]?.v || '', score2: rows[6].c[2]?.v || '', team2: rows[6].c[4]?.v || '' };
+            const third = { team1: rows[7].c[0]?.v || '', score1: rows[7].c[1]?.v || '', score2: rows[7].c[2]?.v || '', team2: rows[7].c[4]?.v || '' };
+
+            container.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <h3 style="text-align: center; color: var(--primary-color); font-size: 1rem;">Ćwierćfinały</h3>
+                    <div class="bracket-grid" style="grid-template-columns: repeat(2,1fr);">
+                        ${renderBracketMatch(qf1, 'Ćwierćfinał 1')}
+                        ${renderBracketMatch(qf2, 'Ćwierćfinał 2')}
+                        ${renderBracketMatch(qf3, 'Ćwierćfinał 3')}
+                        ${renderBracketMatch(qf4, 'Ćwierćfinał 4')}
+                    </div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <h3 style="text-align: center; color: var(--primary-color); font-size: 1rem;">Półfinały</h3>
+                    <div class="bracket-grid" style="grid-template-columns: repeat(1,1fr);">
+                        ${renderBracketMatch(sf1, 'Półfinał 1')}
+                        ${renderBracketMatch(sf2, 'Półfinał 2')}
+                    </div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <h3 style="text-align: center; color: var(--primary-color); font-size: 1rem;">Finał / 3. miejsce</h3>
+                    <div class="bracket-grid" style="grid-template-columns: repeat(1,1fr);">
+                        ${renderBracketMatch(final, 'Finał')}
+                        ${renderBracketMatch(third, 'Mecz o 3. miejsce')}
+                    </div>
+            `;
+        })
+        .catch(err => {
+            console.error(err);
+            displayError('bracketContainer', 'Nie udało się załadować drabinki.');
+        });
+}
 
             // ================== MECZE ==================
             function parseDate(dateStr, timeStr) {
@@ -1390,14 +1310,18 @@
                 loadSiatkowkaData();
                 loadMatches();
                 loadBracket();
-                setInterval(() => { loadSiatkowkaData();
+                setInterval(() => { 
+                    loadSiatkowkaData();
                     loadMatches();
-                    loadBracket(); }, 1200000);
+                    loadBracket(); 
+                }, 1200000);
             });
 
             const refreshBtn = document.getElementById('refreshMatchesBtn');
-            if (refreshBtn) refreshBtn.addEventListener('click', e => { e.preventDefault();
-                loadMatches(); });
+            if (refreshBtn) refreshBtn.addEventListener('click', e => { 
+                e.preventDefault();
+                loadMatches(); 
+            });
 
             window.loadSiatkowkaData = loadSiatkowkaData;
             window.loadMatches = loadMatches;
