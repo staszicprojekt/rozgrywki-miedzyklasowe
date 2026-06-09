@@ -51,14 +51,12 @@
             letter-spacing: 0.5px;
         }
 
-        /* NOWY KONTENER TABELI - BEZ PRZEWIJANIA */
         .table-container {
             width: 100%;
             overflow-x: visible;
             -webkit-overflow-scrolling: touch;
         }
 
-        /* TABELA SPORTOWA - KLUCZOWE ZMIANY */
         .sports-table {
             width: 100%;
             border-collapse: collapse;
@@ -75,28 +73,20 @@
         /* SZEROKOŚCI KOLUMN - BAZOWE (DESKTOP) */
         .sports-table th:nth-child(1),
         .sports-table td:nth-child(1) { width: 6%; }
-
         .sports-table th:nth-child(2),
         .sports-table td:nth-child(2) { width: 28%; }
-
         .sports-table th:nth-child(3),
         .sports-table td:nth-child(3) { width: 9%; }
-
         .sports-table th:nth-child(4),
         .sports-table td:nth-child(4) { width: 9%; }
-
         .sports-table th:nth-child(5),
         .sports-table td:nth-child(5) { width: 9%; }
-
         .sports-table th:nth-child(6),
         .sports-table td:nth-child(6) { width: 9%; }
-
         .sports-table th:nth-child(7),
         .sports-table td:nth-child(7) { width: 10%; }
-
         .sports-table th:nth-child(8),
         .sports-table td:nth-child(8) { width: 10%; }
-
         .sports-table th:nth-child(9),
         .sports-table td:nth-child(9) { width: 10%; }
 
@@ -346,7 +336,7 @@
             padding: 0 15px;
         }
 
-        /* =============== DRABINKA PUCHAROWA (poprawiona – mniejsza czcionka) =============== */
+        /* =============== DRABINKA PUCHAROWA =============== */
         .bracket-outer {
             max-width: 800px;
             margin: 0 auto;
@@ -400,14 +390,32 @@
         .match-rows tr:last-child td { border-bottom: none; }
 
         .team-cell {
-    font-weight: 600;
-    color: var(--primary-dark);
-    width: 35%;
-    font-size: 0.7rem;
-    line-height: 1.2;
-    vertical-align: middle;   /* ← pionowe wyśrodkowanie */
-    text-align: center;       /* ← poziome wyśrodkowanie obu drużyn */
-}
+            font-weight: 600;
+            color: var(--primary-dark);
+            width: 35%;
+            font-size: 0.7rem;
+            line-height: 1.2;
+            vertical-align: middle;
+            text-align: center;
+        }
+        
+        /* ===== NOWE, BEZPIECZNE KLASY DLA ZWYCIĘZCY/PRZEGRANEGO W DRABINCE ===== */
+        .bracket-winner {
+            background: rgba(76, 175, 80, 0.2);
+            font-weight: 800;
+            color: #1b5e20;
+            border-left: 1px solid #2e7d32;
+            border-right: 1px solid #2e7d32;
+            box-shadow: inset 0 0 0 1px rgba(46,125,50,0.3);
+        }
+        .bracket-loser {
+            opacity: 0.7;
+            background: rgba(0,0,0,0.03);
+            text-decoration: line-through;
+            text-decoration-thickness: 1px;
+            text-decoration-color: #999;
+        }
+
         .score-cell {
             font-weight: 700;
             color: var(--primary-color);
@@ -425,7 +433,7 @@
             font-size: 0.8rem;
         }
 
-        /* Responsywność drabinki – jeszcze mniejsze czcionki na wąskich ekranach */
+        /* Responsywność drabinki */
         @media (max-width: 700px) {
             .bracket-grid {
                 gap: 8px;
@@ -451,7 +459,7 @@
 
         @media (max-width: 550px) {
             .bracket-grid {
-                grid-template-columns: 1fr; /* układ pionowy */
+                grid-template-columns: 1fr;
                 gap: 8px;
             }
             .bracket-match {
@@ -472,13 +480,10 @@
             .tables-container {
                 gap: 12px;
             }
-
             .group-table {
                 flex: 1 1 45%;
                 min-width: 260px;
             }
-
-            /* KOLUMNY NA TABLETACH */
             .sports-table th:nth-child(1),
             .sports-table td:nth-child(1) { width: 6%; }
             .sports-table th:nth-child(2),
@@ -497,26 +502,21 @@
             .sports-table td:nth-child(8) { width: 10%; }
             .sports-table th:nth-child(9),
             .sports-table td:nth-child(9) { width: 12%; }
-
             .sports-table th,
             .sports-table td {
                 padding: 6px 2px;
                 font-size: 0.75rem;
             }
-
             .sports-table td .team-name {
                 font-size: 0.8rem;
             }
-
             .matches-grid {
                 grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
                 gap: 12px;
             }
-
             .match-teams {
                 padding: 12px 10px;
             }
-
             .team-name {
                 font-size: 0.9rem;
             }
@@ -528,24 +528,19 @@
                 flex-direction: column;
                 gap: 15px;
             }
-
             .group-table {
                 flex: 1 1 auto;
                 min-width: auto;
                 max-width: 100%;
             }
-
             .group-table h3 {
                 font-size: 0.95rem;
                 padding: 10px 5px;
             }
-
-            /* KOLUMNY NA TELEFONACH - KLUCZOWE */
             .sports-table {
                 table-layout: fixed;
                 width: 100%;
             }
-
             .sports-table th:nth-child(1),
             .sports-table td:nth-child(1) { width: 6%; }
             .sports-table th:nth-child(2),
@@ -564,109 +559,87 @@
             .sports-table td:nth-child(8) { width: 10%; }
             .sports-table th:nth-child(9),
             .sports-table td:nth-child(9) { width: 14%; }
-
             .sports-table th {
                 font-size: 0.7rem;
                 padding: 7px 1px;
                 white-space: nowrap;
                 letter-spacing: -0.2px;
             }
-
             .sports-table td {
                 font-size: 0.7rem;
                 padding: 6px 1px;
             }
-
             .sports-table td .team-name {
                 font-size: 0.72rem;
                 max-width: 100%;
                 word-break: break-word;
                 hyphens: auto;
             }
-
             .full-text { display: none; }
             .short-text { display: inline; }
-
-            /* Mecze */
             .matches-grid {
                 grid-template-columns: 1fr;
                 gap: 12px;
             }
-
             .match-card {
                 border-radius: 12px;
             }
-
             .match-header {
                 padding: 8px 12px;
                 gap: 5px;
             }
-
             .match-date {
                 font-size: 0.75rem;
             }
-
             .match-court {
                 font-size: 0.7rem;
                 padding: 2px 8px;
             }
-
             .match-teams {
                 flex-direction: row;
                 align-items: center;
                 padding: 12px 10px;
                 gap: 5px;
             }
-
             .team {
                 flex: 1;
                 flex-direction: column;
                 text-align: center;
                 align-items: center !important;
             }
-
             .team-home,
             .team-away {
                 align-items: center !important;
                 text-align: center !important;
             }
-
             .team-name {
                 font-size: 0.85rem;
                 margin-bottom: 4px;
             }
-
             .team-score {
                 font-size: 1.2rem;
                 padding: 3px 10px;
             }
-
             .team-score-empty {
                 font-size: 1rem;
                 padding: 3px 8px;
             }
-
             .match-score-separator {
                 font-size: 1.2rem;
                 margin: 0 3px;
             }
-
             .desktop-only { display: flex; }
             .mobile-only { display: none; }
-
             .match-footer {
                 padding: 6px 12px 10px;
             }
-
             .match-status {
                 font-size: 0.65rem;
                 padding: 3px 10px;
             }
-
             .match-sport-icon {
                 font-size: 0.9rem;
             }
-
             .set-details {
                 font-size: 0.7em;
                 padding: 0 10px;
@@ -678,18 +651,14 @@
             .tables-container {
                 gap: 10px;
             }
-
             .group-table h3 {
                 font-size: 0.85rem;
                 padding: 8px 3px;
             }
-
-            /* KOLUMNY NA BARDZO MAŁYCH EKRANACH */
             .sports-table {
                 table-layout: fixed;
                 width: 100%;
             }
-
             .sports-table th:nth-child(1),
             .sports-table td:nth-child(1) { width: 6%; }
             .sports-table th:nth-child(2),
@@ -708,99 +677,78 @@
             .sports-table td:nth-child(8) { width: 10%; }
             .sports-table th:nth-child(9),
             .sports-table td:nth-child(9) { width: 16%; }
-
             .sports-table th {
                 font-size: 0.62rem;
                 padding: 5px 0px;
                 letter-spacing: -0.3px;
             }
-
             .sports-table td {
                 font-size: 0.62rem;
                 padding: 4px 0px;
             }
-
             .sports-table td .team-name {
                 font-size: 0.65rem;
                 max-width: 100%;
                 line-height: 1.2;
             }
-
-            /* Mecze */
             .matches-grid {
                 gap: 10px;
             }
-
             .match-card {
                 border-radius: 10px;
             }
-
             .match-header {
                 padding: 6px 10px;
                 gap: 4px;
             }
-
             .match-date {
                 font-size: 0.7rem;
                 gap: 3px;
             }
-
             .match-court {
                 font-size: 0.65rem;
                 padding: 2px 6px;
             }
-
             .match-teams {
                 padding: 10px 8px;
                 gap: 3px;
             }
-
             .team-name {
                 font-size: 0.78rem;
                 margin-bottom: 3px;
             }
-
             .team-score {
                 font-size: 1.1rem;
                 padding: 2px 8px;
             }
-
             .team-score-empty {
                 font-size: 0.9rem;
                 padding: 2px 6px;
             }
-
             .match-score-separator {
                 font-size: 1.1rem;
                 margin: 0 2px;
                 min-width: 15px;
             }
-
             .match-footer {
                 padding: 5px 10px 8px;
             }
-
             .match-status {
                 font-size: 0.6rem;
                 padding: 2px 8px;
                 letter-spacing: 0.2px;
             }
-
             .match-sport-icon {
                 font-size: 0.8rem;
             }
-
             .set-details {
                 font-size: 0.65em;
                 padding: 0 8px;
             }
-
             .matches-group-header {
                 font-size: 1rem;
                 margin: 10px 0 3px;
             }
-
-            /* Drabinka – dodatkowe zmniejszenie */
             .bracket-match {
                 padding: 5px 3px;
             }
@@ -819,48 +767,15 @@
             }
         }
 
-        /* =============== SPECJALNE POPRAWKI DLA IPHONE SAFARI =============== */
         @supports (-webkit-touch-callout: none) {
-            input,
-            button,
-            select,
-            textarea {
-                font-size: 16px !important;
-            }
-
-            .table-container {
-                overflow-x: visible;
-                width: 100%;
-            }
-
-            .table-container {
-                -webkit-overflow-scrolling: touch;
-            }
-
-            a,
-            button,
-            .match-card,
-            .group-table {
-                -webkit-tap-highlight-color: transparent;
-            }
-
-            .nav-list a {
-                min-height: 44px;
-                display: flex;
-                align-items: center;
-            }
+            input, button, select, textarea { font-size: 16px !important; }
+            .table-container { overflow-x: visible; width: 100%; -webkit-overflow-scrolling: touch; }
+            a, button, .match-card, .group-table { -webkit-tap-highlight-color: transparent; }
+            .nav-list a { min-height: 44px; display: flex; align-items: center; }
         }
-
-        /* Poprawki dla urządzeń z notch (iPhone X i nowsze) */
         @supports (padding: max(0px)) {
-            body {
-                padding-bottom: max(0px, var(--safe-area-bottom));
-            }
-
-            .main-nav {
-                padding-left: max(0px, env(safe-area-inset-left));
-                padding-right: max(0px, env(safe-area-inset-right));
-            }
+            body { padding-bottom: max(0px, var(--safe-area-bottom)); }
+            .main-nav { padding-left: max(0px, env(safe-area-inset-left)); padding-right: max(0px, env(safe-area-inset-right)); }
         }
     </style>
 </head>
@@ -909,7 +824,6 @@
             <div class="tables-container" id="tablesContainer"></div>
         </section>
 
-        <!-- NOWA SEKCJA: DRABINKA PUCHAROWA Z PÓŁFINAŁAMI -->
         <section class="section">
             <div class="section-header">
                 <h2><i class="fas fa-trophy"></i> Drabinka pucharowa</h2>
@@ -926,7 +840,6 @@
         </section>
     </main>
 
-    <!-- Podstawowe skrypty -->
     <script>
         function updateCurrentDate() {
             const now = new Date();
@@ -966,28 +879,24 @@
         });
     </script>
 
-    <!-- Główny skrypt danych (bez zmian, tylko poprawiony zakres) -->
     <script>
         (function() {
             const SPREADSHEET_ID = '1qLCQ-6uTyusQRsY23d0tvtEx2XcYmR4MLuwGVriow58';
             const SHEET_NAME = 'Dane_Siatka';
             const GROUPS_RANGE = 'A2:J25';
             const MATCHES_RANGE = 'P2:X100';
-            const BRACKET_RANGE = 'R23:V35';  // poprawiony zakres
+            const BRACKET_RANGE = 'R23:V35';
 
             function displayError(id, msg) {
                 const el = document.getElementById(id);
-                if (el) el.innerHTML =
-                    `<div class="error-message"><i class="fas fa-exclamation-triangle"></i> ${msg}</div>`;
+                if (el) el.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-triangle"></i> ${msg}</div>`;
             }
 
             function showLoading(id) {
                 const el = document.getElementById(id);
-                if (el) el.innerHTML =
-                    '<div class="loading-spinner"><i class="fas fa-spinner fa-spin fa-3x"></i><p>Ładowanie danych...</p></div>';
+                if (el) el.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin fa-3x"></i><p>Ładowanie danych...</p></div>';
             }
 
-            // ================== TABELE GRUPOWE ==================
             function renderGroupTable(groupName, teamRows) {
                 let html = `
                     <div class="group-table">
@@ -1033,9 +942,7 @@
             function loadSiatkowkaData() {
                 const container = document.getElementById('tablesContainer');
                 showLoading('tablesContainer');
-
-                const url =
-                    `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${GROUPS_RANGE}`;
+                const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${GROUPS_RANGE}`;
                 fetch(url)
                     .then(r => r.ok ? r.text() : Promise.reject('Błąd sieci'))
                     .then(text => {
@@ -1043,12 +950,10 @@
                         if (!json) throw new Error('Nieprawidłowa odpowiedź');
                         const data = JSON.parse(json[1]);
                         const rows = data.table.rows;
-
                         if (!rows || rows.length === 0) {
                             container.innerHTML = '<div class="empty-state"><p>Brak danych</p></div>';
                             return;
                         }
-
                         const teams = rows.map(row => {
                             const c = row.c;
                             return {
@@ -1064,14 +969,12 @@
                                 bilans: c[9]?.v || '0'
                             };
                         }).filter(t => t.nazwa);
-
                         const groups = {};
                         teams.forEach(t => {
                             const gr = t.grupa || 'Inna';
                             if (!groups[gr]) groups[gr] = [];
                             groups[gr].push(t);
                         });
-
                         const sortFn = (a, b) => {
                             const pktDiff = (parseInt(b.pkt) || 0) - (parseInt(a.pkt) || 0);
                             if (pktDiff) return pktDiff;
@@ -1081,14 +984,12 @@
                             if (swDiff) return swDiff;
                             return (parseInt(a.sp) || 0) - (parseInt(b.sp) || 0);
                         };
-
                         let html = '';
                         const sortedGroups = Object.keys(groups).sort();
                         sortedGroups.forEach(gr => {
                             groups[gr].sort(sortFn);
                             html += renderGroupTable(`Grupa ${gr}`, groups[gr]);
                         });
-
                         if (!html) html = '<div class="empty-state"><p>Brak danych</p></div>';
                         container.innerHTML = html;
                     })
@@ -1098,86 +999,98 @@
                     });
             }
 
-            // ================== DRABINKA PUCHAROWA ==================
+            // ================== DRABINKA Z NOWYMI KLASAMI ==================
             function renderBracketMatch(match, title) {
                 const hasScore = match.score1 !== '' && match.score2 !== '' &&
                     !isNaN(parseInt(match.score1)) && !isNaN(parseInt(match.score2));
+                
+                let team1Class = '';
+                let team2Class = '';
+                
+                if (hasScore) {
+                    const s1 = parseInt(match.score1);
+                    const s2 = parseInt(match.score2);
+                    if (s1 > s2) {
+                        team1Class = 'bracket-winner';
+                        team2Class = 'bracket-loser';
+                    } else if (s2 > s1) {
+                        team1Class = 'bracket-loser';
+                        team2Class = 'bracket-winner';
+                    }
+                }
+                
                 return `
-                    <div class="bracket-match ${title === 'Finał' ? 'final' : title === 'Mecz o 3. miejsce' ? 'third' : ''}">
+                    <div class="bracket-match">
                         <h4>${title}</h4>
                         <table class="match-rows">
                             <tr>
-                                <td class="team-cell">${match.team1 || '?'}</td>
+                                <td class="team-cell ${team1Class}">${match.team1 || '?'}</td>
                                 <td class="score-cell">${hasScore ? match.score1 : '<span class="score-empty">?</span>'}</td>
                                 <td class="score-sep">:</td>
                                 <td class="score-cell">${hasScore ? match.score2 : '<span class="score-empty">?</span>'}</td>
-                                <td class="team-cell">${match.team2 || '?'}</td>
+                                <td class="team-cell ${team2Class}">${match.team2 || '?'}</td>
                             </tr>
                         </table>
                     </div>`;
             }
 
             function loadBracket() {
-    const container = document.getElementById('bracketContainer');
-    if (!container) return;
-    showLoading('bracketContainer');
-    const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${BRACKET_RANGE}`;
-    fetch(url)
-        .then(r => r.ok ? r.text() : Promise.reject('Błąd sieci'))
-        .then(text => {
-            const json = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
-            if (!json) throw new Error('Nieprawidłowa odpowiedź');
-            const data = JSON.parse(json[1]);
-            const rows = data.table.rows;
-            if (!rows || rows.length < 8) {
-                container.innerHTML = '<div class="empty-state"><p>Brak danych drabinki (potrzeba co najmniej 8 wierszy)</p></div>';
-                return;
+                const container = document.getElementById('bracketContainer');
+                if (!container) return;
+                showLoading('bracketContainer');
+                const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${BRACKET_RANGE}`;
+                fetch(url)
+                    .then(r => r.ok ? r.text() : Promise.reject('Błąd sieci'))
+                    .then(text => {
+                        const json = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
+                        if (!json) throw new Error('Nieprawidłowa odpowiedź');
+                        const data = JSON.parse(json[1]);
+                        const rows = data.table.rows;
+                        if (!rows || rows.length < 8) {
+                            container.innerHTML = '<div class="empty-state"><p>Brak danych drabinki (potrzeba co najmniej 8 wierszy)</p></div>';
+                            return;
+                        }
+
+                        const qf1 = { team1: rows[0].c[0]?.v || '', score1: rows[0].c[1]?.v || '', score2: rows[0].c[2]?.v || '', team2: rows[0].c[4]?.v || '' };
+                        const qf2 = { team1: rows[1].c[0]?.v || '', score1: rows[1].c[1]?.v || '', score2: rows[1].c[2]?.v || '', team2: rows[1].c[4]?.v || '' };
+                        const qf3 = { team1: rows[2].c[0]?.v || '', score1: rows[2].c[1]?.v || '', score2: rows[2].c[2]?.v || '', team2: rows[2].c[4]?.v || '' };
+                        const qf4 = { team1: rows[3].c[0]?.v || '', score1: rows[3].c[1]?.v || '', score2: rows[3].c[2]?.v || '', team2: rows[3].c[4]?.v || '' };
+                        const sf1 = { team1: rows[4].c[0]?.v || '', score1: rows[4].c[1]?.v || '', score2: rows[4].c[2]?.v || '', team2: rows[4].c[4]?.v || '' };
+                        const sf2 = { team1: rows[5].c[0]?.v || '', score1: rows[5].c[1]?.v || '', score2: rows[5].c[2]?.v || '', team2: rows[5].c[4]?.v || '' };
+                        const final = { team1: rows[6].c[0]?.v || '', score1: rows[6].c[1]?.v || '', score2: rows[6].c[2]?.v || '', team2: rows[6].c[4]?.v || '' };
+                        const third = { team1: rows[7].c[0]?.v || '', score1: rows[7].c[1]?.v || '', score2: rows[7].c[2]?.v || '', team2: rows[7].c[4]?.v || '' };
+
+                        container.innerHTML = `
+                            <div style="margin-bottom: 20px;">
+                                <h3 style="text-align: center; color: var(--primary-color); font-size: 1rem;">Ćwierćfinały</h3>
+                                <div class="bracket-grid" style="grid-template-columns: repeat(2,1fr);">
+                                    ${renderBracketMatch(qf1, 'Ćwierćfinał 1')}
+                                    ${renderBracketMatch(qf2, 'Ćwierćfinał 2')}
+                                    ${renderBracketMatch(qf3, 'Ćwierćfinał 3')}
+                                    ${renderBracketMatch(qf4, 'Ćwierćfinał 4')}
+                                </div>
+                            </div>
+                            <div style="margin-top: 20px;">
+                                <h3 style="text-align: center; color: var(--primary-color); font-size: 1rem;">Półfinały</h3>
+                                <div class="bracket-grid" style="grid-template-columns: repeat(1,1fr);">
+                                    ${renderBracketMatch(sf1, 'Półfinał 1')}
+                                    ${renderBracketMatch(sf2, 'Półfinał 2')}
+                                </div>
+                            </div>
+                            <div style="margin-top: 20px;">
+                                <h3 style="text-align: center; color: var(--primary-color); font-size: 1rem;">Finał / 3. miejsce</h3>
+                                <div class="bracket-grid" style="grid-template-columns: repeat(1,1fr);">
+                                    ${renderBracketMatch(final, 'Finał')}
+                                    ${renderBracketMatch(third, 'Mecz o 3. miejsce')}
+                                </div>
+                            </div>
+                        `;
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        displayError('bracketContainer', 'Nie udało się załadować drabinki.');
+                    });
             }
-
-            // Ćwierćfinały (wiersze 0-3)
-            const qf1 = { team1: rows[0].c[0]?.v || '', score1: rows[0].c[1]?.v || '', score2: rows[0].c[2]?.v || '', team2: rows[0].c[4]?.v || '' };
-            const qf2 = { team1: rows[1].c[0]?.v || '', score1: rows[1].c[1]?.v || '', score2: rows[1].c[2]?.v || '', team2: rows[1].c[4]?.v || '' };
-            const qf3 = { team1: rows[2].c[0]?.v || '', score1: rows[2].c[1]?.v || '', score2: rows[2].c[2]?.v || '', team2: rows[2].c[4]?.v || '' };
-            const qf4 = { team1: rows[3].c[0]?.v || '', score1: rows[3].c[1]?.v || '', score2: rows[3].c[2]?.v || '', team2: rows[3].c[4]?.v || '' };
-
-            // Półfinały (wiersze 4-5)
-            const sf1 = { team1: rows[4].c[0]?.v || '', score1: rows[4].c[1]?.v || '', score2: rows[4].c[2]?.v || '', team2: rows[4].c[4]?.v || '' };
-            const sf2 = { team1: rows[5].c[0]?.v || '', score1: rows[5].c[1]?.v || '', score2: rows[5].c[2]?.v || '', team2: rows[5].c[4]?.v || '' };
-
-            // Finał i mecz o 3. miejsce (wiersze 6-7)
-            const final = { team1: rows[6].c[0]?.v || '', score1: rows[6].c[1]?.v || '', score2: rows[6].c[2]?.v || '', team2: rows[6].c[4]?.v || '' };
-            const third = { team1: rows[7].c[0]?.v || '', score1: rows[7].c[1]?.v || '', score2: rows[7].c[2]?.v || '', team2: rows[7].c[4]?.v || '' };
-
-            container.innerHTML = `
-                <div style="margin-bottom: 20px;">
-                    <h3 style="text-align: center; color: var(--primary-color); font-size: 1rem;">Ćwierćfinały</h3>
-                    <div class="bracket-grid" style="grid-template-columns: repeat(2,1fr);">
-                        ${renderBracketMatch(qf1, 'Ćwierćfinał 1')}
-                        ${renderBracketMatch(qf2, 'Ćwierćfinał 2')}
-                        ${renderBracketMatch(qf3, 'Ćwierćfinał 3')}
-                        ${renderBracketMatch(qf4, 'Ćwierćfinał 4')}
-                    </div>
-                </div>
-                <div style="margin-top: 20px;">
-                    <h3 style="text-align: center; color: var(--primary-color); font-size: 1rem;">Półfinały</h3>
-                    <div class="bracket-grid" style="grid-template-columns: repeat(1,1fr);">
-                        ${renderBracketMatch(sf1, 'Półfinał 1')}
-                        ${renderBracketMatch(sf2, 'Półfinał 2')}
-                    </div>
-                </div>
-                <div style="margin-top: 20px;">
-                    <h3 style="text-align: center; color: var(--primary-color); font-size: 1rem;">Finał / 3. miejsce</h3>
-                    <div class="bracket-grid" style="grid-template-columns: repeat(1,1fr);">
-                        ${renderBracketMatch(final, 'Finał')}
-                        ${renderBracketMatch(third, 'Mecz o 3. miejsce')}
-                    </div>
-            `;
-        })
-        .catch(err => {
-            console.error(err);
-            displayError('bracketContainer', 'Nie udało się załadować drabinki.');
-        });
-}
 
             // ================== MECZE ==================
             function parseDate(dateStr, timeStr) {
@@ -1198,20 +1111,15 @@
                 const statusText = hasScore ? 'Rozegrany' : 'Nadchodzący';
                 const cardClass = hasScore ? 'match-card--finished' : 'match-card--upcoming';
 
-                let wc1 = '',
-                    wc2 = '';
+                let wc1 = '', wc2 = '';
                 if (hasScore) {
-                    const s1 = parseInt(match.score1),
-                        s2 = parseInt(match.score2);
+                    const s1 = parseInt(match.score1), s2 = parseInt(match.score2);
                     if (s1 > s2) wc1 = 'team-winner';
                     else if (s2 > s1) wc2 = 'team-winner';
                 }
 
-                const courtHtml = match.court ?
-                    `<span class="match-court"><i class="fas fa-map-marker-alt"></i> Boisko ${match.court}</span>` : '';
-
-                const setHtml = match.setPoints ?
-                    `<div class="set-details"><span>${match.setPoints}</span></div>` : '';
+                const courtHtml = match.court ? `<span class="match-court"><i class="fas fa-map-marker-alt"></i> Boisko ${match.court}</span>` : '';
+                const setHtml = match.setPoints ? `<div class="set-details"><span>${match.setPoints}</span></div>` : '';
 
                 return `
                     <div class="match-card ${cardClass}">
@@ -1245,8 +1153,7 @@
             function loadMatches() {
                 const container = document.getElementById('matchesContainer');
                 showLoading('matchesContainer');
-                const url =
-                    `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${MATCHES_RANGE}`;
+                const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${MATCHES_RANGE}`;
                 fetch(url)
                     .then(r => r.ok ? r.text() : Promise.reject('Błąd sieci'))
                     .then(text => {
@@ -1258,7 +1165,6 @@
                             container.innerHTML = '<div class="empty-state"><p>Brak meczów</p></div>';
                             return;
                         }
-
                         const matches = rows.map(row => {
                             const c = row.c;
                             return {
@@ -1273,23 +1179,18 @@
                                 header: c[8]?.v || ''
                             };
                         }).filter(m => m.team1 && m.team2 && m.date && m.time);
-
                         if (matches.length === 0) {
                             container.innerHTML = '<div class="empty-state"><p>Brak meczów</p></div>';
                             return;
                         }
-
                         matches.sort((a, b) => {
-                            const da = parseDate(a.date, a.time),
-                                db = parseDate(b.date, b.time);
+                            const da = parseDate(a.date, a.time), db = parseDate(b.date, b.time);
                             if (!da && !db) return 0;
                             if (!da) return 1;
                             if (!db) return -1;
                             return da - db;
                         });
-
-                        let lastHeader = '',
-                            html = '';
+                        let lastHeader = '', html = '';
                         matches.forEach(m => {
                             if (m.header && m.header !== lastHeader) {
                                 html += `<h3 class="matches-group-header">${m.header}</h3>`;
@@ -1305,7 +1206,6 @@
                     });
             }
 
-            // Inicjalizacja
             document.addEventListener('DOMContentLoaded', () => {
                 loadSiatkowkaData();
                 loadMatches();

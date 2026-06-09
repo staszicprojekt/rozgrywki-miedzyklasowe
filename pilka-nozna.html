@@ -2,171 +2,152 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>Piłka nożna - Rozgrywki Międzyklasowe</title>
+    <link rel="icon" type="image/png" href="logo_szkoly.png">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- DODATKOWE STYLE DLA KOMUNIKATU -->
     <style>
-        .construction-notice {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 12px;
-            margin: 30px auto;
-            padding: 40px;
-            max-width: 900px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-            border-left: 5px solid #4CAF50;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        /* =============== STYLE OGÓLNE =============== */
+        :root {
+            --primary-color: #1a237e;
+            --primary-light: #534bae;
+            --primary-dark: #000051;
+            --success-color: #4caf50;
         }
-        
-        .construction-content {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-            flex-wrap: wrap;
-            justify-content: center;
+        .bracket-outer {
+            max-width: 100%;
+            overflow-x: auto;
+            padding: 10px 0;
         }
-        
-        .construction-gif-container {
-            flex-shrink: 0;
+        .bracket-table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 600px;
+    table-layout: fixed;   /* <-- wymusza równe szerokości kolumn */
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    font-size: 0.7rem;
+}
+
+/* Wymuszenie równej szerokości dla każdej z 4 kolumn */
+.bracket-table th,
+.bracket-table td {
+    width: 25%;   /* 100% / 4 kolumny */
+}
+        .round-header {
+            background: var(--primary-dark);
+            color: white;
+            padding: 6px 8px; /* zmniejszone */
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.7rem; /* zmniejszone */
+            border: 1px solid rgba(255,255,255,0.2);
         }
-        
-        .construction-gif {
-            width: 180px; /* Zmniejszony rozmiar */
-            height: auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-            transition: transform 0.3s ease;
-        }
-        
-        .construction-gif:hover {
-            transform: scale(1.05);
-        }
-        
-        .construction-text {
-            flex: 1;
-            min-width: 300px;
-        }
-        
-        .construction-text h3 {
-            color: #2c3e50;
-            margin-bottom: 20px;
-            font-size: 1.8em;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .construction-text p {
-            margin: 15px 0;
-            font-size: 1.1em;
-            line-height: 1.6;
-            color: #34495e;
-        }
-        
-        .construction-highlight {
-            background-color: rgba(76, 175, 80, 0.1);
-            padding: 15px 20px;
-            border-radius: 8px;
-            border-left: 4px solid #4CAF50;
-            margin: 25px 0;
-        }
-        
-        .construction-note {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
+        .match-cell {
             border: 1px solid #e0e0e0;
-            margin-top: 20px;
-            font-size: 0.95em;
-            color: #666;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
+            vertical-align: middle;
+            padding: 4px; /* zmniejszone */
+            background: #fefefe;
         }
-        
-        .construction-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 25px;
-            flex-wrap: wrap;
+        .final-cell {
+            background: linear-gradient(145deg, #fff8e7, #fff);
+            border-left: 4px solid #f7d266;
         }
-        
-        .construction-btn {
-            padding: 10px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 500;
-            display: inline-flex;
+        .third-place-cell {
+            background: #fef9e6;
+            border-left: 4px solid #b3976d;
+        }
+        .team {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
+            padding: 3px 5px; /* zmniejszone */
+            margin: 2px 0;
+            border-radius: 8px;
+            background: #f8f9fa;
+            font-size: 0.65rem; /* zmniejszone */
+            font-weight: 500;
         }
-        
-        .construction-btn-primary {
-            background-color: #4CAF50;
+        .team-name {
+            flex: 1;
+            font-weight: 600;
+            color: var(--primary-dark);
+            word-break: break-word;
+            padding-right: 4px;
+            font-size: 0.65rem;
+        }
+        .team-points {
+            background: var(--primary-light);
+            color: white;
+            border-radius: 20px;
+            padding: 1px 5px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            min-width: 24px;
+            text-align: center;
+        }
+        .team.winner .team-name {
+            color: var(--success-color);
+            font-weight: 800;
+        }
+        .team.winner .team-points {
+            background: var(--success-color);
+        }
+        .loading-spinner, .error-message, .empty-state {
+            text-align: center;
+            padding: 30px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 8px;
+        }
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.6rem;
+            color: var(--primary-dark);
+        }
+        .btn-refresh {
+            background: var(--primary-color);
             color: white;
             border: none;
+            padding: 6px 14px;
+            border-radius: 30px;
+            cursor: pointer;
         }
-        
-        .construction-btn-primary:hover {
-            background-color: #388E3C;
-            transform: translateY(-2px);
+        .current-date {
+            font-size: 0.9rem;
         }
-        
-        .construction-btn-secondary {
-            background-color: #f8f9fa;
-            color: #2c3e50;
-            border: 1px solid #ddd;
+        .match-label {
+            font-size: 0.6rem;
+            font-weight: normal;
+            background: rgba(0,0,0,0.05);
+            display: inline-block;
+            padding: 1px 5px;
+            border-radius: 12px;
+            margin-bottom: 4px;
         }
-        
-        .construction-btn-secondary:hover {
-            background-color: #e9ecef;
-            border-color: #4CAF50;
+        @media (max-width: 700px) {
+            .team { font-size: 0.6rem; padding: 2px 4px; }
+            .team-points { font-size: 0.55rem; padding: 1px 4px; }
+            .round-header { font-size: 0.65rem; padding: 4px 6px; }
+            .match-cell { padding: 3px; }
+            .bracket-table { min-width: 500px; }
         }
-        
-        @media (max-width: 768px) {
-            .construction-content {
-                flex-direction: column;
-                text-align: center;
-                gap: 25px;
-            }
-            
-            .construction-gif {
-                width: 150px;
-            }
-            
-            .construction-text h3 {
-                justify-content: center;
-            }
-            
-            .construction-buttons {
-                justify-content: center;
-            }
-            
-            .construction-notice {
-                margin: 20px 15px;
-                padding: 25px;
-            }
-        }
-        
-        /* Animacja dla ikonki narzędzi */
-        @keyframes tools-animation {
-            0% { transform: rotate(0deg); }
-            25% { transform: rotate(10deg); }
-            50% { transform: rotate(0deg); }
-            75% { transform: rotate(-10deg); }
-            100% { transform: rotate(0deg); }
-        }
-        
-        .construction-text h3 i {
-            animation: tools-animation 2s infinite;
+        @media (max-width: 500px) {
+            .bracket-table { min-width: 450px; }
+            .team-name { font-size: 0.55rem; }
+            .team-points { font-size: 0.5rem; }
         }
     </style>
 </head>
 <body>
-    <!-- HEADER -->
     <header>
         <div class="school-header">
             <div class="logo-container">
@@ -177,8 +158,8 @@
                 </a>
                 <a href="index.html" class="title-link">
                     <div class="title-container">
-                        <h1 id="pageTitle">Rozgrywki Międzyklasowe 2026</h1>
-                        <p class="school-name" id="schoolName"> I Liceum Ogólnokształcące im. Stanisława Staszica</p>
+                        <h1>Rozgrywki Międzyklasowe 2026</h1>
+                        <p class="school-name"> I Liceum Ogólnokształcące im. Stanisława Staszica</p>
                     </div>
                 </a>
             </div>
@@ -187,221 +168,396 @@
                 <span id="currentDate"></span>
             </div>
         </div>
-        
-        <!-- NAVIGACJA -->
         <nav class="main-nav">
             <ul class="nav-list">
-                <!-- DROPDOWN DYSCYPLINY -->
                 <li class="dropdown">
-                    <a href="#">
-                        <i class="fas fa-futbol"></i> Dyscypliny <i class="fas fa-chevron-down"></i>
-                    </a>
+                    <a href="#"><i class="fas fa-futbol"></i> Dyscypliny <i class="fas fa-chevron-down"></i></a>
                     <div class="dropdown-content">
                         <a href="koszykowka.html"><i class="fas fa-basketball-ball"></i> Koszykówka</a>
                         <a href="siatkowka.html"><i class="fas fa-volleyball-ball"></i> Siatkówka</a>
                         <a href="pilka-nozna.html" class="active"><i class="fas fa-futbol"></i> Piłka nożna</a>
                     </div>
                 </li>
-                
                 <li><a href="druzyny.html"><i class="fas fa-users"></i> Drużyny</a></li>
                 <li><a href="dokumenty.html"><i class="fas fa-file-alt"></i> Dokumenty</a></li>
             </ul>
         </nav>
     </header>
 
-<!-- KOMUNIKAT O BUDOWIE STRONY -->
-<div class="container">
-    <div class="construction-notice">
-        <div class="construction-content">
-            <div class="construction-gif-container">
-                <img src="logos/underconstruction.gif" alt="Strona w budowie" class="construction-gif">
-            </div>
-            <div class="construction-text">
-                <h3><i class="fas fa-tools"></i> Strona w przygotowaniu</h3>
-                <p>Właśnie trwają zapisy, dlatego ta sekcja jest jeszcze w budowie.</p>
-                
-                <div class="construction-highlight">
-                    <p><strong>Po zakończeniu zapisów strona zostanie zaktualizowana</strong> i pojawią się tu wszystkie informacje:</p>
-                    <ul style="margin: 10px 0 0 20px; color: #2c3e50;">
-                        <li>Drużyny biorące udział</li>
-                        <li>Terminy spotkań i wyniki na żywo</li>
-                        <li>Drabinka turniejowa i informacje o finale</li>
-                    </ul>
-                </div>
-                
-                <div class="construction-note">
-                    <i class="fas fa-info-circle" style="color: #4CAF50;"></i>
-                    <div>
-                        <strong>Na razie możesz:</strong><br>
-                        • Zebrać drużynę w swojej klasie i zgłosić się poprzez formularz zgłoszeniowy w zakładce "Dokumenty"<br>
-                        • Wrócić tu za kilka dni po zaktualizowaniu danych
-                    </div>
-                </div>
-                
-                <div class="construction-buttons">
-                    <a href="dokumenty.html" class="construction-btn construction-btn-primary">
-                        <i class="fas fa-file-alt"></i> Dokumenty
-                    </a>
-                    <a href="index.html" class="construction-btn construction-btn-secondary">
-                        <i class="fas fa-home"></i> Strona główna
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- 
-    RESZTA STRONY JEST W KOMENTARZU - NIE WIDOCZNA
-    ================================================
-    
     <main class="container">
-        <section class="hero">
-            <div class="hero-content">
-                <h2><i class="fas fa-futbol"></i> Piłka nożna</h2>
-                <p>Mecze, statystyki i tabela ligowa piłki nożnej międzyklasowej</p>
-                
-                <div class="sport-summary">
-                    <div class="summary-item">
-                        <i class="fas fa-futbol"></i>
-                        <span id="totalMatches">0</span>
-                        <small>Meczów</small>
-                    </div>
-                    <div class="summary-item">
-                        <i class="fas fa-flag"></i>
-                        <span id="totalTeams">8</span>
-                        <small>Drużyn</small>
-                    </div>
-                </div>
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-trophy"></i> Drabinka turniejowa</h2>
+                <button id="refreshBracketBtn" class="btn-refresh"><i class="fas fa-sync-alt"></i> Odśwież</button>
+            </div>
+            <div id="bracketContainer" class="bracket-outer">
+                <table class="bracket-table" id="bracketTable">
+                    <thead>
+                        <tr>
+                            <th class="round-header">1/8 finału</th>
+                            <th class="round-header">Ćwierćfinał</th>
+                            <th class="round-header">Półfinał</th>
+                            <th class="round-header">Finał<br><span style="font-size:0.6rem;">/ Mecz o 3. miejsce</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- RZĄD 1: mecz A1 vs A3 -->
+                        <tr>
+                            <td class="match-cell">
+                                <div class="team" data-team-address="A1" data-score-address="B1">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                                <div class="team" data-team-address="A3" data-score-address="B3">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                            </td>
+                            <!-- Ćwierćfinał QF1 (C2 vs C6) rowspan=2 -->
+                            <td rowspan="2" class="match-cell">
+                                <div class="team" data-team-address="C2" data-score-address="D2">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                                <div class="team" data-team-address="C6" data-score-address="D6">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                            </td>
+                            <!-- Półfinał SF1 (E4 vs E12) rowspan=4 -->
+                            <td rowspan="4" class="match-cell">
+                                <div class="team" data-team-address="E4" data-score-address="F4">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                                <div class="team" data-team-address="E12" data-score-address="F12">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                            </td>
+                            <!-- Finał (G8 vs G24) - rowspan=4 (górna połowa wierszy) -->
+                            <td rowspan="4" class="match-cell final-cell">
+                                <div class="match-label">⚽ Finał</div>
+                                <div class="team" data-team-address="G8" data-score-address="H8">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                                <div class="team" data-team-address="G24" data-score-address="H24">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- RZĄD 2: wolny los C6 -->
+                        <tr>
+                            <td class="match-cell">
+                                <div class="team" data-team-address="C6" data-score-address="">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- RZĄD 3: mecz A9 vs A11 -->
+                        <tr>
+                            <td class="match-cell">
+                                <div class="team" data-team-address="A9" data-score-address="B9">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                                <div class="team" data-team-address="A11" data-score-address="B11">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                            </td>
+                            <!-- Ćwierćfinał QF2 (C10 vs C14) rowspan=2 -->
+                            <td rowspan="2" class="match-cell">
+                                <div class="team" data-team-address="C10" data-score-address="D10">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                                <div class="team" data-team-address="C14" data-score-address="D14">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- RZĄD 4: mecz A13 vs A15 -->
+                        <tr>
+                            <td class="match-cell">
+                                <div class="team" data-team-address="A13" data-score-address="B13">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                                <div class="team" data-team-address="A15" data-score-address="B15">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- RZĄD 5: mecz A17 vs A19 -->
+                        <tr>
+                            <td class="match-cell">
+                                <div class="team" data-team-address="A17" data-score-address="B17">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                                <div class="team" data-team-address="A19" data-score-address="B19">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                            </td>
+                            <!-- Ćwierćfinał QF3 (C18 vs C22) rowspan=2 -->
+                            <td rowspan="2" class="match-cell">
+                                <div class="team" data-team-address="C18" data-score-address="D18">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                                <div class="team" data-team-address="C22" data-score-address="D22">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                            </td>
+                            <!-- Półfinał SF2 (E20 vs E28) rowspan=4 -->
+                            <td rowspan="4" class="match-cell">
+                                <div class="team" data-team-address="E20" data-score-address="F20">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                                <div class="team" data-team-address="E28" data-score-address="F28">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                            </td>
+                            <!-- Mecz o 3. miejsce (G33 vs G35) - rowspan=4 (dolna połowa wierszy) -->
+                            <td rowspan="4" class="match-cell third-place-cell">
+                                <div class="match-label">🥉 Mecz o 3. miejsce</div>
+                                <div class="team" data-team-address="G33" data-score-address="H33">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                                <div class="team" data-team-address="G35" data-score-address="H35">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- RZĄD 6: mecz A21 vs A23 -->
+                        <tr>
+                            <td class="match-cell">
+                                <div class="team" data-team-address="A21" data-score-address="B21">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                                <div class="team" data-team-address="A23" data-score-address="B23">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- RZĄD 7: mecz A25 vs A27 -->
+                        <tr>
+                            <td class="match-cell">
+                                <div class="team" data-team-address="A25" data-score-address="B25">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                                <div class="team" data-team-address="A27" data-score-address="B27">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                            </td>
+                            <!-- Ćwierćfinał QF4 (C26 vs C30) rowspan=2 -->
+                            <td rowspan="2" class="match-cell">
+                                <div class="team" data-team-address="C26" data-score-address="D26">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                                <div class="team" data-team-address="C30" data-score-address="D30">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- RZĄD 8: wolny los C30 -->
+                        <tr>
+                            <td class="match-cell">
+                                <div class="team" data-team-address="C30" data-score-address="">
+                                    <span class="team-name"></span>
+                                    <span class="team-points"></span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </section>
-
-        ... CAŁA RESZTA KODU STRONY PIŁKI NOŻNEJ ...
-        
     </main>
 
-    <script src="js/data.js"></script>
-    <script src="js/pilka-nozna.js"></script>
--->
+    <script>
+        // ----- DATA W NAGŁÓWKU -----
+        function updateCurrentDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateElem = document.getElementById('currentDate');
+            if (dateElem) dateElem.textContent = now.toLocaleDateString('pl-PL', options);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCurrentDate();
+            setInterval(updateCurrentDate, 60000);
+        });
 
-<!-- SKRYPT DO DATY W HEADERZE - MUSI BYĆ POZA KOMENTARZEM, ŻEBY DZIAŁAŁ -->
-<script>
-    // ===================== FUNKCJE DLA HEADERA =====================
-    // Tylko funkcje niezbędne do działania nagłówka
-    
-    function updateCurrentDate() {
-        const now = new Date();
-        const options = {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        };
-        
-        const dateString = now.toLocaleDateString('pl-PL', options);
-        const dateElement = document.getElementById('currentDate');
-        
-        if (dateElement) {
-            dateElement.textContent = dateString;
-        }
-    }
-    
-    // Inicjalizacja przy załadowaniu strony
-    document.addEventListener('DOMContentLoaded', function() {
-        updateCurrentDate();
-        // Aktualizuj datę co minutę
-        setInterval(updateCurrentDate, 60000);
-    });
-    // POPRAWIONY KOD DROPDOWN
-    document.addEventListener('DOMContentLoaded', function() {
-        const dropdowns = document.querySelectorAll('.dropdown');
-        
-        dropdowns.forEach(dropdown => {
-            const toggle = dropdown.querySelector('a');
-            
-            toggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const isOpen = dropdown.classList.contains('open');
-                
-                // Zamknij wszystkie inne dropdowny
-                dropdowns.forEach(otherDropdown => {
-                    if (otherDropdown !== dropdown) {
-                        otherDropdown.classList.remove('open');
-                    }
-                });
-                
-                // Otwórz/zamknij aktualny dropdown
-                if (!isOpen) {
-                    dropdown.classList.add('open');
-                    adjustDropdownPosition(dropdown);
-                } else {
-                    dropdown.classList.remove('open');
-                }
-            });
-        });
-        
-        // Zamknij po kliknięciu gdzie indziej
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.dropdown')) {
-                dropdowns.forEach(dropdown => {
-                    dropdown.classList.remove('open');
-                });
-            }
-        });
-        
-        // Zamknij po ESC
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                dropdowns.forEach(dropdown => {
-                    dropdown.classList.remove('open');
-                });
-            }
-        });
-        
-        // Zamknij po kliknięciu w link
-        document.querySelectorAll('.dropdown-content a').forEach(link => {
-            link.addEventListener('click', function() {
-                dropdowns.forEach(dropdown => {
-                    dropdown.classList.remove('open');
-                });
-            });
-        });
-        
-        // FUNKCJA DOSTOSOWUJĄCA POZYCJĘ DROPDOWNU
-        function adjustDropdownPosition(dropdown) {
-            setTimeout(() => {
-                const content = dropdown.querySelector('.dropdown-content');
-                const toggle = dropdown.querySelector('a');
-                
-                if (!content || !toggle) return;
-                
-                // Resetujemy klasę
-                content.classList.remove('out-of-view');
-                
-                // Sprawdzamy czy dropdown wyjdzie poza ekran (tylko na mobile)
-                if (window.innerWidth <= 768) {
-                    const toggleRect = toggle.getBoundingClientRect();
-                    const contentWidth = content.offsetWidth;
-                    const viewportWidth = window.innerWidth;
-                    
-                    // Jeśli dropdown wyjdzie poza prawy brzeg ekranu
-                    if (toggleRect.left + contentWidth > viewportWidth - 20) {
-                        content.classList.add('out-of-view');
-                    }
-                }
-            }, 10);
-        }
-        
-        // Zamknij dropdowny przy zmianie rozmiaru okna
-        window.addEventListener('resize', function() {
+        // ----- OBSŁUGA DROPDOWN -----
+        document.addEventListener('DOMContentLoaded', () => {
+            const dropdowns = document.querySelectorAll('.dropdown');
             dropdowns.forEach(dropdown => {
-                dropdown.classList.remove('open');
+                const toggle = dropdown.querySelector('a');
+                if (!toggle) return;
+                const handler = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const isOpen = dropdown.classList.contains('open');
+                    dropdowns.forEach(other => other.classList.remove('open'));
+                    if (!isOpen) dropdown.classList.add('open');
+                };
+                toggle.addEventListener('click', handler);
+                toggle.addEventListener('touchend', handler);
+            });
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.dropdown')) dropdowns.forEach(d => d.classList.remove('open'));
+            });
+            document.addEventListener('touchend', (e) => {
+                if (!e.target.closest('.dropdown')) dropdowns.forEach(d => d.classList.remove('open'));
             });
         });
-    });
-</script>
 
+        // ----- SKRYPT ODCZYTUJĄCY DANE Z ARKUSZA -----
+        (function() {
+            const SPREADSHEET_ID = '1qLCQ-6uTyusQRsY23d0tvtEx2XcYmR4MLuwGVriow58';
+            const SHEET_NAME = 'Dane_Noga';
+
+            function cellToIndices(address) {
+                const match = address.match(/([A-Z]+)(\d+)/);
+                if (!match) return { col: -1, row: -1 };
+                let colStr = match[1];
+                let row = parseInt(match[2], 10) - 1;
+                let col = 0;
+                for (let i = 0; i < colStr.length; i++) {
+                    col = col * 26 + (colStr.charCodeAt(i) - 64);
+                }
+                col -= 1;
+                return { col, row };
+            }
+
+            function getValueFromData(dataRows, address) {
+                if (!address) return '';
+                const { col, row } = cellToIndices(address);
+                if (row < 0 || col < 0 || row >= dataRows.length) return '';
+                const rowData = dataRows[row];
+                if (!rowData || !rowData.c) return '';
+                const cell = rowData.c[col];
+                let val = (cell && cell.v !== undefined && cell.v !== null) ? String(cell.v).trim() : '';
+                return val;
+            }
+
+            function escapeHtml(str) {
+                if (!str) return '';
+                return str.replace(/[&<>]/g, function(m) {
+                    if (m === '&') return '&amp;';
+                    if (m === '<') return '&lt;';
+                    if (m === '>') return '&gt;';
+                    return m;
+                });
+            }
+
+            function parseScore(scoreStr) {
+                if (!scoreStr || scoreStr === '' || scoreStr === '?') return NaN;
+                const num = Number(scoreStr);
+                return isNaN(num) ? NaN : num;
+            }
+
+            function loadBracket() {
+                const container = document.getElementById('bracketContainer');
+                const table = document.getElementById('bracketTable');
+                if (!container || !table) return;
+
+                container.style.opacity = '0.5';
+                const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=A1:Z100`;
+                
+                fetch(url)
+                    .then(res => {
+                        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                        return res.text();
+                    })
+                    .then(text => {
+                        const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
+                        if (!jsonMatch) throw new Error('Nieprawidłowa odpowiedź z arkusza');
+                        const data = JSON.parse(jsonMatch[1]);
+                        const rows = data.table.rows;
+                        if (!rows || rows.length === 0) throw new Error('Brak danych w arkuszu');
+
+                        const teamDivs = document.querySelectorAll('#bracketTable .team');
+                        teamDivs.forEach(div => {
+                            const teamAddr = div.getAttribute('data-team-address');
+                            const scoreAddr = div.getAttribute('data-score-address');
+                            
+                            if (teamAddr) {
+                                let teamValue = getValueFromData(rows, teamAddr);
+                                if (teamValue === '') teamValue = '–';
+                                const teamSpan = div.querySelector('.team-name');
+                                if (teamSpan) teamSpan.textContent = escapeHtml(teamValue);
+                            }
+                            if (scoreAddr) {
+                                let scoreValue = getValueFromData(rows, scoreAddr);
+                                if (scoreValue === '') scoreValue = '–';
+                                const scoreSpan = div.querySelector('.team-points');
+                                if (scoreSpan) scoreSpan.textContent = escapeHtml(scoreValue);
+                            }
+                        });
+
+                        teamDivs.forEach(div => {
+                            const parentMatch = div.closest('.match-cell');
+                            if (!parentMatch) return;
+                            const teamsInMatch = parentMatch.querySelectorAll('.team');
+                            if (teamsInMatch.length !== 2) return;
+                            
+                            const scoreText1 = teamsInMatch[0].querySelector('.team-points')?.textContent || '';
+                            const scoreText2 = teamsInMatch[1].querySelector('.team-points')?.textContent || '';
+                            const score1 = parseScore(scoreText1);
+                            const score2 = parseScore(scoreText2);
+                            
+                            teamsInMatch.forEach(t => t.classList.remove('winner'));
+                            
+                            if (!isNaN(score1) && !isNaN(score2)) {
+                                if (score1 > score2) teamsInMatch[0].classList.add('winner');
+                                else if (score2 > score1) teamsInMatch[1].classList.add('winner');
+                            }
+                        });
+
+                        container.style.opacity = '1';
+                    })
+                    .catch(err => {
+                        console.error('Błąd ładowania drabinki:', err);
+                        container.style.opacity = '1';
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'error-message';
+                        errorDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Nie udało się załadować danych. Spróbuj ponownie później.';
+                        const oldError = container.querySelector('.error-message');
+                        if (oldError) oldError.remove();
+                        container.appendChild(errorDiv);
+                        setTimeout(() => {
+                            if (errorDiv.parentNode) errorDiv.remove();
+                            container.style.opacity = '1';
+                        }, 4000);
+                    });
+            }
+
+            const refreshBtn = document.getElementById('refreshBracketBtn');
+            if (refreshBtn) refreshBtn.addEventListener('click', (e) => { 
+                e.preventDefault(); 
+                loadBracket();
+            });
+            document.addEventListener('DOMContentLoaded', loadBracket);
+        })();
+    </script>
 </body>
 </html>
