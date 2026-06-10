@@ -8,48 +8,45 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* =============== STYLE OGÓLNE =============== */
         :root {
             --primary-color: #1a237e;
             --primary-light: #534bae;
             --primary-dark: #000051;
             --success-color: #4caf50;
+            --secondary-color: #00b0ff;
+            --gray-color: #757575;
         }
+        /* Drabinka (istniejący styl) */
         .bracket-outer {
             max-width: 100%;
             overflow-x: auto;
             padding: 10px 0;
         }
         .bracket-table {
-    border-collapse: collapse;
-    width: 100%;
-    min-width: 600px;
-    table-layout: fixed;   /* <-- wymusza równe szerokości kolumn */
-    background: white;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    font-size: 0.7rem;
-}
-
-/* Wymuszenie równej szerokości dla każdej z 4 kolumn */
-.bracket-table th,
-.bracket-table td {
-    width: 25%;   /* 100% / 4 kolumny */
-}
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 600px;
+            table-layout: fixed;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            font-size: 0.7rem;
+        }
+        .bracket-table th, .bracket-table td { width: 25%; }
         .round-header {
             background: var(--primary-dark);
             color: white;
-            padding: 6px 8px; /* zmniejszone */
+            padding: 6px 8px;
             text-align: center;
             font-weight: 700;
-            font-size: 0.7rem; /* zmniejszone */
+            font-size: 0.7rem;
             border: 1px solid rgba(255,255,255,0.2);
         }
         .match-cell {
             border: 1px solid #e0e0e0;
             vertical-align: middle;
-            padding: 4px; /* zmniejszone */
+            padding: 4px;
             background: #fefefe;
         }
         .final-cell {
@@ -64,11 +61,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 3px 5px; /* zmniejszone */
+            padding: 3px 5px;
             margin: 2px 0;
             border-radius: 8px;
             background: #f8f9fa;
-            font-size: 0.65rem; /* zmniejszone */
+            font-size: 0.65rem;
             font-weight: 500;
         }
         .team-name {
@@ -89,17 +86,8 @@
             min-width: 24px;
             text-align: center;
         }
-        .team.winner .team-name {
-            color: var(--success-color);
-            font-weight: 800;
-        }
-        .team.winner .team-points {
-            background: var(--success-color);
-        }
-        .loading-spinner, .error-message, .empty-state {
-            text-align: center;
-            padding: 30px;
-        }
+        .team.winner .team-name { color: var(--success-color); font-weight: 800; }
+        .team.winner .team-points { background: var(--success-color); }
         .section-header {
             display: flex;
             justify-content: space-between;
@@ -107,6 +95,8 @@
             margin-bottom: 15px;
             border-bottom: 2px solid var(--primary-light);
             padding-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .section-header h2 {
             margin: 0;
@@ -120,30 +110,122 @@
             padding: 6px 14px;
             border-radius: 30px;
             cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
-        .current-date {
-            font-size: 0.9rem;
+        .btn-link {
+            background: var(--primary-light);
+            text-decoration: none;
         }
+        .current-date { font-size: 0.9rem; }
         .match-label {
             font-size: 0.6rem;
-            font-weight: normal;
             background: rgba(0,0,0,0.05);
             display: inline-block;
             padding: 1px 5px;
             border-radius: 12px;
             margin-bottom: 4px;
         }
+        /* Karty meczów (harmonogram) */
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .match-card {
+            background: white;
+            border-radius: 14px;
+            overflow: hidden;
+            transition: all 0.25s ease;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+            display: flex;
+            flex-direction: column;
+        }
+        .match-card--finished { border-left: 4px solid var(--success-color); }
+        .match-card--upcoming { border-left: 4px solid var(--secondary-color); }
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            background: #fafafa;
+        }
+        .match-date {
+            color: var(--gray-color);
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .match-teams {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            gap: 8px;
+            flex: 1;
+        }
+        .team-in-match {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .team-home { align-items: flex-start; text-align: left; }
+        .team-away { align-items: flex-end; text-align: right; }
+        .team-name-match {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+        .team-score {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            background: rgba(26,35,126,0.08);
+            padding: 4px 14px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+        .team-score-empty {
+            background: transparent;
+            color: var(--gray-color);
+            opacity: 0.4;
+        }
+        .match-score-separator {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-color);
+            margin: 0 5px;
+        }
+        .match-footer {
+            padding: 8px 15px 12px;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid rgba(0,0,0,0.04);
+        }
+        .match-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+        .status-upcoming { background: #e3f2fd; color: var(--secondary-color); }
+        .status-finished { background: #e8f5e8; color: #2e7d32; }
+        .loading-spinner, .error-message { text-align: center; padding: 30px; }
         @media (max-width: 700px) {
-            .team { font-size: 0.6rem; padding: 2px 4px; }
-            .team-points { font-size: 0.55rem; padding: 1px 4px; }
-            .round-header { font-size: 0.65rem; padding: 4px 6px; }
-            .match-cell { padding: 3px; }
-            .bracket-table { min-width: 500px; }
+            .team { font-size: 0.6rem; }
+            .team-name-match { font-size: 0.85rem; }
+            .team-score { font-size: 1.2rem; padding: 2px 10px; }
+            .match-score-separator { font-size: 1.2rem; }
         }
         @media (max-width: 500px) {
-            .bracket-table { min-width: 450px; }
-            .team-name { font-size: 0.55rem; }
-            .team-points { font-size: 0.5rem; }
+            .matches-grid { grid-template-columns: 1fr; }
+            .match-teams { flex-direction: row; align-items: center; }
+            .team-home, .team-away { align-items: center; text-align: center; }
         }
     </style>
 </head>
@@ -151,22 +233,10 @@
     <header>
         <div class="school-header">
             <div class="logo-container">
-                <a href="index.html" class="logo-link">
-                    <div class="logo-placeholder">
-                        <img src="logo_szkoly.png" alt="Logo szkoły" class="school-logo">
-                    </div>
-                </a>
-                <a href="index.html" class="title-link">
-                    <div class="title-container">
-                        <h1>Rozgrywki Międzyklasowe 2026</h1>
-                        <p class="school-name"> I Liceum Ogólnokształcące im. Stanisława Staszica</p>
-                    </div>
-                </a>
+                <a href="index.html" class="logo-link"><div class="logo-placeholder"><img src="logo_szkoly.png" alt="Logo szkoły" class="school-logo"></div></a>
+                <a href="index.html" class="title-link"><div class="title-container"><h1>Rozgrywki Międzyklasowe 2026</h1><p class="school-name"> I Liceum Ogólnokształcące im. Stanisława Staszica</p></div></a>
             </div>
-            <div class="current-date">
-                <i class="far fa-calendar-alt"></i>
-                <span id="currentDate"></span>
-            </div>
+            <div class="current-date"><i class="far fa-calendar-alt"></i> <span id="currentDate"></span></div>
         </div>
         <nav class="main-nav">
             <ul class="nav-list">
@@ -185,6 +255,7 @@
     </header>
 
     <main class="container">
+        <!-- Drabinka -->
         <section class="section">
             <div class="section-header">
                 <h2><i class="fas fa-trophy"></i> Drabinka turniejowa</h2>
@@ -192,372 +263,327 @@
             </div>
             <div id="bracketContainer" class="bracket-outer">
                 <table class="bracket-table" id="bracketTable">
-                    <thead>
-                        <tr>
-                            <th class="round-header">1/8 finału</th>
-                            <th class="round-header">Ćwierćfinał</th>
-                            <th class="round-header">Półfinał</th>
-                            <th class="round-header">Finał<br><span style="font-size:0.6rem;">/ Mecz o 3. miejsce</span></th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th class="round-header">1/8 finału</th><th class="round-header">Ćwierćfinał</th><th class="round-header">Półfinał</th><th class="round-header">Finał<br><span style="font-size:0.6rem;">/ Mecz o 3. miejsce</span></th></tr></thead>
                     <tbody>
-                        <!-- RZĄD 1: mecz A1 vs A3 -->
-                        <tr>
-                            <td class="match-cell">
-                                <div class="team" data-team-address="A1" data-score-address="B1">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                                <div class="team" data-team-address="A3" data-score-address="B3">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                            </td>
-                            <!-- Ćwierćfinał QF1 (C2 vs C6) rowspan=2 -->
-                            <td rowspan="2" class="match-cell">
-                                <div class="team" data-team-address="C2" data-score-address="D2">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                                <div class="team" data-team-address="C6" data-score-address="D6">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                            </td>
-                            <!-- Półfinał SF1 (E4 vs E12) rowspan=4 -->
-                            <td rowspan="4" class="match-cell">
-                                <div class="team" data-team-address="E4" data-score-address="F4">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                                <div class="team" data-team-address="E12" data-score-address="F12">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                            </td>
-                            <!-- Finał (G8 vs G24) - rowspan=4 (górna połowa wierszy) -->
-                            <td rowspan="4" class="match-cell final-cell">
-                                <div class="match-label">⚽ Finał</div>
-                                <div class="team" data-team-address="G8" data-score-address="H8">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                                <div class="team" data-team-address="G24" data-score-address="H24">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- RZĄD 2: wolny los C6 -->
-                        <tr>
-                            <td class="match-cell">
-                                <div class="team" data-team-address="C6" data-score-address="">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- RZĄD 3: mecz A9 vs A11 -->
-                        <tr>
-                            <td class="match-cell">
-                                <div class="team" data-team-address="A9" data-score-address="B9">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                                <div class="team" data-team-address="A11" data-score-address="B11">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                            </td>
-                            <!-- Ćwierćfinał QF2 (C10 vs C14) rowspan=2 -->
-                            <td rowspan="2" class="match-cell">
-                                <div class="team" data-team-address="C10" data-score-address="D10">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                                <div class="team" data-team-address="C14" data-score-address="D14">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- RZĄD 4: mecz A13 vs A15 -->
-                        <tr>
-                            <td class="match-cell">
-                                <div class="team" data-team-address="A13" data-score-address="B13">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                                <div class="team" data-team-address="A15" data-score-address="B15">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- RZĄD 5: mecz A17 vs A19 -->
-                        <tr>
-                            <td class="match-cell">
-                                <div class="team" data-team-address="A17" data-score-address="B17">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                                <div class="team" data-team-address="A19" data-score-address="B19">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                            </td>
-                            <!-- Ćwierćfinał QF3 (C18 vs C22) rowspan=2 -->
-                            <td rowspan="2" class="match-cell">
-                                <div class="team" data-team-address="C18" data-score-address="D18">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                                <div class="team" data-team-address="C22" data-score-address="D22">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                            </td>
-                            <!-- Półfinał SF2 (E20 vs E28) rowspan=4 -->
-                            <td rowspan="4" class="match-cell">
-                                <div class="team" data-team-address="E20" data-score-address="F20">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                                <div class="team" data-team-address="E28" data-score-address="F28">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                            </td>
-                            <!-- Mecz o 3. miejsce (G33 vs G35) - rowspan=4 (dolna połowa wierszy) -->
-                            <td rowspan="4" class="match-cell third-place-cell">
-                                <div class="match-label">🥉 Mecz o 3. miejsce</div>
-                                <div class="team" data-team-address="G33" data-score-address="H33">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                                <div class="team" data-team-address="G35" data-score-address="H35">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- RZĄD 6: mecz A21 vs A23 -->
-                        <tr>
-                            <td class="match-cell">
-                                <div class="team" data-team-address="A21" data-score-address="B21">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                                <div class="team" data-team-address="A23" data-score-address="B23">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- RZĄD 7: mecz A25 vs A27 -->
-                        <tr>
-                            <td class="match-cell">
-                                <div class="team" data-team-address="A25" data-score-address="B25">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                                <div class="team" data-team-address="A27" data-score-address="B27">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                            </td>
-                            <!-- Ćwierćfinał QF4 (C26 vs C30) rowspan=2 -->
-                            <td rowspan="2" class="match-cell">
-                                <div class="team" data-team-address="C26" data-score-address="D26">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                                <div class="team" data-team-address="C30" data-score-address="D30">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- RZĄD 8: wolny los C30 -->
-                        <tr>
-                            <td class="match-cell">
-                                <div class="team" data-team-address="C30" data-score-address="">
-                                    <span class="team-name"></span>
-                                    <span class="team-points"></span>
-                                </div>
-                            </td>
-                        </tr>
+                        <!-- (zachowujemy dokładnie taką samą strukturę jak wcześniej – nie zmieniamy) -->
+                        <tr><td class="match-cell"><div class="team" data-team-address="A1" data-score-address="B1"><span class="team-name"></span><span class="team-points"></span></div><div class="team" data-team-address="A3" data-score-address="B3"><span class="team-name"></span><span class="team-points"></span></div></td><td rowspan="2" class="match-cell"><div class="team" data-team-address="C2" data-score-address="D2"><span class="team-name"></span><span class="team-points"></span></div><div class="team" data-team-address="C6" data-score-address="D6"><span class="team-name"></span><span class="team-points"></span></div></td><td rowspan="4" class="match-cell"><div class="team" data-team-address="E4" data-score-address="F4"><span class="team-name"></span><span class="team-points"></span></div><div class="team" data-team-address="E12" data-score-address="F12"><span class="team-name"></span><span class="team-points"></span></div></td><td rowspan="4" class="match-cell final-cell"><div class="match-label">⚽ Finał</div><div class="team" data-team-address="G8" data-score-address="H8"><span class="team-name"></span><span class="team-points"></span></div><div class="team" data-team-address="G24" data-score-address="H24"><span class="team-name"></span><span class="team-points"></span></div></td></tr>
+                        <tr><td class="match-cell"><div class="team" data-team-address="C6" data-score-address=""><span class="team-name"></span><span class="team-points"></span></div></td></tr>
+                        <tr><td class="match-cell"><div class="team" data-team-address="A9" data-score-address="B9"><span class="team-name"></span><span class="team-points"></span></div><div class="team" data-team-address="A11" data-score-address="B11"><span class="team-name"></span><span class="team-points"></span></div></td><td rowspan="2" class="match-cell"><div class="team" data-team-address="C10" data-score-address="D10"><span class="team-name"></span><span class="team-points"></span></div><div class="team" data-team-address="C14" data-score-address="D14"><span class="team-name"></span><span class="team-points"></span></div></td></tr>
+                        <tr><td class="match-cell"><div class="team" data-team-address="A13" data-score-address="B13"><span class="team-name"></span><span class="team-points"></span></div><div class="team" data-team-address="A15" data-score-address="B15"><span class="team-name"></span><span class="team-points"></span></div></td></tr>
+                        <tr><td class="match-cell"><div class="team" data-team-address="A17" data-score-address="B17"><span class="team-name"></span><span class="team-points"></span></div><div class="team" data-team-address="A19" data-score-address="B19"><span class="team-name"></span><span class="team-points"></span></div></td><td rowspan="2" class="match-cell"><div class="team" data-team-address="C18" data-score-address="D18"><span class="team-name"></span><span class="team-points"></span></div><div class="team" data-team-address="C22" data-score-address="D22"><span class="team-name"></span><span class="team-points"></span></div></td><td rowspan="4" class="match-cell"><div class="team" data-team-address="E20" data-score-address="F20"><span class="team-name"></span><span class="team-points"></span></div><div class="team" data-team-address="E28" data-score-address="F28"><span class="team-name"></span><span class="team-points"></span></div></td><td rowspan="4" class="match-cell third-place-cell"><div class="match-label">🥉 Mecz o 3. miejsce</div><div class="team" data-team-address="G33" data-score-address="H33"><span class="team-name"></span><span class="team-points"></span></div><div class="team" data-team-address="G35" data-score-address="H35"><span class="team-name"></span><span class="team-points"></span></div></td></tr>
+                        <tr><td class="match-cell"><div class="team" data-team-address="A21" data-score-address="B21"><span class="team-name"></span><span class="team-points"></span></div><div class="team" data-team-address="A23" data-score-address="B23"><span class="team-name"></span><span class="team-points"></span></div></td></tr>
+                        <tr><td class="match-cell"><div class="team" data-team-address="A25" data-score-address="B25"><span class="team-name"></span><span class="team-points"></span></div><div class="team" data-team-address="A27" data-score-address="B27"><span class="team-name"></span><span class="team-points"></span></div></td><td rowspan="2" class="match-cell"><div class="team" data-team-address="C26" data-score-address="D26"><span class="team-name"></span><span class="team-points"></span></div><div class="team" data-team-address="C30" data-score-address="D30"><span class="team-name"></span><span class="team-points"></span></div></td></tr>
+                        <tr><td class="match-cell"><div class="team" data-team-address="C30" data-score-address=""><span class="team-name"></span><span class="team-points"></span></div></td></tr>
                     </tbody>
                 </table>
+            </div>
+        </section>
+
+        <!-- Klasyfikacja strzelców (link do osobnej strony) -->
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-user-graduate"></i> Klasyfikacja strzelców</h2>
+                <a href="zawodnicy_noga.html" class="btn-refresh btn-link"><i class="fas fa-arrow-right"></i> Zobacz szczegóły</a>
+            </div>
+        </section>
+
+        <!-- Harmonogram meczów (na tej samej stronie) -->
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-calendar-alt"></i> Terminarz i wyniki</h2>
+                <button id="refreshMatchesBtn" class="btn-refresh"><i class="fas fa-sync-alt"></i> Odśwież</button>
+            </div>
+            <div id="matchesContainer" class="matches-grid">
+                <div class="loading-spinner"><i class="fas fa-spinner fa-pulse"></i> Ładowanie harmonogramu...</div>
             </div>
         </section>
     </main>
 
     <script>
-        // ----- DATA W NAGŁÓWKU -----
+        // Data w nagłówku
         function updateCurrentDate() {
             const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const dateElem = document.getElementById('currentDate');
-            if (dateElem) dateElem.textContent = now.toLocaleDateString('pl-PL', options);
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('pl-PL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         }
         document.addEventListener('DOMContentLoaded', () => {
             updateCurrentDate();
             setInterval(updateCurrentDate, 60000);
         });
 
-        // ----- OBSŁUGA DROPDOWN -----
+        // Dropdown
         document.addEventListener('DOMContentLoaded', () => {
             const dropdowns = document.querySelectorAll('.dropdown');
             dropdowns.forEach(dropdown => {
                 const toggle = dropdown.querySelector('a');
-                if (!toggle) return;
-                const handler = (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const isOpen = dropdown.classList.contains('open');
-                    dropdowns.forEach(other => other.classList.remove('open'));
-                    if (!isOpen) dropdown.classList.add('open');
-                };
-                toggle.addEventListener('click', handler);
-                toggle.addEventListener('touchend', handler);
+                const handler = (e) => { e.preventDefault(); e.stopPropagation(); dropdowns.forEach(d => d.classList.remove('open')); dropdown.classList.add('open'); };
+                toggle.addEventListener('click', handler); toggle.addEventListener('touchend', handler);
             });
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.dropdown')) dropdowns.forEach(d => d.classList.remove('open'));
-            });
-            document.addEventListener('touchend', (e) => {
-                if (!e.target.closest('.dropdown')) dropdowns.forEach(d => d.classList.remove('open'));
-            });
+            document.addEventListener('click', () => dropdowns.forEach(d => d.classList.remove('open')));
+            document.addEventListener('touchend', () => dropdowns.forEach(d => d.classList.remove('open')));
         });
 
-        // ----- SKRYPT ODCZYTUJĄCY DANE Z ARKUSZA -----
+        // ----- Drabinka (z obsługą karnych) -----
         (function() {
             const SPREADSHEET_ID = '1qLCQ-6uTyusQRsY23d0tvtEx2XcYmR4MLuwGVriow58';
             const SHEET_NAME = 'Dane_Noga';
-
             function cellToIndices(address) {
                 const match = address.match(/([A-Z]+)(\d+)/);
                 if (!match) return { col: -1, row: -1 };
-                let colStr = match[1];
-                let row = parseInt(match[2], 10) - 1;
-                let col = 0;
-                for (let i = 0; i < colStr.length; i++) {
-                    col = col * 26 + (colStr.charCodeAt(i) - 64);
-                }
-                col -= 1;
+                let colStr = match[1], row = parseInt(match[2],10)-1, col=0;
+                for(let i=0;i<colStr.length;i++) col = col*26 + (colStr.charCodeAt(i)-64);
+                col-=1;
                 return { col, row };
             }
-
-            function getValueFromData(dataRows, address) {
-                if (!address) return '';
-                const { col, row } = cellToIndices(address);
-                if (row < 0 || col < 0 || row >= dataRows.length) return '';
-                const rowData = dataRows[row];
-                if (!rowData || !rowData.c) return '';
-                const cell = rowData.c[col];
-                let val = (cell && cell.v !== undefined && cell.v !== null) ? String(cell.v).trim() : '';
-                return val;
+            function getValueFromData(rows, addr) {
+                if(!addr) return '';
+                let {col,row} = cellToIndices(addr);
+                if(row<0 || col<0 || row>=rows.length) return '';
+                let cell = rows[row].c[col];
+                return (cell && cell.v!==undefined && cell.v!==null) ? String(cell.v).trim() : '';
             }
-
-            function escapeHtml(str) {
-                if (!str) return '';
-                return str.replace(/[&<>]/g, function(m) {
-                    if (m === '&') return '&amp;';
-                    if (m === '<') return '&lt;';
-                    if (m === '>') return '&gt;';
-                    return m;
-                });
+            function escapeHtml(s) { if(!s) return ''; return s.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
+            function parseScoreDetails(scoreStr) {
+                if(!scoreStr || scoreStr==='' || scoreStr==='–') return { primary: null, hasPenalty: false, penaltyValue: 0 };
+                let trimmed = scoreStr.trim();
+                if(trimmed.includes('+')) {
+                    let parts = trimmed.split('+');
+                    let primary = parseInt(parts[0],10);
+                    let penalty = parseInt(parts[1],10);
+                    return { primary: isNaN(primary)?null:primary, hasPenalty: true, penaltyValue: isNaN(penalty)?0:penalty };
+                } else {
+                    let primary = parseInt(trimmed,10);
+                    return { primary: isNaN(primary)?null:primary, hasPenalty: false, penaltyValue: 0 };
+                }
             }
-
-            function parseScore(scoreStr) {
-                if (!scoreStr || scoreStr === '' || scoreStr === '?') return NaN;
-                const num = Number(scoreStr);
-                return isNaN(num) ? NaN : num;
+            function compareScores(a,b) {
+                if(a.primary===null && b.primary===null) return 0;
+                if(a.primary===null) return 2;
+                if(b.primary===null) return 1;
+                if(a.primary > b.primary) return 1;
+                if(b.primary > a.primary) return 2;
+                if(a.penaltyValue > b.penaltyValue) return 1;
+                if(b.penaltyValue > a.penaltyValue) return 2;
+                if(a.hasPenalty && !b.hasPenalty) return 1;
+                if(!a.hasPenalty && b.hasPenalty) return 2;
+                return 0;
             }
-
             function loadBracket() {
-                const container = document.getElementById('bracketContainer');
-                const table = document.getElementById('bracketTable');
-                if (!container || !table) return;
-
+                let container = document.getElementById('bracketContainer');
+                let table = document.getElementById('bracketTable');
+                if(!container || !table) return;
                 container.style.opacity = '0.5';
-                const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=A1:Z100`;
-                
-                fetch(url)
-                    .then(res => {
-                        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                        return res.text();
-                    })
-                    .then(text => {
-                        const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
-                        if (!jsonMatch) throw new Error('Nieprawidłowa odpowiedź z arkusza');
-                        const data = JSON.parse(jsonMatch[1]);
-                        const rows = data.table.rows;
-                        if (!rows || rows.length === 0) throw new Error('Brak danych w arkuszu');
-
-                        const teamDivs = document.querySelectorAll('#bracketTable .team');
-                        teamDivs.forEach(div => {
-                            const teamAddr = div.getAttribute('data-team-address');
-                            const scoreAddr = div.getAttribute('data-score-address');
-                            
-                            if (teamAddr) {
-                                let teamValue = getValueFromData(rows, teamAddr);
-                                if (teamValue === '') teamValue = '–';
-                                const teamSpan = div.querySelector('.team-name');
-                                if (teamSpan) teamSpan.textContent = escapeHtml(teamValue);
+                fetch(`https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=A1:Z100`)
+                    .then(r=>r.ok?r.text():Promise.reject())
+                    .then(text=>{
+                        let jsonMatch = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
+                        if(!jsonMatch) throw new Error();
+                        let data = JSON.parse(jsonMatch[1]);
+                        let rows = data.table.rows;
+                        if(!rows || rows.length===0) throw new Error();
+                        let teamDivs = document.querySelectorAll('#bracketTable .team');
+                        teamDivs.forEach(div=>{
+                            let teamAddr = div.getAttribute('data-team-address');
+                            let scoreAddr = div.getAttribute('data-score-address');
+                            if(teamAddr) {
+                                let teamVal = getValueFromData(rows, teamAddr) || '–';
+                                let teamSpan = div.querySelector('.team-name');
+                                if(teamSpan) teamSpan.textContent = escapeHtml(teamVal);
                             }
-                            if (scoreAddr) {
-                                let scoreValue = getValueFromData(rows, scoreAddr);
-                                if (scoreValue === '') scoreValue = '–';
-                                const scoreSpan = div.querySelector('.team-points');
-                                if (scoreSpan) scoreSpan.textContent = escapeHtml(scoreValue);
+                            if(scoreAddr) {
+                                let scoreVal = getValueFromData(rows, scoreAddr) || '–';
+                                let scoreSpan = div.querySelector('.team-points');
+                                if(scoreSpan) scoreSpan.textContent = escapeHtml(scoreVal);
                             }
                         });
-
-                        teamDivs.forEach(div => {
-                            const parentMatch = div.closest('.match-cell');
-                            if (!parentMatch) return;
-                            const teamsInMatch = parentMatch.querySelectorAll('.team');
-                            if (teamsInMatch.length !== 2) return;
-                            
-                            const scoreText1 = teamsInMatch[0].querySelector('.team-points')?.textContent || '';
-                            const scoreText2 = teamsInMatch[1].querySelector('.team-points')?.textContent || '';
-                            const score1 = parseScore(scoreText1);
-                            const score2 = parseScore(scoreText2);
-                            
-                            teamsInMatch.forEach(t => t.classList.remove('winner'));
-                            
-                            if (!isNaN(score1) && !isNaN(score2)) {
-                                if (score1 > score2) teamsInMatch[0].classList.add('winner');
-                                else if (score2 > score1) teamsInMatch[1].classList.add('winner');
-                            }
+                        document.querySelectorAll('#bracketTable .match-cell').forEach(cell=>{
+                            let teams = cell.querySelectorAll('.team');
+                            if(teams.length!==2) return;
+                            let s1 = parseScoreDetails(teams[0].querySelector('.team-points')?.textContent||'');
+                            let s2 = parseScoreDetails(teams[1].querySelector('.team-points')?.textContent||'');
+                            teams.forEach(t=>t.classList.remove('winner'));
+                            let w = compareScores(s1,s2);
+                            if(w===1) teams[0].classList.add('winner');
+                            else if(w===2) teams[1].classList.add('winner');
                         });
-
                         container.style.opacity = '1';
                     })
-                    .catch(err => {
-                        console.error('Błąd ładowania drabinki:', err);
-                        container.style.opacity = '1';
-                        const errorDiv = document.createElement('div');
-                        errorDiv.className = 'error-message';
-                        errorDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Nie udało się załadować danych. Spróbuj ponownie później.';
-                        const oldError = container.querySelector('.error-message');
-                        if (oldError) oldError.remove();
-                        container.appendChild(errorDiv);
-                        setTimeout(() => {
-                            if (errorDiv.parentNode) errorDiv.remove();
-                            container.style.opacity = '1';
-                        }, 4000);
-                    });
+                    .catch(err=>{ container.style.opacity='1'; console.error(err); });
             }
-
-            const refreshBtn = document.getElementById('refreshBracketBtn');
-            if (refreshBtn) refreshBtn.addEventListener('click', (e) => { 
-                e.preventDefault(); 
-                loadBracket();
-            });
+            document.getElementById('refreshBracketBtn')?.addEventListener('click', (e)=>{ e.preventDefault(); loadBracket(); });
             document.addEventListener('DOMContentLoaded', loadBracket);
         })();
+
+        // ----- Harmonogram meczów (L:R) -----
+(function() {
+    const SPREADSHEET_ID = '1qLCQ-6uTyusQRsY23d0tvtEx2XcYmR4MLuwGVriow58';
+    const SHEET_NAME = 'Dane_Noga';
+    const RANGE = 'L2:R100';
+
+    // Funkcja pomocnicza do escape HTML
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // Bezpieczne parsowanie daty i godziny (obsługuje różne formaty)
+    function parseMatchDate(dateValue, timeValue) {
+        if (dateValue === undefined || dateValue === null) return null;
+        
+        let dateStr = '';
+        if (typeof dateValue === 'object' && dateValue.toISOString) {
+            dateStr = dateValue.toISOString().split('T')[0];
+        } else {
+            dateStr = String(dateValue).trim();
+        }
+        
+        let timeStr = '00:00';
+        if (timeValue !== undefined && timeValue !== null) {
+            if (typeof timeValue === 'number') {
+                let totalMinutes = Math.round(timeValue * 24 * 60);
+                let hours = Math.floor(totalMinutes / 60);
+                let minutes = totalMinutes % 60;
+                timeStr = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}`;
+            } else {
+                timeStr = String(timeValue).trim();
+                // Wyciągnij pierwszą część przed spacją lub myślnikiem (np. "14:40 - 15:00" -> "14:40")
+                if (timeStr.includes(' ')) timeStr = timeStr.split(' ')[0];
+                if (timeStr.includes('-')) timeStr = timeStr.split('-')[0].trim();
+                if (!timeStr.match(/^\d{1,2}:\d{2}$/)) timeStr = '00:00';
+            }
+        }
+        
+        // Konwersja daty DD.MM.YYYY na YYYY-MM-DD
+        if (!dateStr.includes('-') && dateStr.includes('.')) {
+            let parts = dateStr.split('.');
+            if (parts.length === 3) dateStr = `${parts[2]}-${parts[1]}-${parts[0]}`;
+        }
+        
+        const dateObj = new Date(`${dateStr}T${timeStr}:00`);
+        return isNaN(dateObj.getTime()) ? null : dateObj;
+    }
+
+    function renderMatchCard(match) {
+        let score1Raw = (match.score1 !== undefined && match.score1 !== null) ? String(match.score1).trim() : '';
+        let score2Raw = (match.score2 !== undefined && match.score2 !== null) ? String(match.score2).trim() : '';
+        let hasScore = score1Raw !== '' && score2Raw !== '' && !isNaN(parseInt(score1Raw)) && !isNaN(parseInt(score2Raw));
+        let displayScore1 = hasScore ? score1Raw : '?';
+        let displayScore2 = hasScore ? score2Raw : '?';
+        
+        let statusClass = hasScore ? 'status-finished' : 'status-upcoming';
+        let statusText = hasScore ? 'Rozegrany' : 'Nadchodzący';
+        let cardClass = hasScore ? 'match-card--finished' : 'match-card--upcoming';
+        
+        let winnerClass1 = '', winnerClass2 = '';
+        if (hasScore) {
+            let s1 = parseInt(score1Raw, 10);
+            let s2 = parseInt(score2Raw, 10);
+            if (s1 > s2) winnerClass1 = 'team-winner';
+            else if (s2 > s1) winnerClass2 = 'team-winner';
+        }
+        
+        return `<div class="match-card ${cardClass}">
+                    <div class="match-header">
+                        <span class="match-date"><i class="far fa-calendar-alt"></i> ${escapeHtml(match.date)} <i class="far fa-clock" style="margin-left:6px;"></i> ${escapeHtml(match.time)}</span>
+                    </div>
+                    <div class="match-teams">
+                        <div class="team-in-match team-home ${winnerClass1}">
+                            <span class="team-name-match">${escapeHtml(match.team1)}</span>
+                            ${hasScore ? `<span class="team-score">${displayScore1}</span>` : '<span class="team-score team-score-empty">?</span>'}
+                        </div>
+                        <div class="match-score-separator"><span>:</span></div>
+                        <div class="team-in-match team-away ${winnerClass2}">
+                            <span class="team-name-match">${escapeHtml(match.team2)}</span>
+                            ${hasScore ? `<span class="team-score">${displayScore2}</span>` : '<span class="team-score team-score-empty">?</span>'}
+                        </div>
+                    </div>
+                    <div class="match-footer">
+                        <div class="match-status ${statusClass}">${statusText}</div>
+                        <div class="match-sport-icon"><i class="fas fa-futbol"></i></div>
+                    </div>
+                </div>`;
+    }
+
+    function loadMatches() {
+        let container = document.getElementById('matchesContainer');
+        if (!container) return;
+        container.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-pulse"></i> Ładowanie harmonogramu...</div>';
+        
+        fetch(`https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=${RANGE}`)
+            .then(r => r.ok ? r.text() : Promise.reject(`HTTP ${r.status}`))
+            .then(text => {
+                let jsonMatch = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
+                if (!jsonMatch) throw new Error('Brak danych');
+                let data = JSON.parse(jsonMatch[1]);
+                let rows = data.table.rows;
+                if (!rows || rows.length === 0) {
+                    container.innerHTML = '<div class="empty-state">Brak meczów w harmonogramie</div>';
+                    return;
+                }
+                
+                let matches = [];
+                for (let i = 0; i < rows.length; i++) {
+                    let c = rows[i].c;
+                    if (!c) continue;
+                    let date = c[0]?.v ?? '';
+                    let time = c[1]?.v ?? '';
+                    let team1 = c[2]?.v ?? '';
+                    let score1 = c[3]?.v ?? '';
+                    let score2 = c[4]?.v ?? '';
+                    let team2 = c[5]?.v ?? '';
+                    let header = c[6]?.v ?? '';
+                    
+                    if (!team1 && !team2) continue;
+                    matches.push({ 
+                        date: String(date), 
+                        time: String(time), 
+                        team1: String(team1), 
+                        score1: String(score1), 
+                        score2: String(score2), 
+                        team2: String(team2), 
+                        header: String(header) 
+                    });
+                }
+                
+                if (matches.length === 0) {
+                    container.innerHTML = '<div class="empty-state">Brak meczów</div>';
+                    return;
+                }
+                
+                // Sortowanie po dacie i godzinie
+                matches.sort((a, b) => {
+                    let da = parseMatchDate(a.date, a.time);
+                    let db = parseMatchDate(b.date, b.time);
+                    if (!da && !db) return 0;
+                    if (!da) return 1;
+                    if (!db) return -1;
+                    return da - db;
+                });
+                
+                let html = '';
+                let lastHeader = '';
+                matches.forEach(m => {
+                    if (m.header && m.header !== lastHeader) {
+                        html += `<h3 class="matches-group-header" style="grid-column:1/-1; margin:10px 0 5px;">${escapeHtml(m.header)}</h3>`;
+                        lastHeader = m.header;
+                    }
+                    html += renderMatchCard(m);
+                });
+                container.innerHTML = html;
+            })
+            .catch(err => {
+                console.error('Błąd harmonogramu:', err);
+                container.innerHTML = '<div class="error-message">Nie udało się załadować harmonogramu. Sprawdź połączenie lub arkusz.</div>';
+            });
+    }
+    
+    document.getElementById('refreshMatchesBtn')?.addEventListener('click', (e) => { e.preventDefault(); loadMatches(); });
+    document.addEventListener('DOMContentLoaded', loadMatches);
+})();
     </script>
 </body>
 </html>
