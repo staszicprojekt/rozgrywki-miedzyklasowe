@@ -870,18 +870,62 @@
         document.getElementById(pointsElementId).textContent = '0';
     }
 }
+        // Specjalna funkcja dla siatkówki – dane są w kolumnach P–X
+        async function fetchVolleyballStats(sheetName, range, pointsElementId, matchesElementId) {
+            try {
+                const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${sheetName}&range=${range}`;
+                const response = await fetch(url);
+                const text = await response.text();
+                const jsonText = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
+                if (!jsonText) throw new Error('Nieprawidłowa odpowiedź');
+                const data = JSON.parse(jsonText[1]);
+                const rows = data.table.rows;
 
+                if (!rows || rows.length === 0) {
+                    document.getElementById(matchesElementId).textContent = '0';
+                    document.getElementById(pointsElementId).textContent = '0';
+                    return;
+                }
+
+                let matchesCount = 0;
+                let totalSets = 0;
+
+                rows.forEach(row => {
+                    const cells = row.c;
+                    if (!cells || cells.length < 7) return;  // potrzebujemy minimum 7 kolumn (P–V)
+                    const team1 = cells[2]?.v || '';   // kolumna R (indeks 2)
+                    const team2 = cells[6]?.v || '';   // kolumna V (indeks 6)
+                    if (!team1 || !team2) return;
+
+                    const score1 = cells[3]?.v;        // kolumna S (indeks 3)
+                    const score2 = cells[4]?.v;        // kolumna T (indeks 4)
+
+                    if (score1 && score2 && !isNaN(parseInt(score1)) && !isNaN(parseInt(score2))) {
+                        matchesCount++;
+                        totalSets += parseInt(score1) + parseInt(score2);
+                    }
+                });
+
+                document.getElementById(matchesElementId).textContent = matchesCount;
+                document.getElementById(pointsElementId).textContent = totalSets;
+
+                console.log(`✅ Statystyki siatkówki: mecze=${matchesCount}, sety=${totalSets}`);
+            } catch (error) {
+                console.error(`❌ Błąd ładowania statystyk siatkówki:`, error);
+                document.getElementById(matchesElementId).textContent = '0';
+                document.getElementById(pointsElementId).textContent = '0';
+            }
+        }
         function loadBasketballStats() {
             fetchSportStats('Dane_Kosz', 'L2:R50', 'basketballPoints', 'basketballMatches');
         }
 
-        function loadVolleyballStats() {
-            fetchSportStats('Dane_Siat', 'L2:R50', 'volleyballSets', 'volleyballMatches');
+                function loadVolleyballStats() {
+            fetchVolleyballStats('Dane_Siatka', 'P2:X100', 'volleyballSets', 'volleyballMatches');
         }
-
         function loadFootballStats() {
-            fetchSportStats('Dane_Pilka', 'L2:R60', 'footballGoals', 'footballMatches');
-        }
+    fetchSportStats('Dane_Noga', 'L2:R100', 'footballGoals', 'footballMatches');
+}
 
         async function initializeAll() {
             console.log('🚀 Inicjalizacja strony...');
@@ -1095,8 +1139,8 @@ async function loadMatches() {
     try {
         // Pobieramy mecze ze wszystkich trzech dyscyplin
         const koszMatches = await fetchMatchesFromSheet('Dane_Kosz', 'L2:R100', 'Koszykówka', 'fa-basketball-ball');
-        const siatkaMatches = await fetchMatchesFromSheet('Dane_Siatka', 'P2:X100', 'Siatkówka', 'fa-volleyball-ball');
-        const pilkaMatches = await fetchMatchesFromSheet('Dane_Pilka', 'L2:R60', 'Piłka nożna', 'fa-futbol');
+    const siatkaMatches = await fetchMatchesFromSheet('Dane_Siatka', 'P2:X100', 'Siatkówka', 'fa-volleyball-ball');
+    const pilkaMatches = await fetchMatchesFromSheet('Dane_Noga', 'L2:R100', 'Piłka nożna', 'fa-futbol');
         
         let allMatches = [...koszMatches, ...siatkaMatches, ...pilkaMatches];
         
